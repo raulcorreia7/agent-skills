@@ -1,0 +1,6 @@
+interface:
+  display_name: "DESIGN.md"
+  short_description: "Work with Google DESIGN.md files"
+  default_prompt: "Use $design-md to author, update, lint, compare, export, or explain this DESIGN.md file under the pinned specification."
+policy:
+  allow_implicit_invocation: true

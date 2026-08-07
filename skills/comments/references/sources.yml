@@ -1,0 +1,38 @@
+retrieved_on: "2026-07-14"
+sources:
+  - name: PEP 8 comments
+    url: https://peps.python.org/pep-0008/#comments
+  - name: Google Testing Blog, Code Health - To Comment or Not to Comment?
+    url: https://testing.googleblog.com/2017/07/code-health-to-comment-or-not-to-comment.html
+  - name: Go doc comments
+    url: https://go.dev/doc/comment
+  - name: Rustdoc, How to write documentation
+    url: https://doc.rust-lang.org/rustdoc/how-to-write-documentation.html
+  - name: C# XML documentation comments
+    url: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/
+  - name: TSDoc approach
+    url: https://tsdoc.org/pages/intro/approach/
+  - name: Oracle, How to Write Doc Comments for the Javadoc Tool
+    url: https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html
+  - name: Google Shell Style Guide, Comments
+    url: https://google.github.io/styleguide/shellguide.html#s4-comments
+  - name: PowerShell, about Comments
+    url: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comments
+  - name: PowerShell, about Comment Based Help
+    url: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comment_based_help
+  - name: ShellCheck directives and diagnostics
+    url: https://www.shellcheck.net/wiki/
+  - name: Dockerfile reference, comments and parser directives
+    url: https://docs.docker.com/reference/dockerfile/#parser-directives
+  - name: YAML 1.2.2 specification, comments
+    url: https://yaml.org/spec/1.2.2/#66-comments
+  - name: GNU Make manual, Makefile contents and comments
+    url: https://www.gnu.org/software/make/manual/html_node/Makefile-Contents.html
+  - name: Terraform language style guide
+    url: https://developer.hashicorp.com/terraform/language/style
+  - name: ESLint configuration comments and suppression descriptions
+    url: https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments
+  - name: Ruff suppression comments and unused suppression detection
+    url: https://docs.astral.sh/ruff/linter/#error-suppression
+  - name: TypeScript expect-error comments
+    url: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html#ts-expect-error-comments

@@ -1,0 +1,82 @@
+reviewed_on: "2026-08-06"
+observed_versions:
+  mermaid_documentation: "11.16.0"
+  mermaid_cli: "11.16.0"
+  graphviz: "14.1.2"
+  d2: "0.7.1"
+supported_languages:
+  mermaid:
+    syntax: "https://mermaid.js.org/intro/syntax-reference.html"
+    demos: "https://github.com/mermaid-js/mermaid/tree/develop/demos"
+    configuration: "https://mermaid.js.org/config/configuration.html"
+    configuration_schema: "https://mermaid.js.org/config/schema-docs/config.html"
+    cli: "https://github.com/mermaid-js/mermaid-cli"
+    license: "https://github.com/mermaid-js/mermaid/blob/develop/LICENSE"
+    cli_license: "https://github.com/mermaid-js/mermaid-cli/blob/master/LICENSE"
+    integrations: "https://mermaid.js.org/ecosystem/integrations-community.html"
+  graphviz:
+    language: "https://graphviz.org/doc/info/lang.html"
+    documentation: "https://graphviz.org/documentation/"
+    attributes: "https://graphviz.org/doc/info/attrs.html"
+    shapes: "https://graphviz.org/doc/info/shapes.html"
+    colors: "https://graphviz.org/doc/info/colors.html"
+    layouts: "https://graphviz.org/docs/layouts/"
+    outputs: "https://graphviz.org/docs/outputs/"
+    license: "https://graphviz.org/license/"
+candidate_languages:
+  d2:
+    documentation: "https://d2lang.com/tour/intro/"
+    repository: "https://github.com/terrastruct/d2"
+    license: "https://github.com/terrastruct/d2/blob/master/LICENSE.txt"
+    install: "https://d2lang.com/tour/install/"
+    icons: "https://d2lang.com/tour/icons/"
+    cli: "https://d2lang.com/tour/man/"
+platforms:
+  github_diagrams: "https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams"
+  gitlab_mermaid: "https://docs.gitlab.com/user/markdown/#mermaid"
+  obsidian_diagrams: "https://obsidian.md/help/Editing%2Band%2Bformatting/Advanced%2Bformatting%2Bsyntax"
+
+design_and_accessibility:
+  wcag_2_2: "https://www.w3.org/TR/WCAG22/"
+  w3c_non_text_contrast: "https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast"
+  w3c_color_and_pattern: "https://www.w3.org/WAI/WCAG22/Techniques/general/G111.html"
+  w3c_complex_images: "https://www.w3.org/WAI/tutorials/images/complex/"
+  carbon_visualization_palettes: "https://carbondesignsystem.com/data-visualization/color-palettes/"
+  carbon_chart_types: "https://carbondesignsystem.com/data-visualization/chart-types/"
+  carbon_axes_and_labels: "https://carbondesignsystem.com/data-visualization/axes-and-labels/"
+  material_color_system: "https://m2.material.io/guidelines/style/color.html"
+  tailwind_colors: "https://tailwindcss.com/docs/colors"
+  nord_palette: "https://www.nordtheme.com/"
+  catppuccin_palette: "https://github.com/catppuccin/palette"
+  dracula_palette: "https://draculatheme.com/"
+  gruvbox_palette: "https://github.com/morhetz/gruvbox"
+  solarized_palette: "https://ethanschoonover.com/solarized/"
+  tokyo_night_palette: "https://github.com/folke/tokyonight.nvim"
+  c4_notation: "https://c4model.com/diagrams/notation"
+  c4_review_checklist: "https://c4model.com/diagrams/checklist"
+  diagrams_2024_domain_rules:
+    title: "Domain-Specific Rules Override Aesthetic Graph Drawing Criteria"
+    doi: "https://doi.org/10.1007/978-3-031-71291-3_4"
+  graph_drawing_2025_metrics:
+    title: "Universal Quality Metrics for Graph Drawings"
+    doi: "https://doi.org/10.4230/LIPIcs.GD.2025.30"
+  graph_drawing_2025_human_validity:
+    title: "Graph Drawing 2025 human-validity study"
+    doi: "https://doi.org/10.4230/LIPIcs.GD.2025.7"
+  process_diagram_eye_tracking_2024:
+    title: "2024 process-diagram eye-tracking study"
+    doi: "https://doi.org/10.1016/j.dss.2024.114292"
+  graph_readability_2026_replication:
+    title: "Do Graph Drawing Aesthetics Matter for AI?"
+    doi: "https://doi.org/10.1111/cgf.70436"
+
+icons:
+  mermaid_registration: "https://mermaid.js.org/config/icons.html"
+  terrastruct_catalog: "https://icons.terrastruct.com/"
+  material_design_icons: "https://pictogrammers.com/library/mdi/"
+  iconify_collections: "https://icon-sets.iconify.design/"
+  font_awesome_free_license: "https://fontawesome.com/license/free"
+
+curation:
+  approach: "Team-authored practical guidance summarized from official sources; no upstream skill, icon asset, or documentation body is vendored."
+  refresh_rule: "Recheck official syntax, platform support, versions, icon terms, and current accessibility recommendations before materially changing the references."

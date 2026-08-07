@@ -1,0 +1,6 @@
+interface:
+  display_name: "Document System"
+  short_description: "Build a coordinated system documentation set"
+  default_prompt: "Use $document-system to reconcile confirmed intent and observed evidence into coordinated, reader-first system documentation."
+policy:
+  allow_implicit_invocation: false

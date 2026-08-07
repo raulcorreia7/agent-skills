@@ -1,0 +1,6 @@
+interface:
+  display_name: "Code Scanner"
+  short_description: "Run code-scanner checks"
+  default_prompt: "Use $code-scanner to run quantitative and qualitative code checks and report thresholded findings with scanner tools."
+policy:
+  allow_implicit_invocation: false

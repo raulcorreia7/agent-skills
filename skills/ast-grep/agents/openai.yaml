@@ -1,0 +1,6 @@
+interface:
+  display_name: "ast-grep"
+  short_description: "Find syntax-aware structures with ast-grep"
+  default_prompt: "Use $ast-grep to find and verify a syntax-aware code pattern."
+policy:
+  allow_implicit_invocation: true

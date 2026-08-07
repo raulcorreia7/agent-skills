@@ -1,0 +1,6 @@
+interface:
+  display_name: "Discuss Architecture"
+  short_description: "Align architecture boundaries and trade-offs"
+  default_prompt: "Use $discuss-architecture to compare system-design options and align on a decision."
+policy:
+  allow_implicit_invocation: false

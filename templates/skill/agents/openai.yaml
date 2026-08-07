@@ -1,0 +1,6 @@
+interface:
+  display_name: "<Skill Name>"
+  short_description: "<25-64 character UI description>"
+  default_prompt: "Use $<skill-name> to <perform a representative task>."
+policy:
+  allow_implicit_invocation: true

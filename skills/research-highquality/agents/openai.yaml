@@ -1,0 +1,6 @@
+interface:
+  display_name: "High-Quality Research"
+  short_description: "Research broad or contested questions with traceable evidence"
+  default_prompt: "Use $research-highquality to investigate this broad or contested question and return a concise, claim-supported synthesis."
+policy:
+  allow_implicit_invocation: false

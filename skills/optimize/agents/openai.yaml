@@ -1,0 +1,6 @@
+interface:
+  display_name: "Optimize"
+  short_description: "Measure and rank target improvements"
+  default_prompt: "Use $optimize to define a measurable target, test the bottleneck claim, and rank evidence-backed improvements in the smallest relevant scope."
+policy:
+  allow_implicit_invocation: false

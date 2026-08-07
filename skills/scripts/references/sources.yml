@@ -1,0 +1,62 @@
+sources:
+  - name: GNU Bash Reference Manual
+    url: https://www.gnu.org/software/bash/manual/bash.html
+  - name: Google Shell Style Guide
+    url: https://google.github.io/styleguide/shellguide.html
+  - name: ShellCheck SC2086
+    url: https://www.shellcheck.net/wiki/SC2086
+  - name: ShellCheck
+    url: https://www.shellcheck.net/
+  - name: BashFAQ/105
+    url: https://mywiki.wooledge.org/BashFAQ/105
+  - name: PowerShell about_Parsing
+    url: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing
+  - name: PowerShell about_Error_Handling
+    url: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_error_handling
+  - name: PowerShell ShouldProcess deep dive
+    url: https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-shouldprocess
+  - name: PSScriptAnalyzer overview
+    url: https://learn.microsoft.com/en-us/powershell/utility-modules/psscriptanalyzer/overview
+  - name: Invoke-ScriptAnalyzer
+    url: https://learn.microsoft.com/en-us/powershell/module/psscriptanalyzer/invoke-scriptanalyzer
+  - name: Invoke-Pester
+    url: https://pester.dev/docs/commands/Invoke-Pester
+  - name: Test-ModuleManifest
+    url: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/test-modulemanifest
+  - name: Python argparse
+    url: https://docs.python.org/3/library/argparse.html
+  - name: Python subprocess
+    url: https://docs.python.org/3/library/subprocess.html
+  - name: Python pathlib
+    url: https://docs.python.org/3/library/pathlib.html
+  - name: Python tempfile
+    url: https://docs.python.org/3/library/tempfile.html
+  - name: Ruff formatter
+    url: https://docs.astral.sh/ruff/formatter/
+  - name: Ruff linter
+    url: https://docs.astral.sh/ruff/linter/
+  - name: uv locking and syncing
+    url: https://docs.astral.sh/uv/concepts/projects/sync/
+  - name: uv CLI reference
+    url: https://docs.astral.sh/uv/reference/cli/
+  - name: Windows Commands
+    url: https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands
+  - name: Windows setlocal
+    url: https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/setlocal
+  - name: zx setup
+    url: https://google.github.io/zx/setup
+  - name: zx quotes
+    url: https://google.github.io/zx/quotes
+  - name: zx TypeScript
+    url: https://google.github.io/zx/typescript
+  - name: TypeScript strict
+    url: https://www.typescriptlang.org/tsconfig/strict
+  - name: TypeScript noEmit
+    url: https://www.typescriptlang.org/tsconfig/noEmit.html
+  - name: npm audit
+    url: https://docs.npmjs.com/cli/commands/npm-audit/
+  - name: GNU command-line interface standards
+    url: https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html
+  - name: GitHub Scripts to Rule Them All
+    url: https://github.blog/engineering/scripts-to-rule-them-all/
+retrieved_on: "2026-08-06"

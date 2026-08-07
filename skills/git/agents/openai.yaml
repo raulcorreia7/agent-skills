@@ -1,0 +1,6 @@
+interface:
+  display_name: "Git"
+  short_description: "Inspect Git, draft text, and run approved workflows"
+  default_prompt: "Use $git to inspect this repository and prepare the requested Git workflow safely."
+policy:
+  allow_implicit_invocation: true

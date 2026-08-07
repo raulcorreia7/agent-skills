@@ -1,0 +1,42 @@
+version: "3"
+
+tasks:
+  default:
+    desc: List the available maintainer tasks.
+    cmds:
+      - task --list
+
+  setup:
+    desc: Create or update the uv-managed development environment.
+    cmds:
+      - uv sync --all-groups
+
+  validate:
+    desc: Run repository validation.
+    cmds:
+      - uv run poe validate
+
+  format:
+    desc: Format Python sources.
+    cmds:
+      - uv run poe format
+
+  format-check:
+    desc: Check Python source formatting.
+    cmds:
+      - uv run poe format-check
+
+  lint:
+    desc: Run development linters.
+    cmds:
+      - uv run poe lint
+
+  check:
+    desc: Run validation and development linters.
+    cmds:
+      - uv run poe check
+
+  serve:
+    desc: Serve the diagram gallery on an available local port.
+    cmds:
+      - uv run poe serve

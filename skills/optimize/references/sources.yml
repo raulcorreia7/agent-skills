@@ -1,0 +1,6 @@
+retrieved_on: "2026-07-14"
+sources:
+  - name: Google SRE, monitoring distributed systems
+    url: https://sre.google/sre-book/monitoring-distributed-systems/
+  - name: OpenTelemetry metrics concepts
+    url: https://opentelemetry.io/docs/concepts/signals/metrics/

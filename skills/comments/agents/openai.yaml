@@ -1,0 +1,6 @@
+interface:
+  display_name: "Comments"
+  short_description: "Maintain source comments and API docs, not standalone docs"
+  default_prompt: "Use $comments to explain, audit, or maintain these source comments and API documentation without changing runtime behavior."
+policy:
+  allow_implicit_invocation: true

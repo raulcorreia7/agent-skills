@@ -1,0 +1,16 @@
+reviewed_on: "2026-08-19"
+limitations:
+  - "Git documents linked-worktree behavior and generic paths; the repository-local .worktrees/ layout is this skill's convention, not a Git portability guarantee."
+sources:
+  linked_worktrees:
+    title: "Git worktree"
+    url: "https://git-scm.com/docs/git-worktree"
+  repository_layout:
+    title: "Git repository layout"
+    url: "https://git-scm.com/docs/gitrepository-layout"
+  ignore_rules:
+    title: "Git ignore"
+    url: "https://git-scm.com/docs/gitignore"
+  cleanup:
+    title: "Git clean"
+    url: "https://git-scm.com/docs/git-clean"

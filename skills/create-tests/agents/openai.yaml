@@ -1,0 +1,6 @@
+interface:
+  display_name: "Create Tests"
+  short_description: "Create tests for observable behavior"
+  default_prompt: "Use $create-tests to add focused tests for this behavior and run them."
+policy:
+  allow_implicit_invocation: true

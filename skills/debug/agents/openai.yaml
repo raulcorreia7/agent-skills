@@ -1,0 +1,6 @@
+interface:
+  display_name: "Debug"
+  short_description: "Diagnose failures and isolate their causes"
+  default_prompt: "Use $debug to reproduce this failure and identify its evidence-backed cause."
+policy:
+  allow_implicit_invocation: true

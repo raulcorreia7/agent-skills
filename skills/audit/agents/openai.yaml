@@ -1,0 +1,6 @@
+interface:
+  display_name: "Audit"
+  short_description: "Inspect repository or system state"
+  default_prompt: "Use $audit to inspect the selected repository or system state and report evidence-backed findings within a read-only boundary."
+policy:
+  allow_implicit_invocation: false

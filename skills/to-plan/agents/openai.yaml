@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Plan"
+  short_description: "Create implementation-ready plans after decisions settle"
+  default_prompt: "Use $to-plan to create an implementation-ready plan after requirements and material decisions are settled; do not implement."
+policy:
+  allow_implicit_invocation: false

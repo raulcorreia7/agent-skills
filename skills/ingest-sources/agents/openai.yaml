@@ -1,0 +1,7 @@
+interface:
+  display_name: "Ingest Sources"
+  short_description: "Acquire and prepare sources with provenance"
+  default_prompt: "Use $ingest-sources to acquire and prepare these sources for bounded retrieval."
+
+policy:
+  allow_implicit_invocation: true

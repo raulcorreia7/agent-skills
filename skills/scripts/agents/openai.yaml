@@ -1,0 +1,6 @@
+interface:
+  display_name: "Scripts"
+  short_description: "Build scripts with explicit command contracts"
+  default_prompt: "Use $scripts to implement or explain this automation with explicit inputs, outputs, side effects, and exit behavior."
+policy:
+  allow_implicit_invocation: true

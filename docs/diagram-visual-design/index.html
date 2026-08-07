@@ -1,0 +1,3327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data:; style-src 'self' 'unsafe-inline' blob: data:; img-src 'self' blob: data:; font-src 'self' blob: data:; media-src 'self' blob: data:; worker-src 'self' blob:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Diagram Visual Design</title>
+<style>:root {
+  color-scheme: light dark;
+  background-color: var(--background) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: light-dark(rgb(255 255 255), rgb(15 23 42));
+  --foreground: light-dark(rgb(15 23 42), rgb(248 250 252));
+  --card: light-dark(rgb(248 250 252), rgb(30 41 59));
+  --card-foreground: var(--foreground);
+  --popover: light-dark(rgb(255 255 255), rgb(30 41 59));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(rgb(37 99 235), rgb(98 143 241));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(15 23 42));
+  --secondary: light-dark(rgb(248 250 252), rgb(30 41 59));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: light-dark(
+    rgb(71 85 105),
+    rgb(203 213 225)
+  );
+  --accent: light-dark(rgb(216 227 251), rgb(16 42 99));
+  --accent-foreground: var(--primary);
+  --destructive: light-dark(rgb(185 28 28), rgb(205 92 92));
+  --border: light-dark(rgb(203 213 225), rgb(71 85 105));
+  --input: light-dark(
+    rgb(203 213 225),
+    rgb(71 85 105)
+  );
+  --ring: light-dark(rgb(37 99 235), rgb(98 143 241));
+  --font-size-base: 14px;
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: 12.5px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E");
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+  --color-background-primary: var(--background);
+  --color-text-primary: var(--foreground);
+  --color-border-secondary: var(--border);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html > body {
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--viz-font-weight-medium);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive > .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align="right"]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align="center"]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget > :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls > .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls > .form-label > :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type="file"] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type="file"]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type="file"]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type="color"] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: "";
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type="radio"]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: "";
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed="true"],
+    [aria-selected="true"],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed="true"], [aria-selected="true"], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget > svg {
+  width: 100%;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html>body{padding:0}</style>
+</head>
+<body>
+<div id="diagram-renderer-alignment" data-scheme="light" data-coverage="11x3-plus-org">
+  <style>
+    #diagram-renderer-alignment {
+      --dl-canvas: #FFFFFF;
+      --dl-edge: #475569;
+      --dl-secondary-text: #475569;
+      --dl-neutral-fill: #F8FAFC;
+      --dl-neutral-stroke: #64748B;
+      --dl-neutral-text: #0F172A;
+      --dl-focus-fill: #D8E3FB;
+      --dl-focus-stroke: #2563EB;
+      --dl-focus-text: #102A63;
+      --dl-external-fill: #E1E5EB;
+      --dl-external-stroke: #5B708E;
+      --dl-external-text: #262F3C;
+      --dl-success-fill: #D5E8DC;
+      --dl-success-stroke: #15803D;
+      --dl-success-text: #09361A;
+      --dl-risk-fill: #F2D6D6;
+      --dl-risk-stroke: #B91C1C;
+      --dl-risk-text: #4E0C0C;
+      --dl-decision-fill: #E7DCFC;
+      --dl-decision-stroke: #7C3AED;
+      --dl-decision-text: #341864;
+      --dl-actor-fill: #D1E9F5;
+      --dl-actor-stroke: #0284C7;
+      --dl-actor-text: #013754;
+      --dl-service-fill: #D3ECEA;
+      --dl-service-stroke: #0D9488;
+      --dl-service-text: #053E39;
+      --dl-data-fill: #DFDEFA;
+      --dl-data-stroke: #4F46E5;
+      --dl-data-text: #211D60;
+      --dl-process-fill: #D3EBF1;
+      --dl-process-stroke: #0891B2;
+      --dl-process-text: #033D4B;
+      --dl-warning-fill: #F8E7D2;
+      --dl-warning-stroke: #D97706;
+      --dl-warning-text: #5B3203;
+      color: var(--foreground);
+      display: grid;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1440px;
+      margin-inline: auto;
+      padding: .75rem 1rem 4rem;
+      scroll-behavior: smooth;
+    }
+    #diagram-renderer-alignment[data-scheme="dark"] {
+      --dl-canvas: #0F172A;
+      --dl-edge: #CBD5E1;
+      --dl-secondary-text: #CBD5E1;
+      --dl-neutral-fill: #1E293B;
+      --dl-neutral-stroke: #94A3B8;
+      --dl-neutral-text: #F8FAFC;
+      --dl-focus-fill: #102A63;
+      --dl-focus-stroke: #628FF1;
+      --dl-focus-text: #CFDDFB;
+      --dl-external-fill: #262F3C;
+      --dl-external-stroke: #8998AE;
+      --dl-external-text: #DBE0E6;
+      --dl-success-fill: #09361A;
+      --dl-success-stroke: #57A473;
+      --dl-success-text: #CCE3D4;
+      --dl-risk-fill: #4E0C0C;
+      --dl-risk-stroke: #CD5C5C;
+      --dl-risk-text: #F0CDCD;
+      --dl-decision-fill: #341864;
+      --dl-decision-stroke: #A171F2;
+      --dl-decision-text: #E2D4FB;
+      --dl-actor-fill: #013754;
+      --dl-actor-stroke: #49A6D7;
+      --dl-actor-text: #C7E4F3;
+      --dl-service-fill: #053E39;
+      --dl-service-stroke: #51B2A9;
+      --dl-service-text: #CAE7E5;
+      --dl-data-fill: #211D60;
+      --dl-data-stroke: #807AEC;
+      --dl-data-text: #D8D6F9;
+      --dl-process-fill: #033D4B;
+      --dl-process-stroke: #4DB0C8;
+      --dl-process-text: #C9E7EE;
+      --dl-warning-fill: #5B3203;
+      --dl-warning-stroke: #E49D4C;
+      --dl-warning-text: #F7E1C8;
+    }
+    #diagram-renderer-alignment .review-toolbar {
+      position: sticky;
+      top: .5rem;
+      z-index: 30;
+      display: grid;
+      grid-template-areas:
+        "identity status"
+        "controls controls";
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: .7rem 1rem;
+      padding: .7rem 1rem;
+      background: color-mix(in srgb, var(--background) 94%, transparent);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: .85rem;
+      box-shadow: 0 12px 30px color-mix(in srgb, var(--foreground) 9%, transparent);
+    }
+    #diagram-renderer-alignment section { scroll-margin-top: 7rem; }
+    #diagram-renderer-alignment .language-heading { display: none; }
+    #diagram-renderer-alignment .gallery-intro {
+      grid-area: identity;
+      display: flex;
+      align-items: baseline;
+      gap: .5rem;
+      min-width: 0;
+    }
+    #diagram-renderer-alignment .renderer-status {
+      grid-area: status;
+      position: relative;
+      min-width: max-content;
+    }
+    #diagram-renderer-alignment .renderer-status[open] {
+      padding-left: 0;
+      border-left: 0;
+    }
+    #diagram-renderer-alignment .renderer-status summary {
+      color: var(--muted-foreground);
+      font-size: var(--font-size-sm);
+    }
+    #diagram-renderer-alignment .renderer-status .dependency-row {
+      position: absolute;
+      top: calc(100% + .5rem);
+      right: 0;
+      display: grid;
+      gap: .4rem;
+      min-width: 16rem;
+      padding: .7rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: .7rem;
+      box-shadow: 0 12px 30px color-mix(in srgb, var(--foreground) 12%, transparent);
+    }
+    #diagram-renderer-alignment .viz-controls {
+      grid-area: controls;
+      display: grid;
+      grid-template-columns: minmax(9rem, 1fr) minmax(11rem, 1.25fr) minmax(9rem, 1fr) minmax(12rem, 1.35fr) auto;
+      gap: .65rem;
+      align-items: end;
+      max-width: 70rem;
+    }
+    #diagram-renderer-alignment .viz-controls .form-label { min-width: 0; }
+    #diagram-renderer-alignment .viz-controls .form-select { width: 100%; }
+    #diagram-renderer-alignment .mode-control {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      min-height: 2.25rem;
+    }
+    #diagram-renderer-alignment .mode-control .form-label { white-space: nowrap; }
+    #diagram-renderer-alignment .palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+      gap: .6rem;
+    }
+    #diagram-renderer-alignment .swatch {
+      display: grid;
+      gap: .35rem;
+      min-width: 0;
+    }
+    #diagram-renderer-alignment .swatch-mark {
+      height: 2.25rem;
+      border: 1px solid var(--swatch-stroke);
+      border-radius: .6rem;
+      background: var(--swatch-fill);
+    }
+    #diagram-renderer-alignment .swatch span { color: var(--muted-foreground); }
+    #diagram-renderer-alignment .swatch > div { display: grid; gap: .1rem; }
+    #diagram-renderer-alignment .examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+    }
+    #diagram-renderer-alignment .language-heading { grid-column: 1 / -1; }
+    #diagram-renderer-alignment .example {
+      display: grid;
+      align-content: start;
+      gap: .55rem;
+      min-width: 0;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: .9rem;
+      background: var(--card);
+      box-shadow: 0 6px 18px color-mix(in srgb, var(--foreground) 5%, transparent);
+    }
+    #diagram-renderer-alignment .example[hidden] { display: none; }
+    #diagram-renderer-alignment .example-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+    #diagram-renderer-alignment .render-target {
+      display: grid;
+      place-items: center;
+      height: clamp(190px, 18vw, 250px);
+      padding: .6rem;
+      border: 1px solid var(--border);
+      border-radius: .7rem;
+      background: transparent;
+      color: var(--dl-neutral-text);
+      overflow: hidden;
+    }
+    #diagram-renderer-alignment .render-target svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+    }
+    #diagram-renderer-alignment .render-target[data-state="loading"]::before {
+      content: "Rendering…";
+      color: var(--muted-foreground);
+    }
+    #diagram-renderer-alignment .render-target[data-state="error"] {
+      height: auto;
+      min-height: 10rem;
+    }
+    #diagram-renderer-alignment .render-target[data-state="idle"] {
+      height: 11rem;
+      min-height: 11rem;
+    }
+    #diagram-renderer-alignment .render-target[data-state="ready"] { cursor: zoom-in; }
+    #diagram-renderer-alignment .render-target[data-state="ready"]:focus-visible {
+      outline: 3px solid var(--ring);
+      outline-offset: 3px;
+    }
+    #diagram-renderer-alignment .org-chart[data-state="idle"] { min-height: 11rem; }
+    #diagram-renderer-alignment details { min-width: 0; }
+    #diagram-renderer-alignment details[open] {
+      padding-left: .8rem;
+      border-left: 3px solid var(--dl-focus-stroke);
+    }
+    #diagram-renderer-alignment summary { cursor: pointer; }
+    #diagram-renderer-alignment .copy-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: .35rem;
+    }
+    #diagram-renderer-alignment pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin-bottom: 0;
+    }
+    #diagram-renderer-alignment .org-chart { height: clamp(360px, 42vw, 620px); }
+    #diagram-renderer-alignment .gallery-name { font-weight: 650; }
+    #diagram-renderer-alignment .gallery-hint { color: var(--muted-foreground); }
+    #diagram-preview {
+      width: min(96vw, 1200px);
+      height: min(88vh, 900px);
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: .9rem;
+      background: var(--card);
+      color: var(--foreground);
+      box-shadow: 0 24px 60px color-mix(in srgb, var(--foreground) 32%, transparent);
+    }
+    #diagram-preview::backdrop { background: rgb(15 23 42 / 65%); }
+    #diagram-preview > header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .8rem;
+    }
+    #diagram-preview img {
+      display: block;
+      width: 100%;
+      height: calc(100% - 2.8rem);
+      object-fit: contain;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: .6rem;
+    }
+    @media (max-width: 680px) {
+      #diagram-renderer-alignment .palette { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      #diagram-renderer-alignment .examples { grid-template-columns: 1fr; }
+      #diagram-renderer-alignment .render-target { height: 260px; }
+      #diagram-renderer-alignment .org-chart { height: 460px; }
+      #diagram-renderer-alignment .review-toolbar {
+        position: static;
+        grid-template-areas: "identity" "controls" "status";
+        grid-template-columns: 1fr;
+      }
+      #diagram-renderer-alignment .gallery-intro { flex-wrap: wrap; }
+      #diagram-renderer-alignment .renderer-status { justify-self: start; }
+      #diagram-renderer-alignment .renderer-status .dependency-row {
+        right: auto;
+        left: 0;
+      }
+      #diagram-renderer-alignment .viz-controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: none;
+      }
+      #diagram-renderer-alignment .viz-controls label[for="palette-family"] { grid-column: 1 / -1; }
+      #diagram-renderer-alignment .mode-control { grid-column: 1 / -1; }
+      #diagram-preview { width: 100vw; height: 100vh; max-width: none; max-height: none; border-radius: 0; }
+    }
+  </style>
+
+  <header class="review-toolbar" aria-label="Gallery toolbar">
+    <div class="gallery-intro">
+      <span class="gallery-name">Diagram gallery</span>
+      <span class="text-small gallery-hint">Select a preview to enlarge</span>
+    </div>
+    <details class="renderer-status">
+      <summary id="renderer-summary">Renderer status · loading</summary>
+      <div class="dependency-row" aria-live="polite">
+      <span class="viz-badge" id="mermaid-status">Mermaid 11.16.0 · loading</span>
+      <span class="viz-badge" id="viz-status">Viz.js 3.28.0 · loading</span>
+      <span class="viz-badge" id="d2-status">D2.js 0.1.33 · loading</span>
+      </div>
+    </details>
+    <div class="viz-controls" aria-label="Gallery controls">
+      <label class="form-label" for="renderer-filter">Renderer
+        <select class="form-select" id="renderer-filter">
+          <option value="mermaid" selected>Mermaid</option>
+          <option value="graphviz">Graphviz</option>
+          <option value="d2">D2</option>
+          <option value="all">All renderers</option>
+        </select>
+      </label>
+      <label class="form-label" for="diagram-category">Category
+        <select class="form-select" id="diagram-category">
+          <option value="all">All categories</option>
+          <option value="architecture">Architecture</option>
+          <option value="process">Process</option>
+          <option value="interaction">Interaction</option>
+          <option value="behavior">Behavior</option>
+          <option value="data">Data</option>
+          <option value="planning">Planning</option>
+          <option value="analysis">Analysis</option>
+          <option value="hierarchy">Hierarchy</option>
+          <option value="formal">Formal models</option>
+          <option value="network">Networks</option>
+          <option value="organization">Organization</option>
+        </select>
+      </label>
+      <label class="form-label" for="example-depth">Example depth
+        <select class="form-select" id="example-depth">
+          <option value="simple">Simple</option>
+          <option value="balanced" selected>Balanced</option>
+          <option value="complex">Complex</option>
+        </select>
+      </label>
+      <label class="form-label" for="palette-family">Theme
+        <select class="form-select" id="palette-family">
+          <option value="carbon" selected>Carbon</option>
+          <option value="fluent">Fluent</option>
+          <option value="material">Material</option>
+          <option value="tailwind">Tailwind</option>
+          <option value="nord">Nord</option>
+          <option value="catppuccin">Catppuccin</option>
+          <option value="dracula">Dracula</option>
+          <option value="gruvbox">Gruvbox</option>
+          <option value="solarized">Solarized</option>
+          <option value="tokyoNight">Tokyo Night</option>
+        </select>
+      </label>
+      <div class="mode-control" role="group" aria-label="Color mode">
+      <span class="form-label">Mode</span>
+      <button class="btn btn-primary" type="button" data-scheme-button="light" aria-pressed="true">Light</button>
+      <button class="btn" type="button" data-scheme-button="dark" aria-pressed="false">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <section aria-labelledby="renderer-palette-heading">
+    <h2 id="renderer-palette-heading">Extended semantic palette</h2>
+    <div class="palette">
+      <div class="swatch" style="--swatch-fill:var(--dl-neutral-fill);--swatch-stroke:var(--dl-neutral-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Neutral</strong><span class="text-small">Context</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-focus-fill);--swatch-stroke:var(--dl-focus-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Focus</strong><span class="text-small">Subject</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-actor-fill);--swatch-stroke:var(--dl-actor-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Actor</strong><span class="text-small">Person / role</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-service-fill);--swatch-stroke:var(--dl-service-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Service</strong><span class="text-small">Capability</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-data-fill);--swatch-stroke:var(--dl-data-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Data</strong><span class="text-small">State / storage</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-process-fill);--swatch-stroke:var(--dl-process-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Process</strong><span class="text-small">Work / automation</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-external-fill);--swatch-stroke:var(--dl-external-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>External</strong><span class="text-small">Dependency</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-success-fill);--swatch-stroke:var(--dl-success-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Success</strong><span class="text-small">Healthy</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-risk-fill);--swatch-stroke:var(--dl-risk-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Risk</strong><span class="text-small">Failure</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-warning-fill);--swatch-stroke:var(--dl-warning-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Warning</strong><span class="text-small">Attention</span></div></div>
+      <div class="swatch" style="--swatch-fill:var(--dl-decision-fill);--swatch-stroke:var(--dl-decision-stroke)"><span class="swatch-mark" aria-hidden="true"></span><div><strong>Decision</strong><span class="text-small">Policy</span></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="renderer-gallery-heading">
+    <h2 id="renderer-gallery-heading">Renderer-backed examples</h2>
+    <div class="examples">
+      <h3 class="language-heading" id="mermaid-examples">Mermaid · 11 families</h3>
+      <article class="example" id="example-mermaid-architecture" data-renderer="mermaid" data-example="architecture">
+        <div class="example-head"><strong>Context / architecture</strong><span class="viz-badge">Mermaid · flowchart</span></div>
+        <div class="render-target" data-state="loading" aria-label="Context architecture preview"></div>
+        <details><summary>Canonical source</summary><pre><code>flowchart LR
+    accTitle: Ordering context
+    accDescr: A customer enters through a gateway and reaches the order API and store.
+    customer([Customer]) -->|submits| gateway[API gateway]
+    subgraph app[Application boundary]
+      api[Order API] -->|writes| store[(Order store)]
+    end
+    gateway -->|forwards| api
+    class customer neutral
+    class gateway external
+    class api focus
+    class store neutral</code></pre></details>
+      </article>
+
+      <article class="example" id="example-mermaid-flow" data-renderer="mermaid" data-example="flow">
+        <div class="example-head"><strong>Flow / activity</strong><span class="viz-badge">Mermaid · flowchart</span></div>
+        <div class="render-target" data-state="loading" aria-label="Order validation flow preview"></div>
+        <details><summary>Canonical source</summary><pre><code>flowchart LR
+    request([Request]) --> validate[Validate]
+    validate --> decision{Valid?}
+    decision -->|yes| queue[(Queue)]
+    decision -.->|no| explain[Explain error]
+    class request neutral
+    class validate focus
+    class decision decision
+    class queue success
+    class explain risk</code></pre></details>
+      </article>
+
+      <article class="example" id="example-mermaid-sequence" data-renderer="mermaid" data-example="sequence">
+        <div class="example-head"><strong>Sequence</strong><span class="viz-badge">Mermaid · sequence</span></div>
+        <div class="render-target" data-state="loading" aria-label="Order placement sequence preview"></div>
+        <details><summary>Canonical source</summary><pre><code>sequenceDiagram
+    actor Customer
+    participant API as Order API
+    participant Stock as Inventory
+    Customer->>API: Submit order
+    API->>Stock: Reserve items
+    Stock-->>API: Reserved
+    API-->>Customer: 201 Created</code></pre></details>
+      </article>
+
+      <article class="example" id="example-mermaid-state" data-renderer="mermaid" data-example="state">
+        <div class="example-head"><strong>State</strong><span class="viz-badge">Mermaid · state</span></div>
+        <div class="render-target" data-state="loading" aria-label="Order lifecycle state preview"></div>
+        <details><summary>Canonical source</summary><pre><code>stateDiagram-v2
+    direction LR
+    [*] --> Draft
+    Draft --> Submitted : submit
+    Submitted --> Fulfilled : ship
+    Submitted --> Rejected : reject
+    Fulfilled --> [*]
+    Rejected --> [*]</code></pre></details>
+      </article>
+
+      <article class="example" id="example-mermaid-er" data-renderer="mermaid" data-example="er">
+        <div class="example-head"><strong>Class / ER</strong><span class="viz-badge">Mermaid · ER</span></div>
+        <div class="render-target" data-state="loading" aria-label="Entity relationship preview"></div>
+        <details><summary>Canonical source</summary><pre><code>erDiagram
+    direction LR
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_LINE : contains
+    CUSTOMER { uuid customer_id PK }
+    ORDER { uuid order_id PK }
+    ORDER_LINE { string sku }</code></pre></details>
+      </article>
+
+      <article class="example" id="example-mermaid-gantt" data-renderer="mermaid" data-example="gantt">
+        <div class="example-head"><strong>Timeline / Gantt</strong><span class="viz-badge">Mermaid · Gantt</span></div>
+        <div class="render-target" data-state="loading" aria-label="Release schedule preview"></div>
+        <details><summary>Canonical source</summary><pre><code>gantt
+    title Checkout release
+    dateFormat YYYY-MM-DD
+    axisFormat %d %b
+    section Delivery
+    Implementation :done, build, 2026-07-01, 6d
+    Verification :crit, verify, after build, 4d
+    Release decision :milestone, release, after verify, 0d</code></pre></details>
+      </article>
+
+      <article class="example" id="example-mermaid-chart" data-renderer="mermaid" data-example="chart">
+        <div class="example-head"><strong>Chart / analysis</strong><span class="viz-badge">Mermaid · XY chart</span></div>
+        <div class="render-target" data-state="loading" aria-label="Checkout outcomes chart preview"></div>
+        <details><summary>Canonical source</summary><pre><code>xychart-beta
+    title "Checkout outcomes (%)"
+    x-axis [Completed, Payment, Inventory]
+    y-axis "Percent" 0 --> 100
+    bar [82, 11, 7]</code></pre></details>
+      </article>
+
+      <article class="example" id="example-mermaid-mindmap" data-renderer="mermaid" data-example="mindmap">
+        <div class="example-head"><strong>Mindmap / tree</strong><span class="viz-badge">Mermaid · mindmap</span></div>
+        <div class="render-target" data-state="loading" aria-label="Release readiness mindmap preview"></div>
+        <details><summary>Canonical source</summary><pre><code>mindmap
+  root((Release ready?))
+    Product
+      Acceptance
+    Engineering
+      Automated checks
+    Operations
+      Runbook</code></pre></details>
+      </article>
+
+      <h3 class="language-heading" id="graphviz-examples">Graphviz · 11 families</h3>
+
+      <article class="example" data-renderer="graphviz" data-example="automaton" data-graph="automaton" data-engine="dot">
+        <div class="example-head"><strong>Automaton / transition system</strong><span class="viz-badge">Graphviz · dot</span></div>
+        <div class="render-target" data-state="loading" aria-label="Finite automaton preview"></div>
+        <details><summary>Rendered DOT source</summary><pre><code></code></pre></details>
+      </article>
+
+      <article class="example" data-renderer="graphviz" data-example="petri" data-graph="petri" data-engine="dot">
+        <div class="example-head"><strong>Petri / formal model</strong><span class="viz-badge">Graphviz · dot</span></div>
+        <div class="render-target" data-state="loading" aria-label="Petri net preview"></div>
+        <details><summary>Rendered DOT source</summary><pre><code></code></pre></details>
+      </article>
+
+      <article class="example" data-renderer="graphviz" data-example="network" data-graph="network" data-engine="neato">
+        <div class="example-head"><strong>Force-directed network</strong><span class="viz-badge">Graphviz · neato</span></div>
+        <div class="render-target" data-state="loading" aria-label="Service dependency network preview"></div>
+        <details><summary>Rendered DOT source</summary><pre><code></code></pre></details>
+      </article>
+
+      <h3 class="language-heading" id="d2-examples">D2 · 11 families</h3>
+
+      <article class="example" data-renderer="d2" data-example="d2-architecture" data-d2="architecture">
+        <div class="example-head"><strong>Nested architecture</strong><span class="viz-badge">D2 · ELK</span></div>
+        <div class="render-target" data-state="loading" aria-label="D2 nested architecture preview"></div>
+        <details><summary>Canonical source</summary><pre><code>direction: right
+
+customer: Customer {shape: person}
+edge: Public edge {
+  gateway: API gateway
+}
+application: Application environment {
+  api: Order API
+  queue: Order queue {shape: queue}
+  store: Order store {shape: cylinder}
+}
+
+customer -> edge.gateway: submits order
+edge.gateway -> application.api: forwards HTTPS
+application.api -> application.queue: publishes
+application.queue -> application.store: writes status</code></pre></details>
+      </article>
+
+      <article class="example" data-renderer="d2" data-example="d2-sequence" data-d2="sequence">
+        <div class="example-head"><strong>Staged sequence</strong><span class="viz-badge">D2 · sequence</span></div>
+        <div class="render-target" data-state="loading" aria-label="D2 staged sequence preview"></div>
+        <details><summary>Canonical source</summary><pre><code>shape: sequence_diagram
+
+customer: Customer
+api: Order API
+stock: Inventory
+payment: Payment provider
+
+reserve: Reserve stock {
+  customer -> api: Submit order
+  api -> stock: Reserve items
+  stock -> api: Reserved
+}
+authorize: Authorize payment {
+  api -> payment: Authorize amount
+  payment -> api: Approved
+  api -> customer: Order confirmed
+}</code></pre></details>
+      </article>
+
+      <article class="example" data-renderer="d2" data-example="d2-portfolio" data-d2="portfolio">
+        <div class="example-head"><strong>Grouped quantitative map</strong><span class="viz-badge">D2 · ELK</span></div>
+        <div class="render-target" data-state="loading" aria-label="D2 grouped quantitative map preview"></div>
+        <details><summary>Canonical source</summary><pre><code>direction: right
+
+portfolio: Platform portfolio {
+  product: Product systems {
+    checkout: "Checkout\nTCO: €900k"
+    catalog: "Catalog\nTCO: €400k"
+  }
+  platform: Platform systems {
+    identity: "Identity\nTCO: €600k"
+    events: "Events\nTCO: €300k"
+  }
+  operations: Operations {
+    observability: "Observability\nTCO: €500k"
+  }
+}
+
+portfolio.product.checkout -> portfolio.platform.identity: authenticates
+portfolio.product.checkout -> portfolio.platform.events: publishes
+portfolio.platform.events -> portfolio.operations.observability: reports</code></pre></details>
+      </article>
+
+      <h3 class="language-heading" id="org-example">Organization example</h3>
+
+      <article class="example" data-renderer="graphviz" data-example="org" data-graph="org" data-engine="dot">
+        <div class="example-head"><strong>Organization chart · 50 people + 6 vacancies</strong><span class="viz-badge">Graphviz · dot</span></div>
+        <div class="render-target org-chart" data-state="loading" aria-label="Illustrative organization chart with fifty people and six vacant roles"></div>
+        <details><summary>Expected Excel columns</summary><pre><code>Employee ID | Name | Title | Manager ID | Status
+E001 | Maya Chen | Chief Executive Officer | | Filled
+E002 | Noah Patel | VP Engineering | E001 | Filled
+V001 | Vacant | Site Reliability Engineer | E014 | Vacant</code></pre></details>
+        <details><summary>Rendered DOT source</summary><pre><code></code></pre></details>
+      </article>
+    </div>
+  </section>
+
+  <dialog id="diagram-preview" aria-labelledby="diagram-preview-title">
+    <header>
+      <strong id="diagram-preview-title">Diagram preview</strong>
+      <button class="btn btn-ghost" type="button" id="diagram-preview-close">Close</button>
+    </header>
+    <img id="diagram-preview-image" alt="">
+  </dialog>
+
+  <script src="./vendor/mermaid.min.js"></script>
+  <script src="./vendor/viz-global.min.js"></script>
+  <script src="./vendor/d2.global.min.js"></script>
+  <script type="module">
+    const root = document.getElementById('diagram-renderer-alignment');
+    const mermaidStatus = root.querySelector('#mermaid-status');
+    const vizStatus = root.querySelector('#viz-status');
+    const d2Status = root.querySelector('#d2-status');
+    const rendererSummary = root.querySelector('#renderer-summary');
+    const paletteSelect = root.querySelector('#palette-family');
+    const depthSelect = root.querySelector('#example-depth');
+    const categorySelect = root.querySelector('#diagram-category');
+    const rendererFilter = root.querySelector('#renderer-filter');
+    const buttons = Array.from(root.querySelectorAll('[data-scheme-button]'));
+    const previewDialog = root.querySelector('#diagram-preview');
+    const previewTitle = root.querySelector('#diagram-preview-title');
+    const previewImage = root.querySelector('#diagram-preview-image');
+    const previewClose = root.querySelector('#diagram-preview-close');
+    let mermaidApi;
+    let vizApi;
+    let d2Api;
+    let renderGeneration = 0;
+    let mermaidSequence = 0;
+    let d2Queue = Promise.resolve();
+    let previewUrl;
+
+    const rendererStatuses = [mermaidStatus, vizStatus, d2Status];
+    rendererStatuses.forEach((status) => { status.dataset.state = 'loading'; });
+
+    function setRendererStatus(status, state, message) {
+      status.dataset.state = state;
+      status.textContent = message;
+      const ready = rendererStatuses.filter((candidate) => candidate.dataset.state === 'ready').length;
+      const unavailable = rendererStatuses.some((candidate) => candidate.dataset.state === 'unavailable');
+      rendererSummary.textContent = unavailable
+        ? `Renderer status · ${ready}/3 ready · unavailable`
+        : ready === rendererStatuses.length
+          ? 'Renderer status · all ready'
+          : `Renderer status · ${ready}/3 ready`;
+    }
+
+    function applyDocumentScheme(scheme) {
+      document.documentElement.style.colorScheme = scheme;
+      document.documentElement.style.backgroundColor = scheme === 'dark' ? '#0F172A' : '#FFFFFF';
+      document.body.style.backgroundColor = scheme === 'dark' ? '#0F172A' : '#FFFFFF';
+    }
+
+    applyDocumentScheme(root.dataset.scheme);
+
+    function addExample(beforeSelector, config) {
+      const before = root.querySelector(beforeSelector);
+      const article = document.createElement('article');
+      article.className = 'example';
+      article.dataset.renderer = config.renderer;
+      article.dataset.example = config.id;
+      if (config.graph) article.dataset.graph = config.graph;
+      if (config.engine) article.dataset.engine = config.engine;
+      if (config.d2) article.dataset.d2 = config.d2;
+
+      const head = document.createElement('div');
+      head.className = 'example-head';
+      const name = document.createElement('strong');
+      name.textContent = config.title;
+      const badge = document.createElement('span');
+      badge.className = 'viz-badge';
+      badge.textContent = config.badge;
+      head.append(name, badge);
+
+      const target = document.createElement('div');
+      target.className = 'render-target';
+      target.dataset.state = 'loading';
+      target.setAttribute('aria-label', `${config.title} preview`);
+
+      const details = document.createElement('details');
+      const summary = document.createElement('summary');
+      summary.textContent = config.renderer === 'graphviz' ? 'Rendered DOT source' : 'Canonical source';
+      const pre = document.createElement('pre');
+      const code = document.createElement('code');
+      code.textContent = config.source || '';
+      pre.appendChild(code);
+      details.append(summary, pre);
+      article.append(head, target, details);
+      before.parentNode.insertBefore(article, before);
+    }
+
+    [
+      { id: 'mermaid-automaton', title: 'Automaton / transition system', badge: 'Mermaid · state', source: `stateDiagram-v2
+    direction LR
+    [*] --> Even
+    Even --> Even : 0
+    Even --> Odd : 1
+    Odd --> Odd : 0
+    Odd --> Even : 1` },
+      { id: 'mermaid-petri', title: 'Petri / formal model approximation', badge: 'Mermaid · flowchart', source: `flowchart LR
+    ready((Ready ●)) --> reserve[Reserve]
+    stock((Stock ●)) --> reserve
+    reserve --> reserved((Reserved))
+    reserved --> ship[Ship]
+    ship --> complete((Complete))
+    class reserve,ship focus
+    class complete success` },
+      { id: 'mermaid-network', title: 'Force-directed network approximation', badge: 'Mermaid · flowchart', source: `flowchart TB
+    gateway((Gateway)) --- platform((Platform))
+    gateway --- commerce((Commerce))
+    platform --- commerce
+    platform --- operations((Operations))
+    commerce --- operations
+    class gateway focus
+    class platform decision
+    class commerce external
+    class operations success` }
+    ].forEach((config) => addExample('#graphviz-examples', { ...config, renderer: 'mermaid' }));
+
+    [
+      ['graphviz-architecture', 'Context / architecture', 'Graphviz · dot', 'architecture', 'dot'],
+      ['graphviz-flow', 'Flow / activity', 'Graphviz · dot', 'flow', 'dot'],
+      ['graphviz-sequence', 'Sequence approximation', 'Graphviz · dot', 'sequence', 'dot'],
+      ['graphviz-state', 'State', 'Graphviz · dot', 'state', 'dot'],
+      ['graphviz-er', 'Class / ER', 'Graphviz · dot', 'er', 'dot'],
+      ['graphviz-gantt', 'Timeline / Gantt approximation', 'Graphviz · dot', 'gantt', 'dot'],
+      ['graphviz-chart', 'Chart / analysis approximation', 'Graphviz · dot', 'chart', 'dot'],
+      ['graphviz-mindmap', 'Mindmap / tree', 'Graphviz · dot', 'mindmap', 'dot']
+    ].forEach(([id, title, badge, graph, engine]) => addExample('#d2-examples', { id, title, badge, graph, engine, renderer: 'graphviz' }));
+
+    [
+      { id: 'd2-flow', title: 'Flow / activity', badge: 'D2 · ELK', d2: 'flow', source: `direction: down
+request: Request {shape: oval}
+validate: Validate
+decision: Valid? {shape: diamond}
+queue: Queue {shape: queue}
+error: Explain error
+request -> validate -> decision
+decision -> queue: yes
+decision -> error: no` },
+      { id: 'd2-state', title: 'State', badge: 'D2 · ELK', d2: 'state', source: `direction: down
+start: Start {shape: circle}
+draft: Draft
+submitted: Submitted
+fulfilled: Fulfilled
+rejected: Rejected
+start -> draft -> submitted
+submitted -> fulfilled: ship
+submitted -> rejected: reject` },
+      { id: 'd2-er', title: 'Entity relationship', badge: 'D2 · ELK', d2: 'er', source: `direction: right
+customer: Customer {shape: sql_table
+  customer_id: uuid {constraint: primary_key}
+  email: varchar {constraint: unique}
+}
+order: Order {shape: sql_table
+  order_id: uuid {constraint: primary_key}
+  customer_id: uuid {constraint: foreign_key}
+  status: varchar
+}
+order_item: Order item {shape: sql_table
+  order_id: uuid {constraint: foreign_key}
+  sku: varchar
+  quantity: integer
+}
+customer.customer_id -> order.customer_id: places {
+  source-arrowhead.shape: cf-one-required
+  target-arrowhead.shape: cf-many
+}
+order.order_id -> order_item.order_id: contains {
+  source-arrowhead.shape: cf-one-required
+  target-arrowhead.shape: cf-many-required
+}` },
+      { id: 'd2-timeline', title: 'Timeline / Gantt approximation', badge: 'D2 · ELK', d2: 'timeline', source: `direction: down
+week1: "01–06 Jul\\nImplementation"
+week2: "07–10 Jul\\nVerification"
+decision: "10 Jul\\nRelease decision" {shape: diamond}
+week1 -> week2 -> decision` },
+      { id: 'd2-mindmap', title: 'Mindmap / tree', badge: 'D2 · ELK', d2: 'mindmap', source: `direction: down
+ready: Release ready?
+ready -> product: Product
+ready -> engineering: Engineering
+ready -> operations: Operations
+product -> acceptance: Acceptance
+engineering -> checks: Automated checks
+operations -> runbook: Runbook` },
+      { id: 'd2-automaton', title: 'Automaton / transition system', badge: 'D2 · ELK', d2: 'automaton', source: `direction: right
+start: Start {shape: circle}
+even: Even {shape: circle; style.stroke-width: 4}
+odd: Odd {shape: circle}
+start -> even
+even -> even: 0
+even -> odd: 1
+odd -> odd: 0
+odd -> even: 1` },
+      { id: 'd2-petri', title: 'Petri / formal model approximation', badge: 'D2 · ELK', d2: 'petri', source: `direction: right
+ready: "Ready ●" {shape: circle}
+reserve: Reserve {shape: rectangle}
+reserved: Reserved {shape: circle}
+ship: Ship {shape: rectangle}
+complete: Complete {shape: circle}
+ready -> reserve -> reserved -> ship -> complete` },
+      { id: 'd2-network', title: 'Force-directed network approximation', badge: 'D2 · ELK', d2: 'network', source: `gateway: Gateway
+platform: Platform
+commerce: Commerce
+operations: Operations
+gateway -- platform
+gateway -- commerce
+platform -- commerce
+platform -- operations
+commerce -- operations` }
+    ].forEach((config) => addExample('#org-example', { ...config, renderer: 'd2' }));
+
+    const categoryRules = [
+      ['organization', /org/],
+      ['architecture', /architecture/],
+      ['process', /flow/],
+      ['interaction', /sequence/],
+      ['behavior', /state/],
+      ['data', /(^|-)er$/],
+      ['planning', /gantt|timeline/],
+      ['analysis', /chart|portfolio/],
+      ['hierarchy', /mindmap/],
+      ['formal', /automaton|petri/],
+      ['network', /network/]
+    ];
+
+    root.querySelectorAll('[data-renderer]').forEach((article) => {
+      const id = article.dataset.example || '';
+      article.id = `example-${article.dataset.renderer}-${id}`;
+      article.dataset.category = categoryRules.find(([, pattern]) => pattern.test(id))?.[0] || 'architecture';
+    });
+    if (location.hash) {
+      queueMicrotask(() => root.querySelector(location.hash)?.scrollIntoView({ block: 'start' }));
+    }
+
+    function applyCategoryFilter() {
+      const selectedCategory = categorySelect.value;
+      const selectedRenderer = rendererFilter.value;
+      root.querySelectorAll('[data-renderer]').forEach((article) => {
+        const categoryMatches = selectedCategory === 'all' || article.dataset.category === selectedCategory;
+        const rendererMatches = selectedRenderer === 'all' || article.dataset.renderer === selectedRenderer;
+        article.hidden = !categoryMatches || !rendererMatches;
+      });
+    }
+
+    const balancedSources = Object.fromEntries(
+      Array.from(root.querySelectorAll('[data-example]:not([data-example="org"])')).map((article) => [
+        article.dataset.example,
+        article.querySelector('code').textContent.trim()
+      ])
+    );
+
+    const sourceVariants = {
+      simple: {
+        architecture: `flowchart TB
+    accTitle: Ordering context
+    customer([Customer]) --> api[Order API]
+    class customer neutral
+    class api focus`,
+        flow: `flowchart TB
+    request([Request]) --> validate[Validate] --> queue[(Queue)]
+    class request neutral
+    class validate focus
+    class queue success`,
+        sequence: `sequenceDiagram
+    actor Customer
+    participant API as Order API
+    Customer->>API: Submit order
+    API-->>Customer: Accepted`,
+        state: `stateDiagram-v2
+    [*] --> Draft
+    Draft --> Submitted : submit
+    Submitted --> [*]`,
+        er: `erDiagram
+    direction LR
+    CUSTOMER ||--o{ ORDER : places
+    CUSTOMER { uuid customer_id PK }
+    ORDER { uuid order_id PK }`,
+        gantt: `gantt
+    title Checkout release
+    dateFormat YYYY-MM-DD
+    section Delivery
+    Implementation :2026-07-01, 6d
+    Release :milestone, 2026-07-07, 0d`,
+        chart: `xychart-beta
+    title "Checkout completion (%)"
+    x-axis [Mon, Tue, Wed]
+    y-axis "Percent" 0 --> 100
+    line [72, 79, 84]`,
+        mindmap: `mindmap
+  root((Release ready?))
+    Product
+    Engineering
+    Operations`,
+        'mermaid-automaton': `stateDiagram-v2
+    [*] --> Off
+    Off --> On : start
+    On --> Off : stop`,
+        'mermaid-petri': `flowchart LR
+    ready((Ready ●)) --> run[Run] --> done((Done))
+    class run focus
+    class done success`,
+        'mermaid-network': `flowchart TB
+    gateway((Gateway)) --- platform((Platform)) --- operations((Operations))
+    class gateway focus
+    class platform decision
+    class operations success`,
+        'd2-architecture': `direction: down
+customer: Customer {shape: person}
+api: Order API
+store: Order store {shape: cylinder}
+customer -> api: submits
+api -> store: writes`,
+        'd2-sequence': `shape: sequence_diagram
+customer: Customer
+api: Order API
+customer -> api: Submit order
+api -> customer: Accepted`,
+        'd2-portfolio': `direction: down
+portfolio: Platform portfolio {
+  checkout: Checkout
+  identity: Identity
+}
+portfolio.checkout -> portfolio.identity: authenticates`
+      },
+      complex: {
+        architecture: `flowchart TB
+    accTitle: Ordering platform architecture
+    accDescr: Customers and operators enter through public controls into services, data, and external dependencies.
+    customer([Customer]) --> gateway[API gateway]
+    operator([Operator]) --> portal[Operations portal]
+    subgraph platform[Ordering platform]
+      gateway --> api[Order API]
+      portal --> api
+      api --> queue[(Order queue)]
+      queue --> worker[Order worker]
+      worker --> store[(Order store)]
+      api --> cache[(Inventory cache)]
+    end
+    worker --> payment[Payment provider]
+    worker --> carrier[Carrier API]
+    class customer,operator neutral
+    class gateway,payment,carrier external
+    class api,worker focus
+    class queue,store,cache success
+    class portal decision`,
+        flow: `flowchart TB
+    request([Request]) --> auth[Authenticate]
+    auth --> valid{Valid?}
+    valid -->|no| reject[Explain error]
+    valid -->|yes| stock{Stock available?}
+    stock -->|no| backorder[Create backorder]
+    stock -->|yes| reserve[Reserve inventory]
+    reserve --> payment{Payment approved?}
+    payment -->|yes| queue[(Fulfilment queue)]
+    payment -->|no| release[Release inventory]
+    release --> reject
+    class request neutral
+    class auth,reserve focus
+    class valid,stock,payment decision
+    class queue success
+    class reject,backorder,release risk`,
+        sequence: `sequenceDiagram
+    actor Customer
+    participant API as Order API
+    participant Stock as Inventory
+    participant Pay as Payment
+    participant Queue as Fulfilment queue
+    Customer->>API: Submit order
+    API->>Stock: Reserve items
+    alt Stock available
+      Stock-->>API: Reserved
+      API->>Pay: Authorize amount
+      alt Payment approved
+        Pay-->>API: Approved
+        API->>Queue: Publish order
+        API-->>Customer: 201 Created
+      else Payment declined
+        Pay-->>API: Declined
+        API->>Stock: Release items
+        API-->>Customer: 402 Payment Required
+      end
+    else Out of stock
+      Stock-->>API: Rejected
+      API-->>Customer: 409 Conflict
+    end`,
+        state: `stateDiagram-v2
+    direction TB
+    [*] --> Draft
+    Draft --> Submitted : submit
+    Submitted --> Validating
+    Validating --> Reserved : inventory available
+    Validating --> Rejected : invalid or unavailable
+    Reserved --> Paid : payment approved
+    Reserved --> PaymentFailed : payment declined
+    PaymentFailed --> Reserved : retry
+    Paid --> Fulfilled : ship
+    Paid --> Cancelled : cancel
+    Fulfilled --> [*]
+    Rejected --> [*]
+    Cancelled --> [*]`,
+        er: `erDiagram
+    direction LR
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_LINE : contains
+    PRODUCT ||--o{ ORDER_LINE : references
+    ORDER ||--o{ PAYMENT : attempts
+    ORDER ||--o| SHIPMENT : creates
+    CUSTOMER { uuid customer_id PK
+      string email UK }
+    ORDER { uuid order_id PK
+      uuid customer_id FK
+      string status }
+    ORDER_LINE { uuid order_id FK
+      string sku FK
+      int quantity }
+    PRODUCT { string sku PK
+      string name }
+    PAYMENT { uuid payment_id PK
+      string outcome }
+    SHIPMENT { uuid shipment_id PK
+      string carrier }`,
+        gantt: `gantt
+    title Checkout release train
+    dateFormat YYYY-MM-DD
+    axisFormat %d %b
+    section Discovery
+    Scope and design :done, discover, 2026-06-23, 5d
+    section Delivery
+    API implementation :done, api, after discover, 7d
+    UI implementation :active, ui, after discover, 8d
+    Integration :crit, integrate, after api, 4d
+    section Assurance
+    Security review :crit, security, after integrate, 3d
+    Operational rehearsal :ops, after integrate, 3d
+    Release decision :milestone, release, after security, 0d`,
+        chart: `xychart-beta
+    title "Checkout outcomes by week (%)"
+    x-axis [W1, W2, W3, W4, W5, W6]
+    y-axis "Percent" 0 --> 100
+    bar [72, 74, 77, 80, 82, 86]
+    line [68, 71, 75, 78, 83, 89]`,
+        mindmap: `mindmap
+  root((Release ready?))
+    Product
+      Acceptance criteria
+      Stakeholder approval
+      Customer communication
+    Engineering
+      Automated checks
+      Security review
+      Performance baseline
+    Operations
+      Runbook
+      Monitoring
+      Rollback rehearsal
+    Governance
+      Change approval
+      Evidence retained`,
+        'mermaid-automaton': `stateDiagram-v2
+    direction TB
+    [*] --> Idle
+    Idle --> Checking : submit
+    Checking --> Accepted : valid
+    Checking --> Rejected : invalid
+    Checking --> Retry : timeout
+    Retry --> Checking : attempts remain
+    Retry --> Rejected : exhausted
+    Accepted --> Idle : reset
+    Rejected --> Idle : reset`,
+        'mermaid-petri': `flowchart TB
+    ready((Ready ●)) --> reserve[Reserve]
+    stock((Stock ●)) --> reserve
+    reserve --> reserved((Reserved))
+    reserved --> confirm[Confirm]
+    payment((Payment ●)) --> confirm
+    confirm --> complete((Complete))
+    audit((Audit ●)) --> record[Record]
+    complete --> record --> archived((Archived))
+    class reserve,confirm,record focus
+    class complete,archived success`,
+        'mermaid-network': `flowchart TB
+    gateway((Gateway)) --- platform((Platform))
+    gateway --- commerce((Commerce))
+    gateway --- security((Security))
+    platform --- data((Data))
+    platform --- commerce
+    platform --- operations((Operations))
+    commerce --- data
+    commerce --- operations
+    operations --- security
+    data --- analytics((Analytics))
+    class gateway,data focus
+    class platform decision
+    class commerce external
+    class operations success
+    class security risk`,
+        'd2-architecture': `direction: down
+customer: Customer {shape: person}
+operator: Operator {shape: person}
+edge: Public edge {
+  gateway: API gateway
+  waf: Web application firewall
+}
+application: Application environment {
+  api: Order API
+  queue: Order queue {shape: queue}
+  worker: Order worker
+  store: Order store {shape: cylinder}
+  cache: Inventory cache {shape: cylinder}
+}
+external: External services {
+  payment: Payment provider
+  carrier: Carrier API
+}
+customer -> edge.waf -> edge.gateway -> application.api
+operator -> application.api: administers
+application.api -> application.queue: publishes
+application.api -> application.cache: reads
+application.queue -> application.worker: delivers
+application.worker -> application.store: writes
+application.worker -> external.payment: authorizes
+application.worker -> external.carrier: books`,
+        'd2-sequence': `shape: sequence_diagram
+customer: Customer
+api: Order API
+stock: Inventory
+payment: Payment provider
+queue: Fulfilment queue
+submit: Submit order {
+  customer -> api: Submit order
+  api -> stock: Reserve items
+  stock -> api: Reserved
+}
+authorize: Authorize payment {
+  api -> payment: Authorize amount
+  payment -> api: Approved
+}
+fulfil: Start fulfilment {
+  api -> queue: Publish order
+  api -> customer: Order confirmed
+}`,
+        'd2-portfolio': `direction: down
+portfolio: Platform portfolio {
+  product: Product systems {
+    checkout: "Checkout\\nTCO: €900k"
+    catalog: "Catalog\\nTCO: €400k"
+    pricing: "Pricing\\nTCO: €350k"
+  }
+  platform: Platform systems {
+    identity: "Identity\\nTCO: €600k"
+    events: "Events\\nTCO: €300k"
+    data: "Data platform\\nTCO: €750k"
+  }
+  operations: Operations {
+    observability: "Observability\\nTCO: €500k"
+    delivery: "Delivery platform\\nTCO: €450k"
+  }
+}
+portfolio.product.checkout -> portfolio.platform.identity: authenticates
+portfolio.product.checkout -> portfolio.platform.events: publishes
+portfolio.product.catalog -> portfolio.platform.data: indexes
+portfolio.platform.events -> portfolio.operations.observability: reports
+portfolio.operations.delivery -> portfolio.product.checkout: deploys`
+      }
+    };
+
+    Object.assign(sourceVariants.simple, {
+      'd2-flow': `direction: down
+request: Request {shape: oval}
+validate: Validate
+queue: Queue {shape: queue}
+request -> validate -> queue`,
+      'd2-state': `direction: down
+start: Start {shape: circle}
+draft: Draft
+submitted: Submitted
+start -> draft -> submitted`,
+      'd2-er': `direction: right
+customer: Customer {shape: sql_table
+  customer_id: uuid {constraint: primary_key}
+}
+order: Order {shape: sql_table
+  customer_id: uuid {constraint: foreign_key}
+}
+customer.customer_id -> order.customer_id: places {
+  source-arrowhead.shape: cf-one-required
+  target-arrowhead.shape: cf-many
+}`,
+      'd2-timeline': `direction: down
+build: "01–06 Jul\\nBuild"
+release: "07 Jul\\nRelease" {shape: diamond}
+build -> release`,
+      'd2-mindmap': `direction: down
+ready: Release ready?
+ready -> product: Product
+ready -> engineering: Engineering
+ready -> operations: Operations`,
+      'd2-automaton': `direction: right
+off: Off {shape: circle}
+on: On {shape: circle; style.stroke-width: 4}
+off -> on: start
+on -> off: stop`,
+      'd2-petri': `direction: right
+ready: "Ready ●" {shape: circle}
+run: Run
+done: Done {shape: circle}
+ready -> run -> done`,
+      'd2-network': `gateway: Gateway
+platform: Platform
+operations: Operations
+gateway -- platform -- operations`
+    });
+
+    Object.assign(sourceVariants.complex, {
+      'd2-flow': `direction: down
+request: Request {shape: oval}
+auth: Authenticate
+valid: Valid? {shape: diamond}
+stock: Stock available? {shape: diamond}
+reserve: Reserve inventory
+payment: Payment approved? {shape: diamond}
+queue: Fulfilment queue {shape: queue}
+error: Explain error
+request -> auth -> valid
+valid -> stock: yes
+valid -> error: no
+stock -> reserve: yes
+stock -> error: no
+reserve -> payment
+payment -> queue: yes
+payment -> error: no`,
+      'd2-state': `direction: down
+start: Start {shape: circle}
+draft: Draft
+validating: Validating
+reserved: Reserved
+paid: Paid
+fulfilled: Fulfilled
+rejected: Rejected
+cancelled: Cancelled
+start -> draft -> validating
+validating -> reserved: valid
+validating -> rejected: invalid
+reserved -> paid: payment approved
+reserved -> cancelled: cancel
+paid -> fulfilled: ship`,
+      'd2-er': `direction: right
+customer: Customer {shape: sql_table
+  customer_id: uuid {constraint: primary_key}
+  email: varchar {constraint: unique}
+}
+order: Order {shape: sql_table
+  order_id: uuid {constraint: primary_key}
+  customer_id: uuid {constraint: foreign_key}
+  status: varchar
+}
+line: Order item {shape: sql_table
+  order_id: uuid {constraint: foreign_key}
+  sku: varchar {constraint: foreign_key}
+  quantity: integer
+}
+product: Product {shape: sql_table
+  sku: varchar {constraint: primary_key}
+  name: varchar
+}
+customer.customer_id -> order.customer_id: places {
+  source-arrowhead.shape: cf-one-required
+  target-arrowhead.shape: cf-many
+}
+order.order_id -> line.order_id: contains {
+  source-arrowhead.shape: cf-one-required
+  target-arrowhead.shape: cf-many-required
+}
+product.sku -> line.sku: describes {
+  source-arrowhead.shape: cf-one-required
+  target-arrowhead.shape: cf-many
+}`,
+      'd2-timeline': `direction: down
+design: "23–27 Jun\\nDesign"
+api: "01–07 Jul\\nAPI implementation"
+ui: "01–08 Jul\\nUI implementation"
+integration: "08–10 Jul\\nIntegration"
+security: "10–12 Jul\\nSecurity review"
+release: "12 Jul\\nRelease decision" {shape: diamond}
+design -> api -> integration
+design -> ui -> integration
+integration -> security -> release`,
+      'd2-mindmap': `direction: down
+ready: Release ready?
+ready -> product: Product
+ready -> engineering: Engineering
+ready -> operations: Operations
+ready -> governance: Governance
+product -> acceptance: Acceptance criteria
+product -> communication: Customer communication
+engineering -> checks: Automated checks
+engineering -> security: Security review
+engineering -> performance: Performance baseline
+operations -> runbook: Runbook
+operations -> monitoring: Monitoring
+operations -> rollback: Rollback rehearsal
+governance -> approval: Change approval`,
+      'd2-automaton': `direction: right
+start: Start {shape: circle}
+idle: Idle {shape: circle}
+checking: Checking {shape: circle}
+accepted: Accepted {shape: circle; style.stroke-width: 4}
+rejected: Rejected {shape: circle}
+retry: Retry {shape: circle}
+start -> idle -> checking: submit
+checking -> accepted: valid
+checking -> rejected: invalid
+checking -> retry: timeout
+retry -> checking: attempts remain
+retry -> rejected: exhausted`,
+      'd2-petri': `direction: right
+ready: "Ready ●" {shape: circle}
+stock: "Stock ●" {shape: circle}
+reserve: Reserve
+reserved: Reserved {shape: circle}
+payment: "Payment ●" {shape: circle}
+confirm: Confirm
+complete: Complete {shape: circle}
+ready -> reserve
+stock -> reserve
+reserve -> reserved
+reserved -> confirm
+payment -> confirm
+confirm -> complete`,
+      'd2-network': `gateway: Gateway
+platform: Platform
+commerce: Commerce
+operations: Operations
+data: Data
+security: Security
+analytics: Analytics
+gateway -- platform
+gateway -- commerce
+gateway -- security
+platform -- data
+platform -- commerce
+platform -- operations
+commerce -- data
+commerce -- operations
+operations -- security
+data -- analytics`
+    });
+
+    function sourceFor(article) {
+      const depth = depthSelect.value;
+      if (depth === 'balanced') return balancedSources[article.dataset.example];
+      return sourceVariants[depth]?.[article.dataset.example] || balancedSources[article.dataset.example];
+    }
+
+    function applySourceVariant(article) {
+      if (article.dataset.example === 'org') return;
+      const code = article.querySelector('code');
+      code.textContent = sourceFor(article);
+    }
+
+    const paletteFamilies = {
+      carbon: { focus: '#0F62FE', actor: '#1192E8', service: '#009D9A', data: '#6929C4', process: '#005D5D', external: '#60758F', success: '#24A148', warning: '#F1C21B', risk: '#DA1E28', decision: '#8A3FFC' },
+      fluent: { focus: '#0F6CBD', actor: '#0078D4', service: '#038387', data: '#5C2D91', process: '#00B7C3', external: '#5B708E', success: '#107C10', warning: '#CA5010', risk: '#C50F1F', decision: '#881798' },
+      material: { focus: '#1A73E8', actor: '#039BE5', service: '#00897B', data: '#5E35B1', process: '#00838F', external: '#546E7A', success: '#2E7D32', warning: '#ED6C02', risk: '#D32F2F', decision: '#7B1FA2' },
+      tailwind: { focus: '#4F46E5', actor: '#0284C7', service: '#0F766E', data: '#7C3AED', process: '#0891B2', external: '#64748B', success: '#16A34A', warning: '#D97706', risk: '#DC2626', decision: '#9333EA' },
+      nord: { focus: '#5E81AC', actor: '#88C0D0', service: '#8FBCBB', data: '#81A1C1', process: '#5E81AC', external: '#4C566A', success: '#A3BE8C', warning: '#EBCB8B', risk: '#BF616A', decision: '#B48EAD' },
+      catppuccin: { focus: '#1E66F5', actor: '#209FB5', service: '#179299', data: '#8839EF', process: '#04A5E5', external: '#8C8FA1', success: '#40A02B', warning: '#DF8E1D', risk: '#D20F39', decision: '#7287FD' },
+      dracula: { focus: '#BD93F9', actor: '#8BE9FD', service: '#50FA7B', data: '#FF79C6', process: '#8BE9FD', external: '#6272A4', success: '#50FA7B', warning: '#FFB86C', risk: '#FF5555', decision: '#BD93F9' },
+      gruvbox: { focus: '#458588', actor: '#83A598', service: '#689D6A', data: '#B16286', process: '#D65D0E', external: '#928374', success: '#98971A', warning: '#D79921', risk: '#CC241D', decision: '#B16286' },
+      solarized: { focus: '#268BD2', actor: '#2AA198', service: '#859900', data: '#6C71C4', process: '#2AA198', external: '#657B83', success: '#859900', warning: '#B58900', risk: '#DC322F', decision: '#D33682' },
+      tokyoNight: { focus: '#7AA2F7', actor: '#7DCFFF', service: '#73DACA', data: '#BB9AF7', process: '#2AC3DE', external: '#565F89', success: '#9ECE6A', warning: '#E0AF68', risk: '#F7768E', decision: '#BB9AF7' }
+    };
+
+    const themeModes = {
+      carbon: { light: { canvas: '#FFFFFF', edge: '#525252', secondaryText: '#525252', neutralFill: '#F4F4F4', neutralStroke: '#8D8D8D', neutralText: '#161616' }, dark: { canvas: '#161616', edge: '#C6C6C6', secondaryText: '#C6C6C6', neutralFill: '#262626', neutralStroke: '#525252', neutralText: '#F4F4F4' } },
+      fluent: { light: { canvas: '#FFFFFF', edge: '#616161', secondaryText: '#616161', neutralFill: '#F5F5F5', neutralStroke: '#8A8886', neutralText: '#242424' }, dark: { canvas: '#1F1F1F', edge: '#D1D1D1', secondaryText: '#ADADAD', neutralFill: '#292929', neutralStroke: '#616161', neutralText: '#FFFFFF' } },
+      material: { light: { canvas: '#FFFBFE', edge: '#79747E', secondaryText: '#49454F', neutralFill: '#F7F2FA', neutralStroke: '#79747E', neutralText: '#1D1B20' }, dark: { canvas: '#1C1B1F', edge: '#CAC4D0', secondaryText: '#CAC4D0', neutralFill: '#313033', neutralStroke: '#938F99', neutralText: '#E6E1E5' } },
+      tailwind: { light: { canvas: '#FFFFFF', edge: '#475569', secondaryText: '#64748B', neutralFill: '#F8FAFC', neutralStroke: '#CBD5E1', neutralText: '#0F172A' }, dark: { canvas: '#0F172A', edge: '#CBD5E1', secondaryText: '#94A3B8', neutralFill: '#1E293B', neutralStroke: '#475569', neutralText: '#F8FAFC' } },
+      nord: { light: { canvas: '#ECEFF4', edge: '#4C566A', secondaryText: '#4C566A', neutralFill: '#E5E9F0', neutralStroke: '#81A1C1', neutralText: '#2E3440' }, dark: { canvas: '#2E3440', edge: '#D8DEE9', secondaryText: '#D8DEE9', neutralFill: '#3B4252', neutralStroke: '#4C566A', neutralText: '#ECEFF4' } },
+      catppuccin: { light: { canvas: '#EFF1F5', edge: '#6C6F85', secondaryText: '#6C6F85', neutralFill: '#E6E9EF', neutralStroke: '#8C8FA1', neutralText: '#4C4F69' }, dark: { canvas: '#1E1E2E', edge: '#BAC2DE', secondaryText: '#BAC2DE', neutralFill: '#313244', neutralStroke: '#45475A', neutralText: '#CDD6F4' } },
+      dracula: { light: { canvas: '#F8F8F2', edge: '#6272A4', secondaryText: '#6272A4', neutralFill: '#E6E6D8', neutralStroke: '#6272A4', neutralText: '#282A36' }, dark: { canvas: '#282A36', edge: '#F8F8F2', secondaryText: '#BDC0CE', neutralFill: '#44475A', neutralStroke: '#6272A4', neutralText: '#F8F8F2' } },
+      gruvbox: { light: { canvas: '#FBF1C7', edge: '#665C54', secondaryText: '#665C54', neutralFill: '#F2E5BC', neutralStroke: '#A89984', neutralText: '#3C3836' }, dark: { canvas: '#1D2021', edge: '#D5C4A1', secondaryText: '#A89984', neutralFill: '#282828', neutralStroke: '#504945', neutralText: '#EBDBB2' } },
+      solarized: { light: { canvas: '#FDF6E3', edge: '#657B83', secondaryText: '#657B83', neutralFill: '#EEE8D5', neutralStroke: '#93A1A1', neutralText: '#073642' }, dark: { canvas: '#002B36', edge: '#839496', secondaryText: '#839496', neutralFill: '#073642', neutralStroke: '#586E75', neutralText: '#EEE8D5' } },
+      tokyoNight: { light: { canvas: '#E1E2E7', edge: '#6172B0', secondaryText: '#6172B0', neutralFill: '#D5D6DB', neutralStroke: '#A1A6C5', neutralText: '#3760BF' }, dark: { canvas: '#1A1B26', edge: '#A9B1D6', secondaryText: '#A9B1D6', neutralFill: '#24283B', neutralStroke: '#414868', neutralText: '#C0CAF5' } }
+    };
+
+    function mixHex(a, b, amount) {
+      const parse = (hex) => [1, 3, 5].map((start) => Number.parseInt(hex.slice(start, start + 2), 16));
+      const left = parse(a);
+      const right = parse(b);
+      const mixed = left.map((value, index) => Math.round(value + (right[index] - value) * amount));
+      return `#${mixed.map((value) => value.toString(16).padStart(2, '0')).join('')}`.toUpperCase();
+    }
+
+    function createPalette(familyName, scheme) {
+      const family = paletteFamilies[familyName];
+      const dark = scheme === 'dark';
+      const nativeMode = themeModes[familyName]?.[scheme];
+      const palette = nativeMode || {
+        canvas: dark ? '#0F172A' : '#FFFFFF',
+        edge: dark ? '#CBD5E1' : '#475569',
+        secondaryText: dark ? '#CBD5E1' : '#475569',
+        neutralFill: dark ? '#1E293B' : '#F8FAFC',
+        neutralStroke: dark ? '#94A3B8' : '#64748B',
+        neutralText: dark ? '#F8FAFC' : '#0F172A'
+      };
+      ['focus', 'actor', 'service', 'data', 'process', 'external', 'success', 'warning', 'risk', 'decision'].forEach((role) => {
+        const base = family[role];
+        palette[`${role}Fill`] = mixHex(base, nativeMode ? palette.canvas : dark ? '#000000' : '#FFFFFF', dark ? 0.58 : 0.82);
+        palette[`${role}Stroke`] = nativeMode ? base : mixHex(base, dark ? '#FFFFFF' : base, dark ? 0.28 : 0);
+        palette[`${role}Text`] = mixHex(base, nativeMode ? palette.neutralText : dark ? '#FFFFFF' : '#000000', dark ? 0.78 : 0.58);
+      });
+      return palette;
+    }
+
+    function applyCssPalette(palette) {
+      const roles = ['focus', 'actor', 'service', 'data', 'process', 'external', 'success', 'warning', 'risk', 'decision'];
+      const names = ['canvas', 'edge', 'secondaryText', 'neutralFill', 'neutralStroke', 'neutralText', ...roles.flatMap((role) => [`${role}Fill`, `${role}Stroke`, `${role}Text`])];
+      names.forEach((name) => {
+        const cssName = name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+        root.style.setProperty(`--dl-${cssName}`, palette[name]);
+      });
+    }
+
+    function setPreviewAvailability(target, available) {
+      if (available) {
+        target.tabIndex = 0;
+        target.setAttribute('role', 'button');
+        target.setAttribute('aria-haspopup', 'dialog');
+        target.setAttribute('aria-keyshortcuts', 'Enter Space');
+        target.title = 'Open large preview';
+        return;
+      }
+      target.tabIndex = -1;
+      target.setAttribute('role', 'img');
+      target.removeAttribute('aria-haspopup');
+      target.removeAttribute('aria-keyshortcuts');
+      target.removeAttribute('title');
+    }
+
+    function closePreview() {
+      if (previewDialog.open) previewDialog.close();
+    }
+
+    function openPreview(target) {
+      const svg = target.querySelector('svg');
+      if (!svg) return;
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      previewUrl = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)], { type: 'image/svg+xml' }));
+      const article = target.closest('.example');
+      const title = article.querySelector('.example-head strong').textContent;
+      previewTitle.textContent = title;
+      previewImage.alt = target.getAttribute('aria-label');
+      previewImage.src = previewUrl;
+      if (!previewDialog.open) previewDialog.showModal();
+    }
+
+    function mermaidProfile(source, palette, example) {
+      const family = example.replace(/^mermaid-/, '');
+      const semanticClasses = `
+classDef neutral fill:${palette.neutralFill},stroke:${palette.neutralStroke},color:${palette.neutralText},stroke-width:2px
+classDef focus fill:${palette.focusFill},stroke:${palette.focusStroke},color:${palette.focusText},stroke-width:2px
+classDef actor fill:${palette.actorFill},stroke:${palette.actorStroke},color:${palette.actorText},stroke-width:2px
+classDef service fill:${palette.serviceFill},stroke:${palette.serviceStroke},color:${palette.serviceText},stroke-width:2px
+classDef data fill:${palette.dataFill},stroke:${palette.dataStroke},color:${palette.dataText},stroke-width:2px
+classDef process fill:${palette.processFill},stroke:${palette.processStroke},color:${palette.processText},stroke-width:2px
+classDef external fill:${palette.externalFill},stroke:${palette.externalStroke},color:${palette.externalText},stroke-width:2px,stroke-dasharray:6 4
+classDef success fill:${palette.successFill},stroke:${palette.successStroke},color:${palette.successText},stroke-width:2px
+classDef warning fill:${palette.warningFill},stroke:${palette.warningStroke},color:${palette.warningText},stroke-width:2px
+classDef risk fill:${palette.riskFill},stroke:${palette.riskStroke},color:${palette.riskText},stroke-width:2px
+classDef decision fill:${palette.decisionFill},stroke:${palette.decisionStroke},color:${palette.decisionText},stroke-width:2px`;
+      let body = source;
+      if (family === 'architecture') {
+        body = body
+          .replace(/class customer neutral/g, 'class customer actor')
+          .replace(/class gateway external/g, 'class gateway external')
+          .replace(/class api focus/g, 'class api service')
+          .replace(/class store neutral/g, 'class store data')
+          .replace(/class queue success/g, 'class queue process')
+          .replace(/class worker focus/g, 'class worker process')
+          .replace(/class customer,operator neutral/g, 'class customer,operator actor')
+          .replace(/class api,worker focus/g, 'class api service\n    class worker process')
+          .replace(/class queue,store,cache success/g, 'class queue process\n    class store,cache data')
+          .replace(/class portal decision/g, 'class portal service');
+        const boundary = body.includes('subgraph platform[') ? 'platform' : 'app';
+        body = `${body}
+style ${boundary} fill:${palette.neutralFill},stroke:${palette.serviceStroke},stroke-width:2px`;
+      }
+      if (family === 'flow') {
+        body = body
+          .replace(/class request neutral/g, 'class request actor')
+          .replace(/class validate focus/g, 'class validate process')
+          .replace(/class reserve focus/g, 'class reserve service')
+          .replace(/class auth,reserve focus/g, 'class auth process\n    class reserve service')
+          .replace(/class valid,stock,payment decision/g, 'class valid decision\n    class stock warning\n    class payment external')
+          .replace(/class reject,backorder,release risk/g, 'class reject risk\n    class backorder warning\n    class release decision');
+      }
+      if (family === 'petri') {
+        body = body.replace(/class reserve,ship focus/g, 'class reserve process\n    class ship service');
+      }
+      if (family === 'network') {
+        body = body
+          .replace(/class platform decision/g, 'class platform service')
+          .replace(/class operations success/g, 'class operations process');
+      }
+      if (body.startsWith('flowchart')) body = `${body}${semanticClasses}`;
+      if (family === 'state') {
+        body = `${body}${semanticClasses}
+class Draft neutral
+class Submitted process
+class Validating warning
+class Paid service
+class Fulfilled success
+class Rejected,Cancelled risk`;
+      }
+      if (family === 'automaton') {
+        body = `${body}${semanticClasses}
+class Even,On,Accepted success
+class Odd,Off,Idle neutral
+class Checking process
+class Retry warning
+class Rejected risk`;
+      }
+      const familyTheme = {
+        sequence: `
+    actorBkg: "${palette.actorFill}"
+    actorBorder: "${palette.actorStroke}"
+    actorTextColor: "${palette.actorText}"
+    signalColor: "${palette.edge}"
+    signalTextColor: "${palette.neutralText}"
+    labelBoxBkgColor: "${palette.processFill}"
+    labelBoxBorderColor: "${palette.processStroke}"`,
+        er: ``,
+        mindmap: `
+    cScale0: "${mixHex(palette.focusStroke, palette.canvas, 0.58)}"
+    cScale1: "${mixHex(palette.actorStroke, palette.canvas, 0.68)}"
+    cScale2: "${mixHex(palette.serviceStroke, palette.canvas, 0.68)}"
+    cScale3: "${mixHex(palette.dataStroke, palette.canvas, 0.68)}"
+    cScale4: "${mixHex(palette.processStroke, palette.canvas, 0.68)}"
+    cScale5: "${mixHex(palette.decisionStroke, palette.canvas, 0.68)}"`,
+        gantt: `
+    doneTaskBkgColor: "${palette.successFill}"
+    doneTaskBorderColor: "${palette.successStroke}"
+    activeTaskBkgColor: "${palette.processFill}"
+    activeTaskBorderColor: "${palette.processStroke}"
+    critBkgColor: "${palette.riskFill}"
+    critBorderColor: "${palette.riskStroke}"
+    milestoneBkgColor: "${palette.decisionFill}"
+    milestoneBorderColor: "${palette.decisionStroke}"`,
+        chart: `
+    xyChart:
+      plotColorPalette: "${palette.focusStroke},${palette.dataStroke},${palette.serviceStroke}"`
+      }[family] || '';
+      const primaryRole = family === 'er' ? 'data' : family === 'sequence' ? 'actor' : 'neutral';
+      const secondaryRole = family === 'er' ? 'data' : family === 'sequence' ? 'service' : 'focus';
+      const roleValue = (role, token) => role === 'neutral' ? palette[`neutral${token}`] : palette[`${role}${token}`];
+      return `---
+config:
+  theme: base
+  look: classic
+  themeVariables:
+    fontFamily: "Inter, Segoe UI, sans-serif"
+    background: "transparent"
+    primaryColor: "${roleValue(primaryRole, 'Fill')}"
+    primaryBorderColor: "${roleValue(primaryRole, 'Stroke')}"
+    primaryTextColor: "${roleValue(primaryRole, 'Text')}"
+    secondaryColor: "${roleValue(secondaryRole, 'Fill')}"
+    secondaryBorderColor: "${roleValue(secondaryRole, 'Stroke')}"
+    secondaryTextColor: "${roleValue(secondaryRole, 'Text')}"
+    tertiaryColor: "${palette.neutralFill}"
+    tertiaryBorderColor: "${palette.neutralStroke}"
+    tertiaryTextColor: "${palette.neutralText}"
+    lineColor: "${palette.edge}"
+    textColor: "${palette.neutralText}"
+${familyTheme}
+---
+${body}`;
+    }
+
+    const orgLeaders = [
+      ['P01', 'Maya Chen', 'Chief Executive Officer', '', 'executive'],
+      ['P02', 'Noah Patel', 'VP Engineering', 'P01', 'vp'],
+      ['P03', 'Sofia Martins', 'VP Product', 'P01', 'vp'],
+      ['P04', 'Liam Okafor', 'VP Commercial', 'P01', 'vp'],
+      ['P05', 'Emma de Vries', 'VP Operations', 'P01', 'vp'],
+      ['P06', 'Lucas Fischer', 'VP Finance & People', 'P01', 'vp'],
+      ['P07', 'Ava Thompson', 'Director Platform', 'P02', 'manager'],
+      ['P08', 'Ethan Kim', 'Director Applications', 'P02', 'manager'],
+      ['P09', 'Mila Rossi', 'Director Product', 'P03', 'manager'],
+      ['P10', 'Leo Anders', 'Director Design', 'P03', 'manager'],
+      ['P11', 'Nora Silva', 'Director Sales', 'P04', 'manager'],
+      ['P12', 'Sam Wilson', 'Director Partnerships', 'P04', 'manager'],
+      ['P13', 'Isla Brown', 'Director Service Delivery', 'P05', 'manager'],
+      ['P14', 'Owen Taylor', 'Director Quality', 'P05', 'manager'],
+      ['P15', 'Elena García', 'Finance Director', 'P06', 'manager'],
+      ['P16', 'Finn Jansen', 'People Director', 'P06', 'manager']
+    ];
+    const orgNames = [
+      'Amir Khan', 'Grace Liu', 'Theo Bakker', 'Zoe Evans',
+      'Hugo Costa', 'Lina Müller', 'Oscar Reed', 'Sara Novak',
+      'Adam Nowak', 'Iris Meijer', 'Maxime Dubois', 'Layla Hassan',
+      'Ben Clarke', 'Yara Smit', 'Jonas Berg', 'Alice Moreau',
+      'Ravi Shah', 'Mia Walker', 'Tomasz Kowalski', 'Eva Nielsen',
+      'Daniel Ruiz', 'Chloe Martin', 'George White', 'Nina Petrova',
+      'Jack Davies', 'Fatima Ali', 'Louis Bernard', 'Anna Weber',
+      'David Green', 'Sophie King', 'Mateo Santos', 'Ella Murphy',
+      'Alex Johnson', 'Ines Pereira'
+    ];
+    const orgTeams = [
+      ['P07', 'Platform Engineer', 4], ['P08', 'Software Engineer', 4],
+      ['P09', 'Product Manager', 4], ['P10', 'Product Designer', 4],
+      ['P11', 'Account Executive', 4], ['P12', 'Partner Manager', 4],
+      ['P13', 'Service Manager', 3], ['P14', 'Quality Specialist', 3],
+      ['P15', 'Finance Analyst', 2], ['P16', 'People Partner', 2]
+    ];
+    const orgPeople = [...orgLeaders];
+    let orgNameIndex = 0;
+    orgTeams.forEach(([manager, title, count]) => {
+      for (let index = 0; index < count; index += 1) {
+        const id = `P${String(orgPeople.length + 1).padStart(2, '0')}`;
+        orgPeople.push([id, orgNames[orgNameIndex], title, manager, 'person']);
+        orgNameIndex += 1;
+      }
+    });
+    [
+      ['V01', 'Vacant', 'Site Reliability Engineer', 'P07', 'vacant'],
+      ['V02', 'Vacant', 'Senior Software Engineer', 'P08', 'vacant'],
+      ['V03', 'Vacant', 'Product Operations Lead', 'P09', 'vacant'],
+      ['V04', 'Vacant', 'Enterprise Account Executive', 'P11', 'vacant'],
+      ['V05', 'Vacant', 'Quality Automation Engineer', 'P14', 'vacant'],
+      ['V06', 'Vacant', 'Talent Acquisition Partner', 'P16', 'vacant']
+    ].forEach((position) => orgPeople.push(position));
+
+    function orgDot(palette) {
+      const nodes = orgPeople.map(([id, name, title, manager, kind]) => {
+        let style = `fillcolor="${palette.neutralFill}", color="${palette.neutralStroke}", fontcolor="${palette.neutralText}"`;
+        if (kind === 'executive') style = `fillcolor="${palette.focusFill}", color="${palette.focusStroke}", fontcolor="${palette.focusText}", penwidth=2.4`;
+        if (kind === 'vp') style = `fillcolor="${palette.decisionFill}", color="${palette.decisionStroke}", fontcolor="${palette.decisionText}"`;
+        if (kind === 'vacant') style = `fillcolor="${palette.riskFill}", color="${palette.riskStroke}", fontcolor="${palette.riskText}", style="rounded,filled,dashed"`;
+        return `${id} [label="${name}\\n${title}", ${style}];`;
+      }).join(String.fromCharCode(10));
+      const edges = orgPeople.filter(([, , , manager]) => manager).map(([id, , , manager]) => `${manager} -> ${id};`).join(String.fromCharCode(10));
+      return `digraph organization {
+  graph [rankdir=TB, bgcolor="${palette.canvas}", pad=0.3, nodesep=0.22, ranksep=0.55, newrank=true, splines=polyline];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=9, margin="0.12,0.08", penwidth=1.5];
+  edge [color="${palette.edge}", penwidth=1.2, arrowsize=0.6];
+  ${nodes}
+  ${edges}
+}`;
+    }
+
+    function dotRole(palette, role) {
+      const pattern = role === 'external' ? ', style="rounded,filled,dashed"' : '';
+      return `fillcolor="${palette[`${role}Fill`]}", color="${palette[`${role}Stroke`]}", fontcolor="${palette[`${role}Text`]}"${pattern}`;
+    }
+
+    function dotSource(name, palette, depth = 'balanced') {
+      if (name === 'org') return orgDot(palette);
+      const defaults = `graph [bgcolor="${palette.canvas}", pad=0.28, fontname="Inter, Segoe UI, sans-serif", fontcolor="${palette.neutralText}"];
+  node [shape=box, style="rounded,filled", fillcolor="${palette.neutralFill}", color="${palette.neutralStroke}", fontcolor="${palette.neutralText}", fontname="Inter, Segoe UI, sans-serif", penwidth=1.8];
+  edge [color="${palette.edge}", fontcolor="${palette.secondaryText}", fontname="Inter, Segoe UI, sans-serif", penwidth=1.5, arrowsize=0.8];`;
+      const compact = depth === 'simple';
+      const expanded = depth === 'complex';
+      if (name === 'architecture') return `digraph architecture {
+  ${defaults}
+  graph [rankdir=LR, compound=true];
+  customer [shape=oval, label="Customer", ${dotRole(palette, 'actor')}];
+  gateway [label="API gateway", ${dotRole(palette, 'external')}];
+  subgraph cluster_app { label="Application"; color="${palette.serviceStroke}"; fontcolor="${palette.serviceText}"; api [label="Order API", ${dotRole(palette, 'service')}]; ${compact ? '' : `queue [label="Order queue", shape=cylinder, ${dotRole(palette, 'process')}]; store [label="Order store", shape=cylinder, ${dotRole(palette, 'data')}];`} ${expanded ? `worker [label="Order worker", ${dotRole(palette, 'process')}]; cache [label="Inventory cache", shape=cylinder, ${dotRole(palette, 'data')}];` : ''} }
+  customer -> gateway -> api;
+  ${compact ? '' : 'api -> queue -> store;'}
+  ${expanded ? 'queue -> worker -> store; api -> cache;' : ''}
+}`;
+      if (name === 'flow') return `digraph flow {
+  ${defaults}
+  graph [rankdir=TB];
+  request [shape=oval, label="Request", ${dotRole(palette, 'actor')}];
+  validate [label="Validate", ${dotRole(palette, 'process')}];
+  valid [shape=diamond, label="Valid?", ${dotRole(palette, 'decision')}];
+  queue [shape=cylinder, label="Queue", ${dotRole(palette, 'success')}];
+  error [label="Explain error", ${dotRole(palette, 'risk')}];
+  request -> validate${compact ? ' -> queue' : ' -> valid'};
+  ${compact ? '' : 'valid -> queue [label="yes"]; valid -> error [label="no"];'}
+  ${expanded ? `stock [shape=diamond, label="Stock?", ${dotRole(palette, 'warning')}]; reserve [label="Reserve", ${dotRole(palette, 'service')}]; valid -> stock [label="yes"]; stock -> reserve [label="yes"]; reserve -> queue; stock -> error [label="no"];` : ''}
+}`;
+      if (name === 'sequence') return `digraph sequence {
+  ${defaults}
+  graph [rankdir=TB];
+  node [shape=box];
+  actors [shape=record, label="Customer | Order API${compact ? '' : ' | Inventory'}${expanded ? ' | Payment | Queue' : ''}"];
+  m1 [shape=plaintext, label="1  Submit order →"];
+  m2 [shape=plaintext, label="2  ${compact ? 'Accepted ←' : 'Reserve items →'}"];
+  ${compact ? '' : 'm3 [shape=plaintext, label="3  Reserved ←"];'}
+  ${expanded ? 'm4 [shape=plaintext, label="4  Authorize →"]; m5 [shape=plaintext, label="5  Publish →"];' : ''}
+  actors -> m1 -> m2${compact ? '' : ' -> m3'}${expanded ? ' -> m4 -> m5' : ''} [arrowhead=none];
+}`;
+      if (name === 'state') return `digraph state {
+  ${defaults}
+  graph [rankdir=LR]; node [shape=circle];
+  start [shape=point, label=""];
+  draft [label="Draft"]; submitted [label="Submitted", ${dotRole(palette, 'process')}]; fulfilled [shape=doublecircle, ${dotRole(palette, 'success')}];
+  start -> draft -> submitted -> fulfilled;
+  ${compact ? '' : `rejected [shape=doublecircle, ${dotRole(palette, 'risk')}]; submitted -> rejected [label="reject"];`}
+  ${expanded ? `validating [label="Validating", ${dotRole(palette, 'warning')}]; paid [label="Paid", ${dotRole(palette, 'service')}]; draft -> validating [label="submit"]; validating -> submitted [label="valid"]; submitted -> paid [label="pay"]; paid -> fulfilled [label="ship"];` : ''}
+}`;
+      if (name === 'er') {
+        const entity = (title, fields) => `[shape=plain, margin=0, label=<
+  <TABLE BORDER="2" COLOR="${palette.dataStroke}" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8" BGCOLOR="${palette.dataFill}">
+    <TR><TD><FONT COLOR="${palette.dataText}"><B>${title}</B></FONT></TD></TR>
+    ${fields.map((field) => `<TR><TD ALIGN="LEFT" BORDER="1" COLOR="${palette.dataStroke}"><FONT COLOR="${palette.dataText}">${field}</FONT></TD></TR>`).join('')}
+  </TABLE>
+>`;
+        return `digraph er {
+  ${defaults}
+  graph [rankdir=LR, nodesep=0.7, ranksep=1.0];
+  customer ${entity('CUSTOMER', ['customer_id (PK)', ...(compact ? [] : ['email'])])};
+  order ${entity('ORDER', ['order_id (PK)', ...(compact ? [] : ['customer_id (FK)', 'status'])])};
+  customer -> order [label="1 : many"];
+  ${compact ? '' : `line ${entity('ORDER_LINE', ['order_id (FK)', 'sku', 'quantity'])}; order -> line [label="1 : many"];`}
+  ${expanded ? `product ${entity('PRODUCT', ['sku (PK)', 'name'])}; payment ${entity('PAYMENT', ['payment_id (PK)', 'outcome'])}; product -> line [label="1 : many"]; order -> payment [label="1 : many"];` : ''}
+}`;
+      }
+      if (name === 'gantt') return `digraph gantt {
+  ${defaults}
+  graph [rankdir=LR]; node [shape=box, fixedsize=true, height=0.5];
+  implementation [label="Implementation\n01–06 Jul", width=${compact ? '2.0' : '2.5'}, ${dotRole(palette, 'process')}];
+  verification [label="Verification\n07–10 Jul", width=2.0, ${dotRole(palette, 'warning')}];
+  release [shape=diamond, fixedsize=false, label="Release\n10 Jul", ${dotRole(palette, 'decision')}];
+  implementation -> verification -> release;
+  ${expanded ? 'design [label="Design\n23–27 Jun", width=2.0]; security [label="Security review\n08–10 Jul", width=2.0]; design -> implementation; verification -> security -> release;' : ''}
+}`;
+      if (name === 'chart') return `digraph chart {
+  ${defaults}
+  graph [rankdir=LR]; node [shape=box, fixedsize=true, height=0.45, fillcolor="${palette.focusFill}"];
+  w1 [label="W1 72%", width=2.9]; w2 [label="W2 78%", width=3.1]; w3 [label="W3 84%", width=3.4];
+  w1 -> w2 -> w3 [style=invis];
+  ${compact ? '' : 'w4 [label="W4 87%", width=3.5]; w3 -> w4 [style=invis];'}
+  ${expanded ? 'w5 [label="W5 90%", width=3.6]; w6 [label="W6 93%", width=3.7]; w4 -> w5 -> w6 [style=invis];' : ''}
+}`;
+      if (name === 'mindmap') return `graph mindmap {
+  ${defaults}
+  graph [rankdir=TB, nodesep=0.55, ranksep=0.8, overlap=false];
+  node [shape=ellipse];
+  ready [label="Release ready?", ${dotRole(palette, 'focus')}];
+  product [${dotRole(palette, 'actor')}]; engineering [${dotRole(palette, 'service')}]; operations [${dotRole(palette, 'process')}];
+  ready -- {product engineering operations};
+  ${compact ? '' : 'product -- acceptance; engineering -- checks; operations -- runbook;'}
+  ${expanded ? 'product -- communication; engineering -- security; engineering -- performance; operations -- monitoring; operations -- rollback;' : ''}
+}`;
+      if (name === 'automaton') {
+        if (depth === 'simple') return `digraph automaton {
+  ${defaults}
+  graph [rankdir=LR];
+  node [shape=circle];
+  start [shape=point, label=""];
+  off [label="Off"];
+  on [label="On", shape=doublecircle, fillcolor="${palette.successFill}", color="${palette.successStroke}"];
+  start -> off;
+  off -> on [label="start"];
+  on -> off [label="stop"];
+}`;
+        if (depth === 'complex') return `digraph automaton {
+  ${defaults}
+  graph [rankdir=LR];
+  node [shape=circle];
+  start [shape=point, label=""];
+  idle [label="Idle"];
+  checking [label="Checking"];
+  accepted [label="Accepted", shape=doublecircle, fillcolor="${palette.successFill}", color="${palette.successStroke}"];
+  rejected [label="Rejected", fillcolor="${palette.riskFill}", color="${palette.riskStroke}"];
+  retry [label="Retry"];
+  start -> idle;
+  idle -> checking [label="submit"];
+  checking -> accepted [label="valid"];
+  checking -> rejected [label="invalid"];
+  checking -> retry [label="timeout"];
+  retry -> checking [label="attempt < 3"];
+  retry -> rejected [label="exhausted"];
+  accepted -> idle [label="reset"];
+  rejected -> idle [label="reset"];
+}`;
+        return `digraph automaton {
+  ${defaults}
+  graph [rankdir=LR];
+  node [shape=circle];
+  start [shape=point, width=0.12, label="", color="${palette.edge}"];
+  even [label="Even", shape=doublecircle, fillcolor="${palette.successFill}", color="${palette.successStroke}", fontcolor="${palette.successText}"];
+  odd [label="Odd"];
+  start -> even;
+  even -> even [label="0"];
+  even -> odd [label="1"];
+  odd -> odd [label="0"];
+  odd -> even [label="1"];
+}`;
+      }
+      if (name === 'petri') {
+        if (depth === 'simple') return `digraph petri {
+  ${defaults}
+  graph [rankdir=LR];
+  ready [label="●", xlabel="Ready", shape=circle];
+  run [label="", xlabel="Run", shape=box, width=0.16, height=0.72, fixedsize=true, fillcolor="${palette.focusFill}"];
+  done [label="Done", shape=circle, fillcolor="${palette.successFill}"];
+  ready -> run -> done;
+}`;
+        if (depth === 'complex') return `digraph petri {
+  ${defaults}
+  graph [rankdir=LR];
+  ready [label="●", xlabel="Ready", shape=circle];
+  stock [label="●", xlabel="Stock", shape=circle];
+  reserve [label="", xlabel="Reserve", shape=box, width=0.16, height=0.72, fixedsize=true, fillcolor="${palette.focusFill}"];
+  reserved [label="Reserved", shape=circle];
+  payment [label="●", xlabel="Payment", shape=circle];
+  confirm [label="", xlabel="Confirm", shape=box, width=0.16, height=0.72, fixedsize=true, fillcolor="${palette.focusFill}"];
+  complete [label="Complete", shape=circle, fillcolor="${palette.successFill}"];
+  ready -> reserve; stock -> reserve; reserve -> reserved;
+  reserved -> confirm; payment -> confirm; confirm -> complete;
+}`;
+        return `digraph petri {
+  ${defaults}
+  graph [rankdir=LR];
+  ready [label="●", xlabel="Ready", shape=circle];
+  reserve [label="", xlabel="Reserve", shape=box, width=0.16, height=0.72, fixedsize=true, fillcolor="${palette.focusFill}", color="${palette.focusStroke}"];
+  reserved [label="Reserved", shape=circle];
+  ship [label="", xlabel="Ship", shape=box, width=0.16, height=0.72, fixedsize=true, fillcolor="${palette.focusFill}", color="${palette.focusStroke}"];
+  complete [label="Complete", shape=circle, fillcolor="${palette.successFill}", color="${palette.successStroke}", fontcolor="${palette.successText}"];
+  ready -> reserve -> reserved -> ship -> complete;
+}`;
+      }
+      if (depth === 'simple') return `graph network {
+  ${defaults}
+  graph [layout=neato, overlap=false];
+  node [shape=circle];
+  gateway -- platform;
+  platform -- commerce;
+  platform -- operations;
+}`;
+      if (depth === 'complex') return `graph network {
+  ${defaults}
+  graph [layout=neato, overlap=false, splines=true, start=42];
+  node [shape=circle];
+  gateway [fillcolor="${palette.focusFill}"];
+  platform [fillcolor="${palette.decisionFill}"];
+  commerce [fillcolor="${palette.externalFill}"];
+  operations [fillcolor="${palette.successFill}"];
+  data [fillcolor="${palette.focusFill}"];
+  security [fillcolor="${palette.riskFill}"];
+  gateway -- {platform commerce security};
+  platform -- {data commerce operations p1 p2 p3};
+  commerce -- {data operations c1 c2 c3};
+  operations -- {data security o1 o2};
+  data -- {d1 d2 d3};
+  security -- {s1 s2};
+}`;
+      return `graph network {
+  ${defaults}
+  graph [layout=neato, overlap=false, splines=true, start=42];
+  node [shape=circle];
+  gateway [label="Gateway", fillcolor="${palette.focusFill}", color="${palette.focusStroke}", fontcolor="${palette.focusText}"];
+  platform [label="Platform", fillcolor="${palette.decisionFill}", color="${palette.decisionStroke}", fontcolor="${palette.decisionText}"];
+  commerce [label="Commerce", fillcolor="${palette.externalFill}", color="${palette.externalStroke}", fontcolor="${palette.externalText}"];
+  operations [label="Operations", fillcolor="${palette.successFill}", color="${palette.successStroke}", fontcolor="${palette.successText}"];
+  gateway -- {g1 g2 platform commerce};
+  platform -- {p1 p2 commerce operations};
+  commerce -- {c1 c2 operations};
+  operations -- {o1 o2};
+}`;
+    }
+
+    async function renderMermaid(article, palette, generation) {
+      const target = article.querySelector('.render-target');
+      applySourceVariant(article);
+      const source = article.querySelector('code').textContent.trim();
+      target.dataset.state = 'loading';
+      setPreviewAvailability(target, false);
+      target.replaceChildren();
+      try {
+        const id = `alignment-mermaid-${generation}-${mermaidSequence++}`;
+        const result = await mermaidApi.render(id, mermaidProfile(source, palette, article.dataset.example));
+        if (generation !== renderGeneration) return;
+        target.innerHTML = result.svg;
+        const svg = target.querySelector('svg');
+        if (svg) {
+          svg.setAttribute('role', 'img');
+          svg.setAttribute('aria-label', target.getAttribute('aria-label'));
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          svg.removeAttribute('height');
+        }
+        target.dataset.state = 'ready';
+        setPreviewAvailability(target, true);
+      } catch (error) {
+        if (generation !== renderGeneration) return;
+        target.dataset.state = 'error';
+        const message = document.createElement('span');
+        message.className = 'text-destructive';
+        message.textContent = `Mermaid failed: ${error.message}`;
+        target.replaceChildren(message);
+      }
+    }
+
+    function renderGraphviz(article, palette, generation) {
+        const target = article.querySelector('.render-target');
+      const source = dotSource(article.dataset.graph, palette, article.dataset.graph === 'org' ? 'balanced' : depthSelect.value);
+      const codeBlocks = article.querySelectorAll('code');
+      codeBlocks[codeBlocks.length - 1].textContent = source;
+        target.dataset.state = 'loading';
+      setPreviewAvailability(target, false);
+      target.replaceChildren();
+      try {
+        const svg = vizApi.renderSVGElement(source, { engine: article.dataset.engine });
+        if (generation !== renderGeneration) return;
+        svg.setAttribute('role', 'img');
+        svg.setAttribute('aria-label', target.getAttribute('aria-label'));
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        target.replaceChildren(svg);
+        target.dataset.state = 'ready';
+        setPreviewAvailability(target, true);
+      } catch (error) {
+        if (generation !== renderGeneration) return;
+        target.dataset.state = 'error';
+        const message = document.createElement('span');
+        message.className = 'text-destructive';
+        message.textContent = `Graphviz failed: ${error.message}`;
+        target.replaceChildren(message);
+      }
+    }
+
+    function d2Profile(source, kind, palette) {
+      const depth = depthSelect.value;
+      const shared = {
+        sequence: [['customer', 'actor'], ['api', 'service']],
+        er: [['customer', 'data'], ['order', 'data']],
+        mindmap: [['ready', 'focus'], ['product', 'actor'], ['engineering', 'service'], ['operations', 'process']],
+        network: [['gateway', 'focus'], ['platform', 'service'], ['operations', 'process']]
+      };
+      const byDepth = {
+        architecture: depth === 'simple'
+          ? [['customer', 'actor'], ['api', 'service'], ['store', 'data']]
+          : [['customer', 'actor'], ['edge', 'external'], ['edge.gateway', 'external'], ['application', 'neutral'], ['application.api', 'service'], ['application.queue', 'process'], ['application.store', 'data']],
+        portfolio: depth === 'simple'
+          ? [['portfolio.checkout', 'focus'], ['portfolio.identity', 'service']]
+          : [['portfolio.product.checkout', 'focus'], ['portfolio.product.catalog', 'actor'], ['portfolio.platform.identity', 'service'], ['portfolio.platform.events', 'process'], ['portfolio.operations.observability', 'warning']],
+        flow: depth === 'simple'
+          ? [['request', 'actor'], ['validate', 'process'], ['queue', 'success']]
+          : [['request', 'actor'], ['validate', 'process'], ['decision', 'decision'], ['queue', 'success'], ['error', 'risk']],
+        state: depth === 'simple'
+          ? [['draft', 'neutral'], ['submitted', 'process']]
+          : [['draft', 'neutral'], ['submitted', 'process'], ['fulfilled', 'success'], ['rejected', 'risk']],
+        timeline: depth === 'simple'
+          ? [['build', 'process'], ['release', 'decision']]
+          : depth === 'complex'
+            ? [['design', 'actor'], ['api', 'service'], ['ui', 'service'], ['integration', 'process'], ['security', 'warning'], ['release', 'decision']]
+            : [['week1', 'process'], ['week2', 'warning'], ['decision', 'decision']],
+        automaton: depth === 'simple'
+          ? [['off', 'neutral'], ['on', 'success']]
+          : depth === 'complex'
+            ? [['idle', 'neutral'], ['checking', 'process'], ['accepted', 'success'], ['rejected', 'risk'], ['retry', 'warning']]
+            : [['even', 'success'], ['odd', 'neutral']],
+        petri: depth === 'simple'
+          ? [['ready', 'neutral'], ['run', 'process'], ['done', 'success']]
+          : depth === 'complex'
+            ? [['ready', 'neutral'], ['stock', 'data'], ['reserve', 'process'], ['reserved', 'data'], ['payment', 'external'], ['confirm', 'service'], ['complete', 'success']]
+            : [['ready', 'neutral'], ['reserve', 'process'], ['reserved', 'data'], ['ship', 'service'], ['complete', 'success']]
+      };
+      const assignments = [...(shared[kind] || []), ...(byDepth[kind] || [])];
+      if (kind === 'sequence' && depth !== 'simple') assignments.push(['stock', 'data'], ['payment', 'external']);
+      if (kind === 'er' && depth === 'balanced') assignments.push(['order_item', 'data']);
+      if (kind === 'er' && depth === 'complex') assignments.push(['product', 'data'], ['line', 'data']);
+      if (kind === 'network' && depth !== 'simple') assignments.push(['commerce', 'external']);
+      const styles = assignments.map(([path, role]) => {
+        const fill = role === 'neutral' ? palette.neutralFill : palette[`${role}Fill`];
+        const stroke = role === 'neutral' ? palette.neutralStroke : palette[`${role}Stroke`];
+        const text = role === 'neutral' ? palette.neutralText : palette[`${role}Text`];
+        return `${path}.style.fill: "${fill}"
+${path}.style.stroke: "${stroke}"
+${path}.style.font-color: "${text}"`;
+      }).join('\n');
+      return `${source}\n${styles}`;
+    }
+
+    function polishD2Er(svg, palette) {
+      svg.querySelectorAll('g.shape').forEach((table) => {
+        const rects = table.querySelectorAll(':scope > rect');
+        if (rects.length < 2) return;
+        rects[0].style.fill = palette.neutralFill;
+        rects[0].style.stroke = palette.dataStroke;
+        rects[1].style.fill = palette.dataFill;
+        const texts = table.querySelectorAll(':scope > text');
+        texts.forEach((node, index) => {
+          const color = index === 0
+            ? palette.dataText
+            : [palette.dataText, palette.secondaryText, palette.dataStroke][(index - 1) % 3];
+          node.style.fill = color;
+        });
+        table.querySelectorAll(':scope > line').forEach((line) => { line.style.stroke = palette.neutralStroke; });
+      });
+      svg.querySelectorAll('path.connection').forEach((path) => { path.style.stroke = palette.edge; });
+      svg.querySelectorAll('marker polygon').forEach((marker) => { marker.style.fill = palette.edge; });
+      svg.querySelectorAll('marker g').forEach((marker) => {
+        marker.style.fill = palette.canvas;
+        marker.style.stroke = palette.edge;
+      });
+      svg.querySelectorAll('marker [stroke]').forEach((marker) => { marker.style.stroke = palette.edge; });
+      svg.querySelectorAll('marker circle').forEach((marker) => { marker.style.fill = palette.canvas; });
+      svg.querySelectorAll('g[class^="K"] > text').forEach((label) => { label.style.fill = palette.secondaryText; });
+    }
+
+    async function renderD2(article, palette, generation) {
+      const target = article.querySelector('.render-target');
+      applySourceVariant(article);
+      const source = article.querySelector('code').textContent.trim();
+      target.dataset.state = 'loading';
+      setPreviewAvailability(target, false);
+      target.replaceChildren();
+      try {
+        const compiled = await d2Api.compile(d2Profile(source, article.dataset.d2, palette), { layout: 'elk' });
+        const svgText = await d2Api.render(compiled.diagram, {
+          ...compiled.renderOptions,
+          center: true,
+          pad: 20,
+          noXMLTag: true,
+          salt: `alignment-${generation}-${article.dataset.d2}`
+        });
+        if (generation !== renderGeneration) return;
+        target.innerHTML = svgText;
+        const svg = target.querySelector('svg');
+        if (svg) {
+          svg.setAttribute('role', 'img');
+          svg.setAttribute('aria-label', target.getAttribute('aria-label'));
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          svg.removeAttribute('width');
+          svg.removeAttribute('height');
+          svg.style.backgroundColor = 'transparent';
+          svg.querySelectorAll('svg').forEach((nested) => { nested.style.backgroundColor = 'transparent'; });
+          svg.querySelectorAll('svg.d2-svg > rect').forEach((background) => { background.style.fill = 'transparent'; });
+          if (article.dataset.d2 === 'er') polishD2Er(svg, palette);
+        }
+        target.dataset.state = 'ready';
+        setPreviewAvailability(target, true);
+      } catch (error) {
+        if (generation !== renderGeneration) return;
+        target.dataset.state = 'error';
+        const message = document.createElement('span');
+        message.className = 'text-destructive';
+        message.textContent = `D2 failed: ${error.message}`;
+        target.replaceChildren(message);
+      }
+    }
+
+    function setRendererIdle(article, message = 'Ready to render on demand') {
+      const target = article.querySelector('.render-target');
+      if (target.dataset.state === 'ready') return;
+      target.dataset.state = 'idle';
+      setPreviewAvailability(target, false);
+      const label = document.createElement('span');
+      label.className = 'text-muted';
+      label.textContent = message;
+      target.replaceChildren(label);
+    }
+
+    function renderArticle(article, palette = createPalette(paletteSelect.value, root.dataset.scheme), generation = renderGeneration) {
+      article.dataset.rendered = 'true';
+      const button = article.querySelector('[data-render-example]');
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Rendering…';
+      }
+      const run = async () => {
+        if (article.dataset.renderer === 'mermaid') await renderMermaid(article, palette, generation);
+        if (article.dataset.renderer === 'graphviz') renderGraphviz(article, palette, generation);
+        if (article.dataset.renderer === 'd2') await renderD2(article, palette, generation);
+        if (button) {
+          button.disabled = false;
+          button.textContent = article.querySelector('.render-target').dataset.state === 'ready' ? 'Render again' : `Retry ${article.dataset.renderer === 'd2' ? 'D2 ' : ''}render`;
+        }
+      };
+      if (article.dataset.renderer === 'd2') {
+        d2Queue = d2Queue.catch(() => undefined).then(run);
+        return d2Queue;
+      }
+      return run();
+    }
+
+    function initializeRendererTargets() {
+      root.querySelectorAll('[data-renderer]').forEach((article) => {
+        setRendererIdle(article, 'Waiting for renderer');
+      });
+    }
+
+    function enableRenderer(renderer) {
+      root.querySelectorAll(`[data-renderer="${renderer}"]`).forEach((article) => {
+        setRendererIdle(article, 'Renderer ready — rendering');
+      });
+      void renderRenderer(renderer).catch((error) => {
+        showDependencyFailure(renderer, `${rendererLabel(renderer)} render failed: ${error.message}`);
+      });
+    }
+
+    function rendererLabel(renderer) {
+      return renderer === 'graphviz' ? 'Graphviz' : renderer === 'd2' ? 'D2' : 'Mermaid';
+    }
+
+    function showDependencyFailure(renderer, message) {
+      root.querySelectorAll(`[data-renderer="${renderer}"] .render-target`).forEach((target) => {
+        target.dataset.state = 'error';
+        const failure = document.createElement('span');
+        failure.className = 'text-destructive';
+        failure.textContent = message;
+        target.replaceChildren(failure);
+      });
+    }
+
+    function withTimeout(promise, milliseconds, message) {
+      let timer;
+      const timeout = new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error(message)), milliseconds);
+      });
+      return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+    }
+
+    async function renderRenderer(renderer, generation = renderGeneration, palette = createPalette(paletteSelect.value, root.dataset.scheme)) {
+      const api = renderer === 'mermaid' ? mermaidApi : renderer === 'graphviz' ? vizApi : d2Api;
+      if (!api) return;
+      const articles = Array.from(root.querySelectorAll(`[data-renderer="${renderer}"]`)).filter((article) => !article.hidden);
+      for (const article of articles) {
+        await renderArticle(article, palette, generation);
+        if (generation !== renderGeneration) return;
+      }
+    }
+
+    async function renderAll() {
+      const generation = ++renderGeneration;
+      const palette = createPalette(paletteSelect.value, root.dataset.scheme);
+      applyCssPalette(palette);
+      mermaidSequence = 0;
+      await Promise.all([
+        renderRenderer('mermaid', generation, palette),
+        renderRenderer('graphviz', generation, palette),
+        renderRenderer('d2', generation, palette)
+      ]);
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', async () => {
+        const scheme = button.dataset.schemeButton;
+        root.dataset.scheme = scheme;
+        applyDocumentScheme(scheme);
+        buttons.forEach((candidate) => {
+          const active = candidate.dataset.schemeButton === scheme;
+          candidate.setAttribute('aria-pressed', String(active));
+          candidate.classList.toggle('btn-primary', active);
+        });
+        await renderAll();
+      });
+    });
+
+    root.addEventListener('click', (event) => {
+      const target = event.target.closest('.render-target[data-state="ready"]');
+      if (target) openPreview(target);
+    });
+    root.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      const target = event.target.closest('.render-target[data-state="ready"]');
+      if (!target) return;
+      event.preventDefault();
+      openPreview(target);
+    });
+    previewClose.addEventListener('click', closePreview);
+    previewDialog.addEventListener('click', (event) => {
+      if (event.target === previewDialog) closePreview();
+    });
+    previewDialog.addEventListener('close', () => {
+      previewImage.removeAttribute('src');
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      previewUrl = undefined;
+    });
+
+    depthSelect.addEventListener('change', renderAll);
+    paletteSelect.addEventListener('change', renderAll);
+    categorySelect.addEventListener('change', () => {
+      applyCategoryFilter();
+      void renderAll();
+    });
+    rendererFilter.addEventListener('change', () => {
+      applyCategoryFilter();
+      void renderAll();
+    });
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const field = document.createElement('textarea');
+      field.value = text;
+      field.setAttribute('aria-hidden', 'true');
+      field.style.position = 'absolute';
+      field.style.left = '-9999px';
+      root.appendChild(field);
+      field.select();
+      document.execCommand('copy');
+      field.remove();
+    }
+
+    root.querySelectorAll('details').forEach((details) => {
+      const code = details.querySelector('code');
+      if (!code) return;
+      const row = document.createElement('div');
+      row.className = 'copy-row';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn btn-ghost';
+      button.textContent = 'Copy source';
+      button.addEventListener('click', async () => {
+        try {
+          await copyText(code.textContent);
+          button.textContent = 'Copied';
+          setTimeout(() => { button.textContent = 'Copy source'; }, 1400);
+        } catch (error) {
+          button.textContent = 'Copy failed';
+          button.setAttribute('data-tooltip', error.message);
+        }
+      });
+      row.appendChild(button);
+      details.insertBefore(row, details.querySelector('pre'));
+    });
+
+    applyCategoryFilter();
+    initializeRendererTargets();
+
+    const loadMermaid = Promise.resolve(globalThis.mermaid)
+      .then((api) => {
+        if (api == null) throw new Error('local Mermaid asset did not load');
+        mermaidApi = api;
+        mermaidApi.initialize({ startOnLoad: false, securityLevel: 'strict', suppressErrorRendering: true });
+        setRendererStatus(mermaidStatus, 'ready', 'Mermaid 11.16.0 · ready');
+        enableRenderer('mermaid');
+      })
+      .catch((error) => {
+        setRendererStatus(mermaidStatus, 'unavailable', `Mermaid failed · ${error.message}`);
+        showDependencyFailure('mermaid', `Mermaid dependency failed: ${error.message}`);
+      });
+
+    const loadViz = Promise.resolve(globalThis.Viz)
+      .then((api) => {
+        if (api == null) throw new Error('local Viz.js asset did not load');
+        return api.instance();
+      })
+      .then((instance) => {
+        vizApi = instance;
+        setRendererStatus(vizStatus, 'ready', `Viz.js 3.28.0 · Graphviz ${vizApi.graphvizVersion} · ready`);
+        enableRenderer('graphviz');
+      })
+      .catch((error) => {
+        setRendererStatus(vizStatus, 'unavailable', `Viz.js failed · ${error.message}`);
+        showDependencyFailure('graphviz', `Viz.js dependency failed: ${error.message}`);
+      });
+
+    const loadD2 = Promise.resolve(globalThis.D2Gallery)
+      .then(async (api) => {
+        if (api == null) throw new Error('local D2 asset did not load');
+        d2Api = new api.D2();
+        setRendererStatus(d2Status, 'loading', 'D2.js 0.1.33 · initializing engine');
+        await withTimeout(d2Api.ready, 15000, 'D2 engine initialization timed out');
+        setRendererStatus(d2Status, 'ready', 'D2.js 0.1.33 · ready');
+        enableRenderer('d2');
+      })
+      .catch((error) => {
+        setRendererStatus(d2Status, 'unavailable', `D2 failed · ${error.message}`);
+        showDependencyFailure('d2', `D2 dependency failed: ${error.message}`);
+      });
+
+    await Promise.allSettled([loadMermaid, loadViz, loadD2]);
+  </script>
+</div>
+
+<script src="./vendor/floating-ui.core.umd.min.js"></script>
+<script src="./vendor/floating-ui.dom.umd.min.js"></script>
+<script>
+(() => {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set(["top", "right", "bottom", "left"]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =>
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest("[data-tooltip]")
+      : null;
+  const containsTarget = (trigger, target) =>
+    target?.nodeType != null && trigger.contains(target);
+  const getContent = (trigger) =>
+    trigger.getAttribute("data-tooltip")?.trim() ?? "";
+  const getPlacement = (trigger) => {
+    const placement = trigger.getAttribute("data-tooltip-placement");
+    return tooltipPlacements.has(placement) ? placement : "top";
+  };
+  const getTooltip = () => {
+    if (tooltip == null) {
+      tooltip = document.createElement("div");
+      tooltip.id = tooltipId;
+      tooltip.className = "tooltip";
+      tooltip.setAttribute("role", "tooltip");
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) => {
+    const ids = new Set(
+      (trigger.getAttribute("aria-describedby") ?? "")
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute("aria-describedby");
+    } else {
+      trigger.setAttribute("aria-describedby", [...ids].join(" "));
+    }
+  };
+  const clearOpenTimeout = () => {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) => {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) => {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              "--tooltip-available-width",
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              "--tooltip-available-height",
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: "fixed",
+    })
+      .then(({ x, y }) => {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = "visible";
+      })
+      .catch(() => {
+        if (activeTrigger === trigger && request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) => {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = "hidden";
+    floating.style.transform = "translate(0, 0)";
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () => {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) => {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() < skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() => {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) => {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) => {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(":focus-visible")) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) => {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () => {
+    closeTooltip(false);
+    document.removeEventListener("pointerover", handlePointerOpen);
+    document.removeEventListener("pointerout", handleLeave);
+    document.removeEventListener("focusin", handleFocusIn);
+    document.removeEventListener("focusout", handleLeave);
+    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener("contextmenu", handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener("pointerover", handlePointerOpen);
+  document.addEventListener("pointerout", handleLeave);
+  document.addEventListener("focusin", handleFocusIn);
+  document.addEventListener("focusout", handleLeave);
+  document.addEventListener("keydown", handleKeyDown);
+  document.addEventListener("contextmenu", handleContextMenu);
+  window.addEventListener("pagehide", destroy, { once: true });
+})();
+</script>
+<script id="codex-visualization-lucide" async src="./vendor/lucide.min.js"></script>
+<script>
+(() => {
+  const initialize = () => {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById("codex-visualization-lucide")
+    ?.addEventListener("load", initialize, { once: true });
+})();
+</script>
+
+</body>
+</html>

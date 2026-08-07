@@ -1,0 +1,6 @@
+interface:
+  display_name: "To PRD"
+  short_description: "Create decision-ready requirements before planning"
+  default_prompt: "Use $to-prd to produce a decision-ready PRD from this problem and its evidence before implementation planning."
+policy:
+  allow_implicit_invocation: false

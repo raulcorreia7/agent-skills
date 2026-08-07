@@ -1,0 +1,6 @@
+interface:
+  display_name: "Plan Remediation"
+  short_description: "Plan remediation across three evidence-backed horizons"
+  default_prompt: "Use $plan-remediation to verify findings and produce a severity-ordered Stabilize, Correct, and Prevent plan without applying changes."
+policy:
+  allow_implicit_invocation: false

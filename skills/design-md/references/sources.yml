@@ -1,0 +1,33 @@
+retrieved_on: "2026-07-31"
+behavior_authority:
+  - title: "DESIGN.md format specification"
+    url: "https://github.com/google-labs-code/design.md/blob/9bf8eae67128b6cc55ad9bf86665767deb4c11cd/docs/spec.md"
+  - title: "DESIGN.md CLI reference"
+    url: "https://github.com/google-labs-code/design.md/blob/9bf8eae67128b6cc55ad9bf86665767deb4c11cd/README.md#cli-reference"
+upstream:
+  repository: "https://github.com/google-labs-code/design.md"
+  release: "0.4.0"
+  commit: "9bf8eae67128b6cc55ad9bf86665767deb4c11cd"
+  format_version: "alpha"
+  license: "Apache-2.0"
+  license_source: "https://github.com/google-labs-code/design.md/blob/9bf8eae67128b6cc55ad9bf86665767deb4c11cd/LICENSE"
+  local_license: "references/LICENSE.txt"
+  files:
+    specification: "https://raw.githubusercontent.com/google-labs-code/design.md/9bf8eae67128b6cc55ad9bf86665767deb4c11cd/docs/spec.md"
+    license: "https://raw.githubusercontent.com/google-labs-code/design.md/9bf8eae67128b6cc55ad9bf86665767deb4c11cd/LICENSE"
+vendored:
+  - upstream: "docs/spec.md"
+    local: "references/spec.md"
+    delta: "None; the upstream generated specification is unchanged."
+  - upstream: "LICENSE"
+    local: "references/LICENSE.txt"
+    delta: "The text is unchanged; the local file has a final newline."
+local_files:
+  - path: "SKILL.md"
+    reason: "Local workflow for authoring and managing DESIGN.md files."
+  - path: "agents/openai.yaml"
+    reason: "OpenAI adapter required by this repository."
+  - path: "references/cli.md"
+    reason: "Local execution and acquisition contract for the pinned designmd CLI."
+  - path: "references/sources.yml"
+    reason: "Source provenance for the bundled specification and license."

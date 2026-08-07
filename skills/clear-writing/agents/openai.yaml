@@ -1,0 +1,6 @@
+interface:
+  display_name: "Clear Writing"
+  short_description: "Write or review prose; formal ASD-STE100 only when requested"
+  default_prompt: "Use $clear-writing when prose quality is primary; use formal ASD-STE100 only when explicitly required."
+policy:
+  allow_implicit_invocation: true

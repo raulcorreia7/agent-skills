@@ -1,0 +1,11 @@
+reviewed_on: "2026-08-19"
+limitations:
+  - "Isolation reduces peer influence but does not make shared models, training data, or evidence independent; agreement is not proof."
+  - "The evidence does not establish two reviewers as universally optimal; two is this workflow's bounded default."
+sources:
+  group_conformity:
+    title: "Group Conformity in Multi-Agent Systems"
+    url: "https://aclanthology.org/2025.findings-acl.265/"
+  consensus_agents:
+    title: "CONSENSAGENT: Can Multi-Agent Language Models Achieve Consensus?"
+    url: "https://aclanthology.org/2025.findings-acl.1141/"

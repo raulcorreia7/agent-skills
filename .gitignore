@@ -1,0 +1,34 @@
+# Agent-local state
+.claude/settings.local.json
+.codex-log/
+.codex/
+
+# Local work outputs
+.cache/
+.tmp/
+.reports/
+.artifacts/
+
+# Python environment and caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Local test, coverage, and browser-render outputs
+.coverage
+.nyc_output/
+coverage/
+htmlcov/
+test-results/
+playwright-report/
+blob-report/
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/

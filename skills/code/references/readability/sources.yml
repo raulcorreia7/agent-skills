@@ -1,0 +1,16 @@
+reviewed_on: "2026-08-19"
+limitations:
+  - "Readability studies vary by language, construct, task, and participant population; they support conditional review signals, not universal syntax, line-count, or nesting limits."
+sources:
+  control_flow:
+    title: "Gopstein et al., ESEC/FSE 2017"
+    url: "https://doi.org/10.1145/3106237.3106264"
+  formatting_review:
+    title: "Oliveira et al., Journal of Systems and Software 2023"
+    url: "https://doi.org/10.1016/j.jss.2023.111728"
+  intermediate_values:
+    title: "Cates, Yunik, and Feitelson, ICPC 2021"
+    url: "https://doi.org/10.1109/ICPC52881.2021.00020"
+  nesting:
+    title: "Johnson et al., ICSME 2019"
+    url: "https://doi.org/10.1109/ICSME.2019.00085"

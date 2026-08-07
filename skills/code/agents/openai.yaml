@@ -1,0 +1,6 @@
+interface:
+  display_name: "Code"
+  short_description: "Implement focused application behavior"
+  default_prompt: "Use $code to implement or explain this application behavior with the smallest coherent change."
+policy:
+  allow_implicit_invocation: true

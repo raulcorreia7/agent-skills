@@ -1,0 +1,6 @@
+interface:
+  display_name: "Diagrams"
+  short_description: "Create Mermaid, Graphviz DOT, or D2 diagrams"
+  default_prompt: "Use $diagrams to design, refactor, render, or validate a Mermaid, Graphviz DOT, or D2 diagram for this material."
+policy:
+  allow_implicit_invocation: true

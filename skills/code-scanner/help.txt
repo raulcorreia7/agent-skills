@@ -1,0 +1,21 @@
+Purpose: identical fallback scanners for machines missing the native
+binaries. Prefer native installs; use this only to fill gaps.
+
+
+  Mount:  docker run --rm -v /abs/path:/src:ro code-scanner:latest <cmd> /src
+
+  osv-scanner --recursive /src          known CVEs in dependencies
+  gitleaks detect --source /src        leaked credentials
+  trufflehog filesystem /src           leaked credentials, deeper pass
+  trivy fs --severity HIGH,CRITICAL /src   OS and dependency CVEs
+  trivy config /src                    IaC misconfigurations
+  hadolint /src/Dockerfile             Dockerfile lint
+  semgrep --config auto /src           static analysis
+  gosec /src                           Go security audit
+  ruff check /src                      Python lint (native: ruff check <dir>)
+  shellcheck <files>                   shell lint, native only
+  ctags -R /src                       symbol index for navigation
+  rg <pattern> /src                   fast text search
+  git -C /src log --oneline          churn history
+
+Pass a scanner command to run it. This text is the default.
