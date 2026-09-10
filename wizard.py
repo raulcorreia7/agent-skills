@@ -21,13 +21,13 @@ import skills
 from tools.lib import ROOT, SetupError
 
 EXAMPLES = """Examples:
-  uv run --with questionary python wizard.py
+  python wizard.py
   python wizard.py --help
 """
 
 DEPENDENCY_HINT = (
-    "error: the wizard needs questionary. Run `uv run --with questionary python wizard.py`, "
-    "or `pip install questionary` first."
+    "error: the wizard needs questionary. Run `uv run python wizard.py`, or `pip install questionary` first; "
+    "`python skills.py install --all` needs nothing extra."
 )
 SCOPE_USER = "User  (~/.agents/skills)"
 SCOPE_PROJECT = "This repository  (./.agents/skills)"

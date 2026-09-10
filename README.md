@@ -16,13 +16,13 @@ You need:
 ```text
 git clone https://github.com/raulcorreia7/agent-skills.git
 cd agent-skills
-uv run --with questionary python wizard.py
+uv run python wizard.py
 ```
 
 The wizard asks three questions, shows the exact plan, offers a dry run, then
-installs and validates. It needs questionary for prompts; `skills.py` needs
-nothing beyond the standard library, so use `python skills.py install --all`
-for an unattended install.
+installs and validates. It needs questionary, which `uv run` installs from the
+declared dependency; `python skills.py install --all` needs nothing beyond the
+standard library.
 
 This command installs every skill for the current user and synchronizes the
 shared baseline. Add `--project` to install into a repository instead. A
@@ -33,7 +33,7 @@ partial install omits the catalog because it lists skills that are not present.
 Guided install, with a preview before anything is written:
 
 ```text
-uv run --with questionary python wizard.py
+uv run python wizard.py
 ```
 
 Install every skill for the user, plus the shared baseline:
