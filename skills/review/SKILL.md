@@ -14,8 +14,9 @@ linter, schema, or CI should own.
 
 ## Priorities
 
-Use these priorities in every review mode. Do not use a lower priority to
-soften a material defect.
+Use these priorities in every review mode. State the source label and the
+normalized severity together. Do not use a lower priority to soften a material
+defect.
 
 | Priority | Meaning |
 |---|---|

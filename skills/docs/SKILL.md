@@ -1,6 +1,6 @@
 ---
 name: docs
-description: Creates, edits, audits, or validates standalone documentation. Use for guides, references, runbooks, and specifications, not source comments or coordinated system bundles.
+description: Creates, edits, audits, or validates standalone documentation. Use for guides, references, runbooks, and specifications, not source comments, in-code API documentation, or coordinated system bundles.
 ---
 
 # Docs

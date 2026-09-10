@@ -1,6 +1,6 @@
 ---
 name: comments
-description: Maintains, audits, or explains source comments, docstrings, API documentation, and tool directives. Use when these artifacts are the primary deliverable, not standalone documentation.
+description: Maintains, audits, or explains source comments, docstrings, API documentation, and tool directives. Use when these artifacts are the primary deliverable, not standalone documentation or published API reference pages.
 ---
 
 # Comments

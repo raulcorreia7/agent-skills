@@ -39,8 +39,8 @@ unspecified.
 
 1. Resolve scope and depth. Default to `quick` + `project`. Ask only when
    the boundary changes risk, cost, access, or deliverable.
-2. Route supplied changes and designs to `review`. Route standalone
-   documentation audits to `docs`.
+2. Route supplied changes and designs to the change-assessment workflow. Route
+   standalone documentation audits to `docs`.
 3. Load only the reference for the selected mode:
    - `project`: read `references/project.md`.
    - `tests`: read `references/tests.md`.
@@ -77,9 +77,12 @@ Example:
 |---|---|---|---|---|---|
 | High | Migration can run before backup verification | `deploy.yml:82` invokes the migration before the backup-check step | Trace the job dependency order and inspect the failed-check path | Make backup verification a required predecessor | High |
 
-- `Critical`: data loss, security break, production outage, or broken public contract.
-- `High`: likely bug or regression, unsafe migration, or essential protection gap.
-- `Medium`: maintainability, confidence, ownership, documentation, or operational risk.
+- `Critical`: data loss, security break, production outage, or broken public
+  contract.
+- `High`: likely bug or regression, unsafe migration, or essential protection
+  gap.
+- `Medium`: maintainability, confidence, ownership, documentation, or
+  operational risk.
 - `Low`: localized improvement with limited impact.
 
 ## Guardrails
@@ -87,7 +90,13 @@ Example:
 - Keep the audit read-only. Treat production data and live systems as separate
   approval boundaries.
 - Limit compliance and coverage claims to the available evidence.
-- Identify sensitive locations and protect their values.
+- Identify sensitive locations and protect their values; cite locations and
+  credential types, never values.
+
+## Composition
+
+- Keep severity ordering here. Hand approved follow-up work to its artifact
+  owner. Use parallel `to-plan` only for a requested delegated plan.
 
 ## Output
 
@@ -98,8 +107,3 @@ Example:
 - Maps or selected artifacts when useful
 - Unknowns, approval-gated evidence, and residual risk
 - Focused follow-up owners
-
-## Composition
-
-- Keep severity ordering here. Hand approved follow-up work to its artifact
-  owner. Use parallel `to-plan` only for a requested delegated plan.

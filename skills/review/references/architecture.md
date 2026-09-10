@@ -26,7 +26,7 @@ outside the default review.
 ## Composition
 
 - Use `audit` for broad multi-domain discovery or coverage mapping.
-- Use `optimize` only when a measurable improvement target owns the work.
+- When a measurable improvement target owns the work, that work is not a review.
 - Use `docs` when the approved outcome is an updated design document or ADR.
 - Use `diagrams` when a dependency, sequence, boundary, or data-flow visual
   would materially clarify the review.

@@ -61,8 +61,8 @@ Read these references only for their named branch:
 - Resolve and validate each write or delete target at the mutation boundary.
 - Keep verification read-only. Obtain approval before networked dependency
   checks, and do not use automatic audit fixes or dependency upgrades as checks.
-- When application behavior becomes the primary artifact, route that work to
-  the `code` skill; this skill retains automation ownership.
+- Keep application behavior changes out of automation work; this skill retains
+  automation ownership.
 
 ## Output
 

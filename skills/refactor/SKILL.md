@@ -31,7 +31,8 @@ Improve code structure. Preserve observable behavior and public contracts.
 
 ## Guardrails
 
-- Keep requested behavior changes with the `code` workflow.
+- Keep behavior changes out of refactoring; this skill preserves observable
+  behavior and public contracts.
 - Preserve public interfaces and data shape unless the user approves a change.
 - Keep scope to the structural target and directly coupled cleanup.
 - Treat a named pattern, smell, metric, or lower score as evidence to inspect,
