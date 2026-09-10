@@ -45,13 +45,6 @@ A decision issue uses `decision` as its kind and replaces the build outcome with
 its decision criterion and required output. `A -> B` means A must finish before
 B; use that direction in drafts and tracker links.
 
-## Composition
-
-- Use `to-prd` or `to-plan` when the source is missing or not
-  implementation-ready.
-- Use `git` for branch, PR, release, and work-item linking conventions after
-  issues exist.
-
 ## Guardrails
 
 - Return drafts unless the user explicitly approves publication.
@@ -61,6 +54,13 @@ B; use that direction in drafts and tracker links.
   that can change them is unresolved.
 - Treat edits, closure, assignment, priority changes, and deletion as separate
   external mutations that require explicit approval.
+
+## Composition
+
+- Return to requirements or planning when the source is missing or not
+  implementation-ready; do not decompose an unapproved source.
+- Use `git` for branch, PR, release, and work-item linking conventions after
+  issues exist.
 
 ## Output
 

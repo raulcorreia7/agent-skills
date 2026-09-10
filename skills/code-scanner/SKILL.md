@@ -48,13 +48,23 @@ Run scanner checks and report thresholded findings.
 
 ## Guardrails
 
-- Stay read-only; coverage executes the test suite, so run it only after
-  explicit confirmation.
-- Use native binaries, `uvx`/`npx`, or the toolbox image; install nothing
-  into the system.
+- Keep the scan read-only; coverage executes the test suite, so run it only
+  after explicit confirmation.
+- Use native binaries, `uvx`/`npx`, or the bundled toolbox for missing
+  binaries: run the `code-scanner` wrapper, take commands from `help.txt`, build
+  its image from `Dockerfile`, and provision pinned binaries with
+  `fetch-bin.sh`. Install nothing into the system.
 - Treat thresholds as signals, not verdicts.
-- Report tool findings, quantitative and qualitative. Send audit verdicts
-  to `$audit`, change verdicts to `$review`, fixes to `$code`/`$refactor`.
+- Report tool findings, quantitative and qualitative. Send audit verdicts to
+  `audit`, change verdicts to `review`, fixes to `code`/`refactor`.
+
+## Composition
+
+- Keep threshold ordering here. Hand fixes to `code`/`refactor`, audit verdicts
+  to `audit`, change verdicts to `review`. Use parallel `to-plan` only for a
+  requested delegated plan.
+- Send verified finding sets to `plan-remediation` when horizon planning or a
+  portfolio order is the next deliverable.
 
 ## Output
 
@@ -62,9 +72,3 @@ Run scanner checks and report thresholded findings.
 - Ranked findings table: file:line, metric value, threshold, verify command
 - Unknowns, unmeasured families, and coverage limits
 - Single next-measurement or fix owner per finding
-
-## Composition
-
-- Keep threshold ordering here. Hand fixes to `$code`/`$refactor`, audit
-  verdicts to `$audit`, change verdicts to `$review`. Use parallel `to-plan`
-  only for a requested delegated plan.

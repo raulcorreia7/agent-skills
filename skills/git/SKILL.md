@@ -48,7 +48,12 @@ mutate Git only after explicit approval for the exact operation and boundary.
 - Keep unrelated files outside staging and mutations.
 - Obtain explicit approval before each external or destructive mutation.
 - When the user explicitly requests correctness or risk review, compose with
-  the manual `$review` skill.
+  the manual `review` skill.
+
+## Composition
+
+- Create, remove, or clean up worktrees through `worktrees`. This skill keeps
+  commit, branch, and remote operations.
 
 ## Output
 

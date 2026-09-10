@@ -63,11 +63,11 @@ preflight checks, and cleanup guardrails.
 
 ## Composition
 
-- Compose with the `git` skill only when drafting branch, PR, release, or
-  work-item text is an independent deliverable. This skill retains ownership of
-  worktree operations and resolves existing refs directly.
-- Remain usable without the `git` skill. Use local repository naming
-  conventions and do not read another skill's files.
+- Drafting branch, PR, release, or work-item text is an independent
+  deliverable. This skill retains ownership of worktree operations and resolves
+  existing refs directly.
+- Remain usable standalone. Use local repository naming conventions and do not
+  read another skill's files.
 
 ## Output
 

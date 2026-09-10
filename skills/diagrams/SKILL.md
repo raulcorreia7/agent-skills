@@ -64,7 +64,12 @@ Resolve `<skill-root>` as the directory that contains this `SKILL.md`.
 - Keep unverified systems, dependencies, ownership, flows, states, and platform
   support out of the diagram.
 - Keep canonical source with each delivered image.
-- Obtain approval before source goes to a public rendering service.
+- Obtain explicit approval before source goes to a public rendering service.
+
+## Composition
+
+- Author or validate a project `DESIGN.md` through `design-md`; this skill
+  consumes it as the project design input.
 
 ## Output
 
