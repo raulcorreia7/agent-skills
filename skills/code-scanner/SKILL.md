@@ -50,10 +50,10 @@ Run scanner checks and report thresholded findings.
 
 ```text
 for family in families:
-    command ← native binary | uvx/npx | toolbox image   # nothing installed
-    result ← run(command) ; flag against the gate
-    report file:line, metric, threshold, verify command, or an unmeasured reason
-coverage runs only after the user confirms the announced command
+    command ← native | uvx/npx | toolbox
+    result ← run → flag against the gate
+    report ← file:line, metric, threshold, verify command | unmeasured reason
+coverage → only after the user confirms the announced command
 ```
 
 ## Guardrails

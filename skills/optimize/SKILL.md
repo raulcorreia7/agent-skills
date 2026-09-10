@@ -47,11 +47,11 @@ cost, or infrastructure change.
 ## Flow
 
 ```text
-target ← one measurable goal, smallest scope
-baseline ← measure, or label the proxy
-bottleneck ← profile or decompose
-loop: rank candidates → apply the approved one → re-measure
-stop when the target is met or further work lacks value
+target ← measurable goal, smallest scope
+baseline ← measure | labelled proxy
+bottleneck ← profile | decompose
+loop: rank → apply approved → re-measure
+stop: target met | further work lacks value
 ```
 
 ## Depth Contract

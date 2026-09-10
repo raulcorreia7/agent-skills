@@ -67,11 +67,11 @@ Make each material claim traceable to a current source.
 ## Flow
 
 ```text
-define question, boundary, and sufficient evidence
-for each question: search, open sources, note locator, date, status, limits
-compare conflicts; keep material ones unresolved
-synthesize from notes, citation beside each claim
-verify links and support; stop when gaps are explicit
+question ← scope, boundary, sufficient evidence
+per question → search → open → note(locator, date, status, limits)
+conflict ← compare; keep material ones open
+synthesis ← notes only, citation per claim
+verify links → stop when gaps are explicit
 ```
 
 ## Source appraisal

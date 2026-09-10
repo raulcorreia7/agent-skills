@@ -48,11 +48,11 @@ owning tools. Prefer types, tests, and linters; comments are last.
 ## Flow
 
 ```text
-for candidate in requested scope:
-    classify keep | revise | remove | add, against current code and guidance
-    preserve syntax, placement, generated ownership, directive semantics
-compare every changed comment with the current code; run the owning check
-stop when every candidate has a classification and evidence for its edit
+for candidate in scope:
+    classify → keep | revise | remove | add
+    preserve syntax, placement, ownership, directive semantics
+compare changed comments with current code → run owning check
+stop: every candidate classified + evidenced
 ```
 
 ## Guardrails

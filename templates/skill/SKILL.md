@@ -16,10 +16,10 @@ description: "Use when <trigger and task>. Do not use for <closest non-goal>."
 
 ## Flow
 
-<!-- Optional. Short, non-restrictive: order, loops, stop conditions, not a full algorithm. -->
+<!-- Optional. Short pseudocode: arrows, loops, stop conditions, not a full algorithm. -->
 
 ```text
-<essence as short pseudocode>
+<essence as arrow-style pseudocode>
 ```
 
 ## Guardrails

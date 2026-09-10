@@ -29,11 +29,10 @@ behavior.
 ## Flow
 
 ```text
-record symptom, environment, frequency, recent change
-reproduce the smallest failure, or preserve the artifacts
-locate the first incorrect state
-loop: rank hypotheses → run one probe → update
-stop at one cause, or one hypothesis plus a falsifying observation
+symptom, env, recency ← record
+state ← first incorrect state | reproduce the smallest failure
+loop: hypotheses ← rank → evidence ← run(strongest)
+stop: one cause | one hypothesis + falsifying observation
 ```
 
 ## Guardrails

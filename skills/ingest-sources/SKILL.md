@@ -62,13 +62,12 @@ reasons.
 ## Flow
 
 ```text
-purpose, limits, retention ← approved scope
-branch ← the one that matches the source format
-raw ← acquire, store immutable
-derived ← convert with the selected tool; keep every warning
-manifest ← link raw and derived, record validation and losses
-curate ← minimize, deduplicate, chunk, retrieve, evaluate
-remove raw and derived at the end of the retention period
+scope ← purpose, limits, retention
+branch ← matches(source format)
+raw ← acquire (immutable); derived ← convert, warnings kept
+manifest ← raw + derived + validation + losses
+curate ← minimize → dedupe → chunk → retrieve → evaluate
+→ remove raw and derived at retention end
 ```
 
 ## Guardrails

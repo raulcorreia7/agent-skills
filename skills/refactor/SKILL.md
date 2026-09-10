@@ -32,13 +32,11 @@ Improve code structure. Preserve observable behavior and public contracts.
 ## Flow
 
 ```text
-target, preserved behavior, contracts ← define
-for each preservation claim: map to existing evidence
-loop:
-    one coherent structural change
-    assess the claims against evidence; revert if a behavior differs
-remove obsolete paths only when callers and evidence show no use
-stop when the target structure exists and every claim has evidence
+target, behavior, contracts ← define
+claims ← map to existing evidence
+loop: one structural change → assess → revert on behavior difference
+remove obsolete paths only when callers and evidence agree
+stop: target exists + every claim has evidence
 ```
 
 ## Guardrails

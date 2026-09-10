@@ -31,11 +31,11 @@ effects.
 ## Flow
 
 ```text
-job, inputs, outputs, side effects, success result ← define
-classify automation: missing | partial | sufficient
-if missing or partial: implement one entrypoint; else skip the edit
-run the aggregate check, or the supported checks for material risk
-stop when the request is satisfied and the check result is recorded
+job, IO, effects, success ← define
+classify → missing | partial | sufficient
+missing | partial → one entrypoint; sufficient → skip
+check ← aggregate | supported checks
+stop: request satisfied + result recorded
 ```
 
 ## References

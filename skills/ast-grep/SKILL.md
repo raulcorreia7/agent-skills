@@ -47,11 +47,10 @@ the product repository instead of growing skill prose.
 ## Flow
 
 ```text
-language, structure, included and excluded cases, paths, output ← identify
-if text search is reliable: use it and stop
-pattern ← direct
-test on one expected match and one near miss; refine until both hold
-scan only the intended paths; report matches and limitations
+target ← language, structure, include/exclude, paths
+text search reliable → use it, stop
+pattern ← direct → test(match, near miss) → refine
+scan intended paths → report matches + limits
 ```
 
 ## Guardrails

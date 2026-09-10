@@ -46,10 +46,10 @@ authority, and coverage limits.
 ## Flow
 
 ```text
-verify selected findings; reject unsupported
-map severity, preserve source labels
-for finding: Stabilize, Correct, Prevent, whatever the evidence supports
-order the portfolio, then name one executable first step
+findings ← verify(selected); reject unsupported
+severity ← map(source labels)
+per finding → Stabilize, Correct, Prevent (evidence-supported)
+portfolio ← order by harm → severity → gates → blast radius → confidence
 ```
 
 ## References

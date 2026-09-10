@@ -58,10 +58,10 @@ defect.
 
 ```text
 branch ← change | pull-request | architecture
-finding ← violated criterion + precise locator + consequence + evidence
-reject each finding that fails its falsification attempt
-assign P0-P3 from the priorities above
-verdict ← pass | findings present | not reviewable, with residual risk
+finding ← criterion + locator + consequence + evidence
+reject: fails falsification
+priority ← P0-P3
+verdict ← pass | findings | not reviewable + residual risk
 ```
 
 ## Guardrails

@@ -20,7 +20,8 @@ out.
 6. Every skill carries an explicit, useful `## Output`, in the template's order:
    `Job`, `Steps`, optional `Flow`, domain sections, `Guardrails`,
    `Composition`, `Output`. Add `Flow` only when order, loops, or stop
-   conditions carry the essence.
+   conditions carry the essence; keep it short arrow-style pseudocode, not a
+   full algorithm.
 7. References stay local, each branch routes from `SKILL.md`, and every package
    file is reachable from it.
 8. `agents/openai.yaml` stays explicit, aligned with invocation policy, and in

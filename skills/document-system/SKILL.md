@@ -53,9 +53,9 @@ Turn confirmed context and observed evidence into a source-backed system bundle.
 
 ```text
 intake → discovery → reconciliation → synthesis → validation
-each phase reads its own leaf: intake, discovery, reconciliation, synthesis, baseline
-context.md stays human-owned; evidence.md keeps normalized observations
-stop at IaC candidates in gaps.md; publishing and migration need separate approval
+per phase → its leaf
+context.md ← human-owned; evidence.md ← normalized observations
+stop at IaC candidates; publish | migrate need approval
 ```
 
 ## Assets

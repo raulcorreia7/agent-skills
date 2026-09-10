@@ -67,11 +67,10 @@ unspecified.
 
 ```text
 for mode in selected:
-    evidence ← local first, then approval-gated live evidence
-    finding or no-finding, plus the coverage limit
-rank by impact, confidence, blast radius or exploitability, verification path
-recommend the smallest follow-up, with its owner
-stop when every selected domain has evidence and a stated limit
+    evidence ← local → approval-gated live
+    result ← finding | no-finding + coverage limit
+rank: impact, confidence, blast radius, verification path
+→ smallest follow-up + owner
 ```
 
 ## Findings

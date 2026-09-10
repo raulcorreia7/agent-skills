@@ -44,12 +44,12 @@ plan with resolved decisions, ordered work, validation, and risk controls.
 ## Flow
 
 ```text
-mode ← sequential | parallel (parallel only when explicitly requested)
-goal, non-goals, constraints, deliverable, evidence boundary ← define
-resolve material decisions, or record the blocker
-shape ← target and ownership boundaries
-sequential: order by dependency and risk; parallel: slice per the delegation contract
-stop when every item has an owner, dependencies, outcome, and validation
+mode ← sequential | parallel (parallel on request only)
+goal, non-goals, constraints, deliverable ← define
+decisions → resolve | record blocker
+shape ← target, ownership boundaries
+order ← dependency, risk | slices per the delegation contract
+stop: every item has owner, deps, outcome, validation
 ```
 
 ## Guardrails

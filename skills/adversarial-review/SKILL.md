@@ -49,11 +49,10 @@ not proof.
 ## Flow
 
 ```text
-packet ← artifact or locator, purpose, scope, exclusions, criteria, evidence limits
-run two isolated roles from the packet alone: breaker, verifier
-retry one unusable role once, packet only; each role yields at most one report
-normalize each claim: confirmed | disputed | rejected
-adjudicate: deduplicate, keep material disagreement, add no new findings
+packet ← artifact, purpose, scope, criteria, evidence limits
+roles ← breaker, verifier (isolated, packet only), ≤1 report each
+claim ← confirmed | disputed | rejected
+synthesis ← dedupe + material disagreement, no new findings
 ```
 
 ## Guardrails

@@ -47,11 +47,11 @@ Per item, in this order:
 
 ```text
 for item in queue:
-    skip closed or already-triaged items
-    classify kind and evidence state
-    incident → escalate; not judgeable → needs evidence; else → an outcome
-assign owner, first action, revisit condition
-order: harm → reversible mitigation → the rest
+    skip closed, already-triaged
+    kind, evidence ← classify
+    incident → escalate | not judgeable → needs evidence | else → outcome(urgency, impact)
+owner, action, revisit ← assign
+order: harm → reversible mitigation → rest
 ```
 
 ## Outcomes
