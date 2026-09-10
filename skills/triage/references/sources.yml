@@ -1,0 +1,16 @@
+reviewed_on: "2026-09-10"
+limitations:
+  - "The outcome ladder generalizes practice from medical, vulnerability, incident, and issue triage; a tracker may name its states differently."
+sources:
+  triage_definition:
+    title: "Triage"
+    url: "https://en.wikipedia.org/wiki/Triage"
+  ssvc:
+    title: "SSVC: Stakeholder-Specific Vulnerability Categorization"
+    url: "https://certcc.github.io/SSVC/"
+  kubernetes_issue_triage:
+    title: "Kubernetes Issue Triage Guidelines"
+    url: "https://github.com/kubernetes/community/blob/master/contributors/guide/issue-triage.md"
+  sre_incident_response:
+    title: "Google SRE Workbook: Incident Response"
+    url: "https://sre.google/workbook/incident-response/"

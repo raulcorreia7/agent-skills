@@ -37,6 +37,7 @@ python skills.py install --all --global
 | [`$audit`](audit/SKILL.md) | `manual` | Inspect repository or system state within a read-only boundary |
 | [`$optimize`](optimize/SKILL.md) | `manual` | Rank evidence-backed improvements to a measurable target |
 | [`$code-scanner`](code-scanner/SKILL.md) | `manual` | Run code scans |
+| [`$triage`](triage/SKILL.md) | `manual` | Triage bugs, issues, tickets, and PRs into owned next actions |
 
 ## Review
 
