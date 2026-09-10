@@ -82,6 +82,18 @@ Replace every `{{...}}` token in a selected asset, including Mermaid node and
 relationship labels. Do not publish generic sample labels or relationships.
 Create the logical diagram only when it materially improves clarity.
 
+## Guardrails
+
+- Prefer canonical resource IDs and source links over name-only matches.
+- Keep the order: context, discovery, reconciliation, synthesis, validation.
+- Publish a useful baseline with visible gaps when the user accepts that scope.
+- Declare the catalog complete only when no material `unresolved`,
+  `context-only`, or unexplained `evidence-only` entries remain.
+- Label unknown architecture, relationships, ownership, deployment, and intent.
+- Keep sensitive and unnecessary exploitable data out of documentation.
+- Keep cloud discovery read-only and within the authorized scope.
+- Create pages and folders only for a concrete reader need.
+
 ## Composition
 
 - Use `audit` for a deeper read-only inspection when explicitly requested.
@@ -99,15 +111,3 @@ Create the logical diagram only when it materially improves clarity.
   destination-specific navigation metadata when applicable
 - Source-backed reconciliation with coverage and unresolved gaps visible
 - Validation results, missing provider coverage, and residual documentation risk
-
-## Guardrails
-
-- Prefer canonical resource IDs and source links over name-only matches.
-- Keep the order: context, discovery, reconciliation, synthesis, validation.
-- Publish a useful baseline with visible gaps when the user accepts that scope.
-- Declare the catalog complete only when no material `unresolved`,
-  `context-only`, or unexplained `evidence-only` entries remain.
-- Label unknown architecture, relationships, ownership, deployment, and intent.
-- Keep sensitive and unnecessary exploitable data out of documentation.
-- Keep cloud discovery read-only and within the authorized scope.
-- Create pages and folders only for a concrete reader need.

@@ -94,7 +94,7 @@ blocker.
 For another language, use repository evidence. Add a language guide only after
 repeated demand.
 
-## Scope
+## Composition
 
 Keep routine implementation and small rationale comments in this skill. Use a
 maintained specialist skill when its artifact or concern is primary:

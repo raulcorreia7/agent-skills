@@ -27,6 +27,11 @@ plans in their owning workflows.
    `accepted` state. Finish when the snapshot records the chosen direction,
    decisive trade-offs, evidence, assumptions, owner, and acceptance state.
 
+## Guardrails
+
+- Record `accepted` only after the decision owner explicitly confirms it.
+- Label unknown architecture, ownership, API, deployment, and data facts.
+
 ## Composition
 
 - Use `diagrams` when a small dependency, sequence, or data-flow visual would
@@ -34,11 +39,6 @@ plans in their owning workflows.
 - Use `docs` when the user wants a durable ADR or architecture document.
 - Recommend explicit `to-plan` only after the architecture decision is stable
   enough to sequence implementation.
-
-## Guardrails
-
-- Record `accepted` only after the decision owner explicitly confirms it.
-- Label unknown architecture, ownership, API, deployment, and data facts.
 
 ## Output
 

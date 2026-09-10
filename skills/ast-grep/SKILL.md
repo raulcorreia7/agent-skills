@@ -44,12 +44,6 @@ the product repository instead of growing skill prose.
 7. Scan only the intended paths. Finish when the tested rule accounts for the
    expected match, the near miss, the scoped results, and known limitations.
 
-## Composition
-
-When a validated search leads to requested code changes, compose with `code` or
-`refactor` when available. Keep structural search useful on its own when those
-skills are absent.
-
 ## Guardrails
 
 - Infer absence only from a tested rule with positive and negative examples.
@@ -58,6 +52,12 @@ skills are absent.
 - Read `references/sources.yml` only to audit or update the curated upstream
   material. Read `references/LICENSE.txt` only for maintenance,
   redistribution, or a license audit.
+
+## Composition
+
+When a validated search leads to requested code changes, compose with `code` or
+`refactor` when available. Keep structural search useful on its own when those
+skills are absent.
 
 ## Output
 

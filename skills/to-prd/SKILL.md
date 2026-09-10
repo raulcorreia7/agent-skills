@@ -44,19 +44,19 @@ Use applicable items from step 4 as sections.
 - A PRD is not decision-ready while material contract, data, security,
   ownership, migration, rollout, or acceptance decisions remain hidden.
 
-## Composition
-
-- Recommend `discuss-architecture` when unresolved boundaries or major
-  trade-offs block requirements.
-- Recommend `to-plan` after approved requirements make sequencing primary.
-- Recommend `to-issues` when an approved PRD or plan is ready to decompose.
-
 ## Guardrails
 
 - Label stakeholder direction separately from verified facts.
 - Keep non-goals, constraints, privacy, security, accessibility, operations,
   migration, and rollout requirements visible.
 - Keep external work-item systems unchanged.
+
+## Composition
+
+- Recommend `discuss-architecture` when unresolved boundaries or major
+  trade-offs block requirements.
+- Recommend `to-plan` after approved requirements make sequencing primary.
+- Recommend `to-issues` when an approved PRD or plan is ready to decompose.
 
 ## Output
 

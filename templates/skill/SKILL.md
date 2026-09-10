@@ -9,10 +9,18 @@ description: "Use when <trigger and task>. Do not use for <closest non-goal>."
 
 <State the primary outcome in one sentence.>
 
-## Workflow
+## Steps
 
 1. <Inspect the inputs, local conventions, and preserved behavior.>
 2. <Perform the task-specific work until its observable completion criterion is true.>
+
+## Guardrails
+
+- <State exceptional safety, scope, authority, or compatibility boundaries.>
+
+## Composition
+
+- <Route an adjacent job to `skill-name` when that job is the deliverable.>
 
 ## Output
 

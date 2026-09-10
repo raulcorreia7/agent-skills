@@ -68,7 +68,7 @@ description: Leading job and distinct trigger branches.
 
 # Action name
 
-## Workflow
+## Steps
 
 1. Perform the first required action. This step is complete when [observable
    condition].
@@ -80,6 +80,10 @@ description: Leading job and distinct trigger branches.
 - State exceptional safety, scope, authority, or compatibility boundaries.
 - Pair a necessary prohibition with the safe action.
 
+## Composition
+
+- Route an adjacent job to `skill-name` when that job is the deliverable.
+
 ## Output
 
 - Required result or artifact.
@@ -89,7 +93,7 @@ description: Leading job and distinct trigger branches.
 
 Apply these variations:
 
-- A reference-only skill can replace `Workflow` with co-located rules. Give the
+- A reference-only skill can replace `Steps` with co-located rules. Give the
   full rule set an exhaustive application condition.
 - Add a branch only when different invocations require different actions.
 - Put a context pointer beside the step or branch that needs the referenced

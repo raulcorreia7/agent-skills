@@ -41,19 +41,19 @@ plan with resolved decisions, ordered work, validation, and risk controls.
 9. Finish when every plan item has an owner or location, dependencies, outcome,
    and validation.
 
-## Composition
-
-- Use `diagrams` when dependencies, flow, ownership, or rollout are materially
-  clearer visually.
-- Use `docs` when documentation structure or reader workflow is itself a major
-  plan artifact.
-
 ## Guardrails
 
 - Keep the deliverable as a plan unless the user separately requests
   implementation.
 - Resolve material public contracts, storage, rollout, and ownership before
   implementation starts.
+
+## Composition
+
+- Use `diagrams` when dependencies, flow, ownership, or rollout are materially
+  clearer visually.
+- Use `docs` when documentation structure or reader workflow is itself a major
+  plan artifact.
 
 ## Output
 

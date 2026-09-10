@@ -43,6 +43,11 @@ authority, and coverage limits.
    finding has applicable horizons and proof, and the portfolio has one
    executable dependency order.
 
+## References
+
+Read [remediation practices](references/practices.md) only when source rationale
+or a detailed example is material.
+
 ## Severity
 
 - `Critical`: data loss, security break, production outage, or broken public
@@ -68,11 +73,6 @@ authority, and coverage limits.
   documentation, dependency policy, observability, least privilege,
   policy-as-code, or temporary-control retirement.
 
-## References
-
-Read [remediation practices](references/practices.md) only when source rationale
-or a detailed example is material.
-
 ## Guardrails
 
 - Treat exploitation, unauthorized access, data or secret leakage, and suspected
@@ -88,8 +88,8 @@ or a detailed example is material.
   condition. A workaround is not permanent closure.
 - Protect credentials and sensitive values. Cite locations and credential
   types, never values.
-- Keep external search and live evidence within the user's authority. The skill
-  remains read-only even when urgent action is recommended.
+- Keep external search and live evidence within the user's authority. Keep the
+  plan read-only, even when urgent action is recommended.
 
 ## Output
 
