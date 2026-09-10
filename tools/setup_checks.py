@@ -30,12 +30,21 @@ def require(condition: bool, message: str) -> None:
         raise SetupError(f"setup check failed: {message}")
 
 
+def require_baseline_files(root: Path, label: str) -> None:
+    for path in sorted((ROOT / "baselines").iterdir()):
+        if not path.is_file():
+            continue
+        installed = root / path.name
+        require(installed.is_file() and installed.read_bytes() == path.read_bytes(), f"{label}: {path.name}")
+
+
 def run() -> list[str]:
     try:
         with tempfile.TemporaryDirectory(prefix="agent-skills-", dir=ROOT) as temporary:
             root = Path(temporary)
             home, project = root / "home", root / "project"
             home.mkdir()
+            home.joinpath(".claude").mkdir()
             project.mkdir()
 
             source_tree = root / "source-tree"
@@ -75,22 +84,20 @@ def run() -> list[str]:
             result = invoke(home, project, "install", "scripts", "--global")
             require(result.returncode == 0 and (home / ".agents/skills/scripts/SKILL.md").is_file(), "global install")
             codex_root = home / ".codex"
-            require(
-                codex_root.joinpath("AGENTS.md").read_bytes() == (ROOT / "baselines/AGENTS.md").read_bytes(),
-                "global baseline install",
-            )
+            agents_root = home / ".agents"
+            require_baseline_files(codex_root, "global baseline")
             require(
                 matches(TreeTask(ROOT / "baselines/guardrails", codex_root / "guardrails", codex_root)),
                 "global guardrails install",
             )
-            agents_root = home / ".agents"
-            require(
-                agents_root.joinpath("AGENTS.md").read_bytes() == (ROOT / "baselines/AGENTS.md").read_bytes(),
-                "shared baseline install",
-            )
+            require_baseline_files(agents_root, "shared baseline")
             require(
                 matches(TreeTask(ROOT / "baselines/guardrails", agents_root / "guardrails", agents_root)),
                 "shared guardrails install",
+            )
+            require(
+                (home / ".claude/CLAUDE.md").read_bytes() == (ROOT / "baselines/claude/CLAUDE.md").read_bytes(),
+                "claude bridge install",
             )
             require(
                 invoke(home, project, "install", "scripts", "--global").returncode == 0,
@@ -101,22 +108,21 @@ def run() -> list[str]:
             codex_root.joinpath("guardrails/local-extra.md").write_text("local change\n", encoding="utf-8")
             agents_root.joinpath("AGENTS.md").write_text("local change\n", encoding="utf-8")
             agents_root.joinpath("guardrails/local-extra.md").write_text("local change\n", encoding="utf-8")
+            home.joinpath(".claude/CLAUDE.md").write_text("local change\n", encoding="utf-8")
             result = invoke(home, project, "install", "docs", "--global")
             require(
                 result.returncode == 0 and not codex_root.joinpath("guardrails/local-extra.md").exists(),
                 "automatic baseline synchronization",
             )
-            require(
-                codex_root.joinpath("AGENTS.md").read_bytes() == (ROOT / "baselines/AGENTS.md").read_bytes(),
-                "baseline file overwrite",
-            )
+            require_baseline_files(codex_root, "baseline file overwrite")
             require(
                 not agents_root.joinpath("guardrails/local-extra.md").exists(),
                 "automatic shared baseline synchronization",
             )
+            require_baseline_files(agents_root, "shared baseline file overwrite")
             require(
-                agents_root.joinpath("AGENTS.md").read_bytes() == (ROOT / "baselines/AGENTS.md").read_bytes(),
-                "shared baseline file overwrite",
+                home.joinpath(".claude/CLAUDE.md").read_text(encoding="utf-8") == "local change\n",
+                "claude bridge left untouched",
             )
 
             result = invoke(home, project, "install", "--all")

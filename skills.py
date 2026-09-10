@@ -31,6 +31,8 @@ EXAMPLES = """Examples:
   python skills.py install --all --global
 """
 
+CLAUDE_BRIDGE = BASELINES / "claude/CLAUDE.md"
+
 
 @dataclass(frozen=True)
 class FileTask:
@@ -90,22 +92,18 @@ def baseline_tasks(args: argparse.Namespace) -> tuple[tuple[TreeTask, tuple[File
     return tuple(
         (
             TreeTask(BASELINES / "guardrails", root / "guardrails", root, replace_different=True),
-            (
-                FileTask(
-                    BASELINES / "AGENTS.md",
-                    root / "AGENTS.md",
-                    root,
-                    replace_different=True,
-                ),
-                FileTask(
-                    BASELINES / "tools.md",
-                    root / "tools.md",
-                    root,
-                    replace_different=True,
-                ),
-            ),
+            baseline_file_tasks(root),
         )
         for root in roots
+    )
+
+
+def baseline_file_tasks(root: Path) -> tuple[FileTask, ...]:
+    """Ship every file directly under baselines/ to a baseline root."""
+    return tuple(
+        FileTask(path, root / path.name, root, replace_different=True)
+        for path in sorted(BASELINES.iterdir())
+        if path.is_file()
     )
 
 
@@ -211,6 +209,28 @@ def atomic_copy_file(task: FileTask) -> None:
             temporary.unlink()
 
 
+def sync_claude_bridge(*, dry_run: bool, verbose: bool) -> str:
+    """Create the Claude Code bridge once, and never edit an existing file."""
+    claude_root = user_home() / ".claude"
+    bridge = claude_root / "CLAUDE.md"
+    if not claude_root.is_dir():
+        if dry_run:
+            print(f"no bridge: {claude_root} does not exist")
+        return "skipped"
+    if bridge.exists():
+        state = "unchanged" if bridge.read_bytes() == CLAUDE_BRIDGE.read_bytes() else "kept"
+        if verbose or dry_run:
+            print(f"{state} bridge {bridge}")
+        return state
+    if dry_run:
+        print(f"would install bridge: {bridge}")
+        return "would install"
+    atomic_copy_file(FileTask(CLAUDE_BRIDGE, bridge, claude_root))
+    if verbose:
+        print(f"installed bridge {bridge}")
+    return "installed"
+
+
 def run_install(args: argparse.Namespace) -> int:
     skill_tasks = tasks_for(args)
     catalog = catalog_task(args)
@@ -237,11 +257,14 @@ def run_install(args: argparse.Namespace) -> int:
                     for destination in (*(file.destination for file in files), tree.destination):
                         action = "replace" if destination.exists() else "install"
                         print(f"would {action} baseline: {destination}")
+        bridge_state = sync_claude_bridge(dry_run=True, verbose=args.verbose) if baselines else "skipped"
         summary = f"{len(pending)} skill{'s' if len(pending) != 1 else ''}"
         if catalog_pending:
             summary += " and the catalog"
         if baseline_pending:
             summary += " and the baseline"
+        if bridge_state == "would install":
+            summary += " and the Claude bridge"
         print(f"Would install {summary}. No files changed.")
         return 0
 
@@ -274,9 +297,12 @@ def run_install(args: argparse.Namespace) -> int:
                     atomic_copy_file(file)
             if args.verbose and target_changed:
                 print(f"installed baseline {tree.managed_root}")
+    bridge_state = sync_claude_bridge(dry_run=False, verbose=args.verbose) if baselines else "skipped"
     baseline_summary = ""
     if baselines:
         baseline_summary = f"; baseline {'updated' if baseline_changed else 'unchanged'}"
+        if bridge_state != "skipped":
+            baseline_summary += f"; bridge {bridge_state}"
     if catalog is not None:
         catalog_result = "updated" if catalog_changed else "unchanged"
         print(
