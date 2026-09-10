@@ -23,12 +23,13 @@ observable boundary.
    double cannot prove the boundary it replaces. Give every case an observable
    pass condition.
 3. Read [the branch index](references/index.md) only when the task needs an
-   extended evidence example or involves broad input spaces, fault-based
-   testing, flakiness, concurrency, migrations, security, agent-generated
-   tests, or test metrics; then load only the matching leaf.
+   extended evidence example, case shape or row count guidance, or involves
+   broad input spaces, fault-based testing, flakiness, concurrency, migrations,
+   security, agent-generated tests, or test metrics; then load only the
+   matching leaf.
 4. Inspect the test style, fixtures, helpers, commands, and continuous
    integration contract. Reuse a suitable local pattern.
-5. Select cases that distinguish separate paths. Each case must protect a
+5. Select rows that distinguish separate paths. Each row must protect a
    contract, regression, boundary, or failure mode that cheaper evidence does
    not prove.
 6. Control applicable instability in time, randomness, paths, networks,
@@ -39,8 +40,24 @@ observable boundary.
    confirm that the test detects the known broken behavior.
 9. Run each broader repository gate that the changed boundary requires. Record
    material evidence limits.
-10. Finish when each case protects a distinct risk and no assertion depends on
+10. Finish when each row protects a distinct risk and no assertion depends on
     an incidental implementation detail.
+
+## Cases
+
+Express one behavior as a table of named rows and one test body.
+
+- Rows are data: a friendly name, the inputs, the expected result, and the risk
+  the row protects.
+- Name rows for what the behavior does, prefixed by path: `happy: applies
+  percentage discount`, `edit: accepts the exact minimum`, `unhappy: rejects an
+  expired coupon`. The row names are the case map.
+- One body arranges, acts, and asserts once. A row that needs its own branch is
+  a different behavior; give it its own table.
+- Cover the happy path first, then boundaries, then each failure mode you can
+  name. Usually 3 to 8 rows; split a table before it grows past about ten.
+- Take expected results from the oracle, never from recomputing with the code
+  under test.
 
 ## Guardrails
 

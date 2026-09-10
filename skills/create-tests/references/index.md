@@ -4,6 +4,8 @@ Read only the leaves that match these conditions:
 
 - Read [core-evidence.md](core-evidence.md) for every task. It defines the
   oracle, test-level, and evidence contract.
+- Read [cases.md](cases.md) when choosing case shape, row names, or how many
+  rows a behavior needs.
 - Read [generative-and-fault-based.md](generative-and-fault-based.md) when the
   task has broad input spaces, weak oracles, parsers, transformations, or weak
   assertion risk.
