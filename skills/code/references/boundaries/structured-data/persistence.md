@@ -23,3 +23,9 @@ Example—expand and contract a renamed field:
 5. Remove `name` in a later migration.
 
 Each phase has a rollback action and a check for mixed-version operation.
+
+```text
+expand: add nullable display_name (readers still use name)
+dual-write → backfill (bounded batches) → switch reads → stop old write → drop name
+per phase: rollback action + mixed-version check
+```

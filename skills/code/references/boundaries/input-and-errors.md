@@ -35,11 +35,11 @@
 Example—translate once at the owning boundary:
 
 ```text
-request bytes -> parse -> validate -> domain command
-parse failure        -> 400 InvalidRequest
-domain rejection     -> 409 OrderAlreadyClosed
-dependency timeout   -> 504 DependencyTimeout
-unexpected failure   -> 500 + internal cause record
+request bytes → parse → validate → domain command
+parse failure        → 400 InvalidRequest
+domain rejection     → 409 OrderAlreadyClosed
+dependency timeout   → 504 DependencyTimeout
+unexpected failure   → 500 + internal cause record
 ```
 
 The boundary logs the stable operation and correlation fields. Lower layers

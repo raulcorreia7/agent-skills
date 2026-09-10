@@ -17,8 +17,8 @@
 Example—decode an owned command instead of a native object:
 
 ```text
-bounded bytes -> strict JSON parser -> CreateOrderInput schema
-              -> reject unknown members and type metadata -> domain command
+bounded bytes → strict JSON parser → CreateOrderInput schema
+              → reject unknown members and type metadata → domain command
 ```
 
 The payload cannot name a runtime class or invoke a constructor.

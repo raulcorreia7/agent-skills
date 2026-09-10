@@ -16,8 +16,8 @@
 Example—authorize the protected operation at its owner:
 
 ```text
-principal + order_id -> tenant-scoped lookup -> authorize CancelOrder
-                     -> cancel order -> owned result
+principal + order_id → tenant-scoped lookup → authorize CancelOrder
+                     → cancel order → owned result
 ```
 
 The external response does not distinguish a missing order from an order in a

@@ -45,8 +45,8 @@ Use compiler, analyzer, test, and runtime failures as evidence in a bounded
 repair loop:
 
 ```text
-contract -> discriminating check -> classify failure -> one evidence-driven edit
-         -> rerun the same check -> required broader check -> inspect final diff
+contract → discriminating check → classify failure → one evidence-driven edit
+         → rerun the same check → required broader check → inspect final diff
 ```
 
 Preserve the first failure and each material change in evidence. Stop when the

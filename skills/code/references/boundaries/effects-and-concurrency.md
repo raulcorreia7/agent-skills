@@ -16,9 +16,9 @@
 Example—one accepted batch item has one owner and one terminal result:
 
 ```text
-admit item -> register ownership -> process with batch cancellation
-           -> record success | failure | cancellation
-shutdown   -> stop admission -> wait for admitted senders -> drain workers
+admit item → register ownership → process with batch cancellation
+           → record success | failure | cancellation
+shutdown   → stop admission → wait for admitted senders → drain workers
 ```
 
 The shutdown path closes shared work only after admitted senders finish, so it

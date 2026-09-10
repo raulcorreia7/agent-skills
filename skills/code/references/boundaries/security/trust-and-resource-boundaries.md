@@ -19,8 +19,8 @@
 Example—convert an external request into an owned command:
 
 ```text
-request -> byte limit -> owned parser -> syntax and domain validation
-        -> allowlisted operation + bound values -> application command
+request → byte limit → owned parser → syntax and domain validation
+        → allowlisted operation + bound values → application command
 ```
 
 The boundary rejects extra structure and oversized collections before it

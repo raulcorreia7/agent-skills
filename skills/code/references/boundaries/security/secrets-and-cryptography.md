@@ -20,8 +20,8 @@
 Example—encrypt an owned record without exposing raw key material:
 
 ```text
-workload identity -> key handle from secret store
-record + context + secure random nonce -> authenticated encryption
+workload identity → key handle from secret store
+record + context + secure random nonce → authenticated encryption
 stored envelope = key_id + nonce + ciphertext + authentication tag
 ```
 

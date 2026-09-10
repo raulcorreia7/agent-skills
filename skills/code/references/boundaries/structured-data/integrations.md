@@ -23,3 +23,8 @@ Example—map provider outcomes once at the adapter:
 | Malformed success payload | `ProviderContractError` | No |
 
 The domain does not receive provider response bodies, headers, or credentials.
+
+```text
+provider response → adapter → domain result | mapped error (+ retry policy)
+bodies, headers, credentials stay at the adapter
+```

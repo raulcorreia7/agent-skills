@@ -21,3 +21,11 @@ Example—record a temporary compatibility flag as a complete contract:
 | Removal condition | All readers use v2 and rollback window ends |
 
 Tests exercise both states through the public boundary.
+
+```text
+if flag("orders.write_v2", default=off):
+    dual-write + verify new schema
+else:
+    write established schema
+# selection at one boundary; remove when all readers use v2
+```

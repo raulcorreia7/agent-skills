@@ -16,8 +16,8 @@
 Example—store a bounded image as private content:
 
 ```text
-upload -> byte limit -> allowlisted signature -> maintained decoder
-       -> safe re-encode -> generated object ID -> private object store
+upload → byte limit → allowlisted signature → maintained decoder
+       → safe re-encode → generated object ID → private object store
 ```
 
 The original filename remains display metadata. Downloads pass through an

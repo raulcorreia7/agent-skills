@@ -18,8 +18,8 @@
 Example—create an owned server session after verification:
 
 ```text
-credentials -> maintained verifier -> abuse policy -> new session identifier
-session -> server-side idle and absolute expiry -> restrictive cookie
+credentials → maintained verifier → abuse policy → new session identifier
+session → server-side idle and absolute expiry → restrictive cookie
 ```
 
 A privilege change rotates the identifier. Logout revokes the server record.

@@ -35,7 +35,7 @@ implement them for compliance or optimize their count.
 Example—one policy owns eligibility and price rounding:
 
 ```text
-Checkout -> PricingPolicy.quote(order) -> Money
+Checkout → PricingPolicy.quote(order) → Money
             owns discount rules and price rounding
 ```
 
