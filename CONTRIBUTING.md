@@ -10,12 +10,15 @@ to review. `main` is the rolling stable branch.
 3. Use only `name` and `description` in `SKILL.md` frontmatter.
 4. Put `Manual invocation only.` in every manual skill description.
 5. Keep references local and route each branch from `SKILL.md`.
-6. Compose by skill name. Do not link to another skill's files.
+6. Compose by skill name. Do not link to another skill's files. Keep composition edges acyclic.
 7. Include an explicit, useful `## Output` contract.
 8. Keep `agents/openai.yaml` explicit and aligned with invocation policy.
 9. Update the curated catalog deliberately.
+10. Name skills in plain text in skills, templates, and baselines. `agents/openai.yaml` uses the client's own invocation form.
 
-Start from `templates/skill/`. Check discovery behavior when the change or user
+Start from `templates/skill/`. Keep its common section order (Job, Steps,
+Guardrails, Composition, Output); place domain sections between Steps and
+Guardrails. Check discovery behavior when the change or user
 request needs that evidence.
 
 For manual invocation, put `Manual invocation only.` in the description and set
@@ -88,8 +91,9 @@ Structural validation is available when a change needs it:
 uv run poe validate
 ```
 
-The validator checks skills, adapters, output contracts, catalog entries, and
-local links. It also checks baseline files, setup behavior, and TOML syntax.
+The validator checks skills, adapters, output contracts, catalog entries,
+composition edges, reachable references, and local links. It also checks
+baseline files, setup behavior, and TOML syntax.
 It does not contact cloud services or change installed user files.
 
 Run validation and development linters together with:

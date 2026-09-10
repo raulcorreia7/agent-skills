@@ -8,7 +8,7 @@ import sys
 import tomllib
 from collections.abc import Callable, Sequence
 
-from commands import repository, skills
+from commands import composition, repository, skills
 from lib import AGENTS, ROOT
 from setup_checks import run as run_setup_checks
 
@@ -16,6 +16,7 @@ Check = Callable[[], list[str]]
 EXAMPLES = """Examples:
   uv run tools/validate.py
   uv run tools/validate.py skills
+  uv run tools/validate.py composition
   uv run tools/validate.py repository toml
   uv run tools/validate.py --quiet
 """
@@ -34,6 +35,7 @@ def validate_toml() -> list[str]:
 
 CHECKS: dict[str, Check] = {
     "skills": skills.validate,
+    "composition": composition.validate,
     "repository": repository.validate,
     "toml": validate_toml,
     "setup": run_setup_checks,
