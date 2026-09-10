@@ -7,16 +7,8 @@ does not need this pattern.
 ## Default Stages
 
 ```text
-parse_args
-validate_args
-load_config
-discover_inputs
-plan_changes
-preview_changes
-execute_changes
-verify_result
-render_output
-cleanup
+parse_args → validate_args → load_config → discover_inputs → plan_changes
+→ preview_changes → execute_changes → verify_result → render_output → cleanup
 ```
 
 Combine or omit stages that do not improve the contract. Preserve the ordering

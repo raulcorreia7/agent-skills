@@ -31,6 +31,10 @@ sources:
     url: https://docs.python.org/3/library/pathlib.html
   - name: Python tempfile
     url: https://docs.python.org/3/library/tempfile.html
+  - name: Xonsh tutorial
+    url: https://xon.sh/tutorial.html
+  - name: Xonsh environment variables
+    url: https://xon.sh/envvars.html
   - name: Ruff formatter
     url: https://docs.astral.sh/ruff/formatter/
   - name: Ruff linter

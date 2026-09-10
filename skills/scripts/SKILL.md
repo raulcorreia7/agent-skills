@@ -45,6 +45,8 @@ Read one implementation guide:
 - `references/bash.md` for non-trivial Bash or Unix-local orchestration.
 - `references/powershell.md` for PowerShell or Windows automation.
 - `references/python.md` for a Python command-line tool.
+- `references/xonsh.md` for a script that mixes Python logic with subprocess
+  orchestration across POSIX and Windows.
 - `references/zx.md` for TypeScript or Node automation that uses or evaluates
   `zx`.
 - For another Node or TypeScript runtime, use repository evidence to define its
