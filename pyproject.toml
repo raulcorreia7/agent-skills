@@ -16,9 +16,9 @@ dev = [
 
 [tool.poe.tasks]
 validate = { cmd = "python tools/validate.py", help = "Run repository validation." }
-format = { cmd = "ruff format skills.py tools skills", help = "Format Python sources." }
-format-check = { cmd = "ruff format --check skills.py tools skills", help = "Check Python source formatting." }
-_ruff = { cmd = "ruff check skills.py tools skills", help = "Run Ruff." }
+format = { cmd = "ruff format skills.py wizard.py tools skills", help = "Format Python sources." }
+format-check = { cmd = "ruff format --check skills.py wizard.py tools skills", help = "Check Python source formatting." }
+_ruff = { cmd = "ruff check skills.py wizard.py tools skills", help = "Run Ruff." }
 _rumdl = { cmd = "rumdl check --disable MD013,MD024,MD034 --quiet README.md AGENTS.md CONTRIBUTING.md agents baselines docs skills templates", help = "Run Rumdl." }
 lint = { sequence = ["_ruff", "_rumdl"], help = "Run development linters." }
 check = { sequence = ["validate", "lint"], help = "Run validation and linters." }

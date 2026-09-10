@@ -248,8 +248,7 @@ def run_install(args: argparse.Namespace) -> int:
             action = "replace" if catalog.destination.exists() else "install"
             print(f"would {action} catalog: {catalog.destination}")
         baseline_pending = any(
-            not matches(tree) or any(not file_matches(file) for file in files)
-            for tree, files in baselines
+            not matches(tree) or any(not file_matches(file) for file in files) for tree, files in baselines
         )
         if baseline_pending:
             for tree, files in baselines:
@@ -284,8 +283,7 @@ def run_install(args: argparse.Namespace) -> int:
         if args.verbose:
             print(f"installed catalog {catalog.destination}")
     baseline_changed = any(
-        not matches(tree) or any(not file_matches(file) for file in files)
-        for tree, files in baselines
+        not matches(tree) or any(not file_matches(file) for file in files) for tree, files in baselines
     )
     if baseline_changed:
         for tree, files in baselines:
@@ -305,10 +303,7 @@ def run_install(args: argparse.Namespace) -> int:
             baseline_summary += f"; bridge {bridge_state}"
     if catalog is not None:
         catalog_result = "updated" if catalog_changed else "unchanged"
-        print(
-            f"Installed {changed} skill{'s' if changed != 1 else ''}; "
-            f"catalog {catalog_result}{baseline_summary}."
-        )
+        print(f"Installed {changed} skill{'s' if changed != 1 else ''}; catalog {catalog_result}{baseline_summary}.")
     else:
         print(f"Installed {changed} skill{'s' if changed != 1 else ''}{baseline_summary}.")
     return 0
