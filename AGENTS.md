@@ -10,7 +10,8 @@ This repository is the source of truth for the shared Agent Skills kit.
   `TASTE.md`, and `guardrails/`.
 - `templates/skill/` is the canonical minimal skill template.
 - `agents/<name>/` contains team-maintained shared-agent packages.
-- `skills.py` and `tools/validate.py` are public CLIs. Poe is the maintainer
+- `skills.py` installs skills, `wizard.py` walks a human through the same
+  install, and `tools/validate.py` is the validator. Poe is the maintainer
   task runner. Shared Python code lives in `tools/lib.py`. Setup checks live in
   `tools/setup_checks.py`, and validation tasks live in `tools/commands/`.
 

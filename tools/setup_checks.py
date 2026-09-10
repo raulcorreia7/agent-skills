@@ -25,6 +25,21 @@ def invoke(home: Path, project: Path, *arguments: str) -> subprocess.CompletedPr
     )
 
 
+def invoke_wizard(home: Path, project: Path, *arguments: str) -> subprocess.CompletedProcess[str]:
+    environment = os.environ.copy()
+    environment.pop("CODEX_HOME", None)
+    environment.update(HOME=str(home), USERPROFILE=str(home))
+    return subprocess.run(
+        [sys.executable, "-S", str(ROOT / "wizard.py"), *arguments],
+        check=False,
+        capture_output=True,
+        text=True,
+        stdin=subprocess.DEVNULL,
+        env=environment,
+        cwd=project,
+    )
+
+
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise SetupError(f"setup check failed: {message}")
@@ -59,6 +74,12 @@ def run() -> list[str]:
             require(help_result.returncode == 0, "install help")
             require("install docs" in help_result.stdout and "install --all" in help_result.stdout, "help examples")
             require("--project" in help_result.stdout, "project scope option documented")
+            require(invoke_wizard(home, project, "--help").returncode == 0, "wizard help")
+            wizard_result = invoke_wizard(home, project)
+            require(
+                wizard_result.returncode == 2 and "skills.py" in wizard_result.stderr,
+                "wizard refuses a non-interactive terminal",
+            )
             for obsolete in ("--bundle", "--skill", "--scope", "--tool", "--target", "--baseline", "--agent"):
                 require(obsolete not in help_result.stdout, f"obsolete option in help: {obsolete}")
 

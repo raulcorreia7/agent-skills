@@ -58,10 +58,12 @@ update configuration and notes together. Allowlisting is authorization;
 
 ## Command contract
 
-`skills.py` and `tools/validate.py` are the public commands; Poe runs maintainer
-tasks. Conventional syntax, long options, `-h`/`--help`, failures on stderr,
-results on stdout. `tools/lib.py` and `tools/commands/` tasks never parse CLI
-arguments.
+`skills.py`, `wizard.py`, and `tools/validate.py` are the public commands; Poe
+runs maintainer tasks. Conventional syntax, long options, `-h`/`--help`,
+failures on stderr, results on stdout. `tools/lib.py` and `tools/commands/`
+tasks never parse CLI arguments. `wizard.py` is a terminal-only front end over
+the installer: it detects state, shows the plan, then installs and validates.
+It depends on questionary for prompts; `skills.py` stays standard-library only.
 
 `skills.py` is Python 3.11+, stdlib only, and preserves preflight, symlink
 detection, atomic replacement, conflict protection, and explicit overwrite. A
