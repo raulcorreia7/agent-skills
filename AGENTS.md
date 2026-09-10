@@ -13,6 +13,9 @@ This repository is the source of truth for the shared Agent Skills kit.
   task runner. Shared Python code lives in `tools/lib.py`. Setup checks live in
   `tools/setup_checks.py`, and validation tasks live in `tools/commands/`.
 
+Read down this chain: `AGENTS.md` → `skills/README.md` (catalog) → the touched
+`skills/<name>/SKILL.md` → its `references/` leaves.
+
 ## Change rules
 
 - Preserve all existing distributable skills unless retirement is explicitly approved.
