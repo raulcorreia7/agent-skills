@@ -53,6 +53,47 @@ def require_baseline_files(root: Path, label: str) -> None:
         require(installed.is_file() and installed.read_bytes() == path.read_bytes(), f"{label}: {path.name}")
 
 
+def run_wizard_session(home: Path, project: Path, keys: str = "\r\r\r\r") -> str | None:
+    """Drive the wizard through a pty and return its output; None when unavailable or dependency-free."""
+    if sys.platform == "win32":
+        return None
+    try:
+        import pty
+    except ImportError:
+        return None
+    master, slave = pty.openpty()
+    environment = os.environ.copy()
+    environment.pop("CODEX_HOME", None)
+    environment.update(HOME=str(home), USERPROFILE=str(home))
+    process = subprocess.Popen(
+        [sys.executable, str(ROOT / "wizard.py")],
+        stdin=slave,
+        stdout=slave,
+        stderr=slave,
+        text=True,
+        env=environment,
+        cwd=project,
+        close_fds=True,
+    )
+    os.close(slave)
+    os.write(master, keys.encode())
+    chunks: list[bytes] = []
+    try:
+        while True:
+            try:
+                chunk = os.read(master, 4096)
+            except OSError:
+                break
+            if not chunk:
+                break
+            chunks.append(chunk)
+    finally:
+        os.close(master)
+        process.wait(timeout=60)
+    output = b"".join(chunks).decode(errors="replace")
+    return None if "needs questionary" in output else output
+
+
 def run() -> list[str]:
     try:
         with tempfile.TemporaryDirectory(prefix="agent-skills-", dir=ROOT) as temporary:
@@ -80,6 +121,9 @@ def run() -> list[str]:
                 wizard_result.returncode == 2 and "skills.py" in wizard_result.stderr,
                 "wizard refuses a non-interactive terminal",
             )
+            session = run_wizard_session(home, project)
+            if session is not None:
+                require("Plan" in session and "nothing written" in session, "wizard preview session")
             for obsolete in ("--bundle", "--skill", "--scope", "--tool", "--target", "--baseline", "--agent"):
                 require(obsolete not in help_result.stdout, f"obsolete option in help: {obsolete}")
 

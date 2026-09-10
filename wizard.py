@@ -89,22 +89,25 @@ def calls_for(chosen: Sequence[str], *, global_scope: bool, dry_run: bool, overw
     ]
 
 
-def show_plan(chosen: Sequence[str], state: Survey, bridge: str, *, global_scope: bool) -> None:
+def show_plan(
+    questionary: ModuleType, chosen: Sequence[str], state: Survey, bridge: str, *, global_scope: bool
+) -> None:
     where = "user" if global_scope else "repository"
     shown = ", ".join(chosen[:4]) + (", …" if len(chosen) > 4 else "")
-    print("\nPlan")
-    print(f"  scope      {where}")
-    print(f"  skills     {len(chosen)} ({shown})")
+    lines = [f"scope      {where}", f"skills     {len(chosen)} ({shown})"]
     if global_scope:
-        print("  baselines  ~/.agents/{AGENTS.md, TOOLS.md, TASTE.md, guardrails/}")
-        print(f"  bridge     ~/.claude/CLAUDE.md  ({bridge})")
-    print(f"  update     {state.pending} skill director{'y' if state.pending == 1 else 'ies'}")
+        lines.append("baselines  ~/.agents/{AGENTS.md, TOOLS.md, TASTE.md, guardrails/}")
+        lines.append(f"bridge     ~/.claude/CLAUDE.md  ({bridge})")
+    lines.append(f"update     {state.pending} skill director{'y' if state.pending == 1 else 'ies'}")
     if state.conflicts:
-        print(f"  conflicts  {state.conflicts} differ from this checkout")
+        lines.append(f"conflicts  {state.conflicts} differ from this checkout")
     if state.catalog_pending:
-        print("  catalog    refresh")
+        lines.append("catalog    refresh")
     if state.baseline_pending:
-        print("  baselines  refresh")
+        lines.append("baselines  refresh")
+    questionary.print("\nPlan", style="bold")
+    for line in lines:
+        questionary.print(f"  {line}", style="fg:#888888")
 
 
 def validate() -> int:
@@ -119,20 +122,37 @@ def validate() -> int:
 
 
 def run(questionary: ModuleType) -> int:
-    def select(message: str, choices: Sequence[str], default: str | None = None) -> str | None:
-        return questionary.select(message, choices=list(choices), default=default).ask()
+    style = questionary.Style(
+        [
+            ("qmark", "fg:cyan bold"),
+            ("question", "bold"),
+            ("pointer", "fg:cyan bold"),
+            ("highlighted", "fg:cyan bold"),
+            ("answer", "fg:cyan bold"),
+        ]
+    )
+    prompt = {"style": style, "qmark": "?"}
 
     print(textwrap.fill("Agent Skills installer: three questions, one plan, then install and validate.", width=80))
 
-    scope = select("Where should the skills live?", [SCOPE_USER, SCOPE_PROJECT], default=SCOPE_USER)
-    if scope is None:
+    global_scope = questionary.select(
+        "Where should the skills live?",
+        choices=[
+            questionary.Choice(SCOPE_USER, value=True),
+            questionary.Choice(SCOPE_PROJECT, value=False),
+        ],
+        default=True,
+        **prompt,
+    ).ask()
+    if global_scope is None:
         return cancel()
-    global_scope = scope == SCOPE_USER
 
     names = list(skills.skill_names())
     chosen = questionary.checkbox(
-        "Which skills? (space toggles, enter accepts)",
+        "Which skills?",
         choices=[questionary.Choice(name, checked=True) for name in names],
+        instruction="(space toggles, enter accepts)",
+        **prompt,
     ).ask()
     if not chosen:
         print("no skills selected; nothing written.")
@@ -140,15 +160,24 @@ def run(questionary: ModuleType) -> int:
 
     state = survey(chosen, global_scope=global_scope)
     bridge = skills.sync_claude_bridge(dry_run=True, verbose=False) if global_scope else "skipped"
-    show_plan(chosen, state, bridge, global_scope=global_scope)
+    show_plan(questionary, chosen, state, bridge, global_scope=global_scope)
 
-    action = select("Now what?", [ACTION_PREVIEW, ACTION_INSTALL, ACTION_CANCEL], default=ACTION_PREVIEW)
-    if action is None or action == ACTION_CANCEL:
+    action = questionary.select(
+        "Now what?",
+        choices=[
+            questionary.Choice(ACTION_PREVIEW, value="preview"),
+            questionary.Choice(ACTION_INSTALL, value="install"),
+            questionary.Choice(ACTION_CANCEL, value="cancel"),
+        ],
+        default="preview",
+        **prompt,
+    ).ask()
+    if action is None or action == "cancel":
         return cancel()
-    if action == ACTION_PREVIEW:
+    if action == "preview":
         for pending in calls_for(chosen, global_scope=global_scope, dry_run=True, overwrite=False):
             skills.run_install(pending)
-        if not questionary.confirm("Install for real now?", default=False).ask():
+        if not questionary.confirm("Install for real now?", default=False, **prompt).ask():
             print("nothing written.")
             return 0
 
@@ -156,7 +185,7 @@ def run(questionary: ModuleType) -> int:
     if state.conflicts:
         plural = "y" if state.conflicts == 1 else "ies"
         print(f"\n{state.conflicts} installed director{plural} differ from this checkout.")
-        overwrite = bool(questionary.confirm("Replace them with this checkout?", default=False).ask())
+        overwrite = bool(questionary.confirm("Replace them with this checkout?", default=False, **prompt).ask())
         if not overwrite:
             print("nothing written. Re-run and choose to replace when you are ready.")
             return 0
