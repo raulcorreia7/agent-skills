@@ -45,17 +45,17 @@ observable boundary.
 
 ## Cases
 
-Express one behavior as a table of named rows and one test body.
+Express one behavior as rows grouped by path, with one test body per group.
 
-- Rows are data: a friendly name, the inputs, the expected result, and the risk
-  the row protects.
-- Name rows for what the behavior does, prefixed by path: `happy: applies
-  percentage discount`, `edit: accepts the exact minimum`, `unhappy: rejects an
-  expired coupon`. The row names are the case map.
-- One body arranges, acts, and asserts once. A row that needs its own branch is
-  a different behavior; give it its own table.
-- Cover the happy path first, then boundaries, then each failure mode you can
-  name. Usually 3 to 8 rows; split a table before it grows past about ten.
+- Group rows as `happy` first, then `edge` (boundaries and ambiguous input),
+  then `unhappy` (named failures). Three groups at most.
+- Each row: a friendly name for what the behavior does, the inputs, the
+  expected result, and the risk it protects. The group carries the path, so the
+  name does not repeat it, and a failing row still shows its class.
+- One body per group: arrange, act, assert once. A row that needs its own
+  branch is a different behavior; give it its own group.
+- Usually 3 to 8 rows across all groups; split a behavior before a group grows
+  past about ten.
 - Take expected results from the oracle, never from recomputing with the code
   under test.
 
