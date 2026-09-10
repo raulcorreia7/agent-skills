@@ -31,8 +31,9 @@ not proof.
    assumptions, certainty, ambiguity, and false positives. Use fresh contexts
    when available; otherwise give each only the packet and its role contract.
    Do not share prompts, progress, or reports.
-4. Validate both reports. Retry one unusable role once with a new subagent and
-   only the original packet. Each role produces at most one valid report.
+4. Validate both reports. Retry one unusable role once in a fresh isolated
+   context with only the original packet. Each role produces at most one valid
+   report.
 5. If a required report remains unavailable, return an incomplete review naming
    missing roles and attempts. Do not adjudicate.
 6. Normalize each material claim to its affected criterion, precise locator,

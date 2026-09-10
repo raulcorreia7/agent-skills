@@ -10,7 +10,7 @@ or another language fence renders everywhere.
 | GitHub | Fenced Mermaid. Otherwise PNG | Render the exact required family and feature in the target |
 | GitLab | Native Mermaid where enabled. Otherwise repository-rendered PNG | Instance version, feature configuration, and sanitization |
 | Obsidian | Fenced Mermaid | App Mermaid version, theme contrast, internal-link behavior |
-| Codex | Mermaid in conversation. Source or image for durable files | Host renderer can lag Mermaid. Beta families can report “No diagram type detected” even when current CLI accepts them |
+| Chat client | Mermaid in conversation. Source or image for durable files | Host renderer can lag Mermaid. Beta families can report “No diagram type detected” even when current CLI accepts them |
 | Generic Markdown | Assume code display only | Site generator or renderer integration |
 | Static docs site | Build plugin or pre-rendered PNG | Pinned plugin/Mermaid version, CSP, icon registration, dark mode |
 | Office/PDF | PNG | Font embedding, clipping, transparency, and print contrast |

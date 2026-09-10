@@ -11,7 +11,7 @@ from .common import frontmatter, load_yaml
 
 CATALOG = SKILLS / "README.md"
 SKILL_TEMPLATE = ROOT / "templates/skill"
-CATALOG_ROW = re.compile(r"^\| \[`\$([a-z][a-z0-9-]*)`\]\(([^/]+)/SKILL\.md\) \| `(implicit|manual)` \|")
+CATALOG_ROW = re.compile(r"^\| \[`([a-z][a-z0-9-]*)`\]\(([^/]+)/SKILL\.md\) \| `(implicit|manual)` \|")
 MANUAL_MARKER = "Manual invocation only."
 SHORT_DESCRIPTION_MAX = 64
 
@@ -60,8 +60,8 @@ def validate_skill(skill: Path) -> list[str]:
                 implicit = policy.get("allow_implicit_invocation")
                 if not isinstance(short, str) or not short.strip() or len(short) > SHORT_DESCRIPTION_MAX:
                     errors.append(f"{adapter.relative_to(ROOT)}: short_description must be 1-64 characters")
-                if not isinstance(prompt, str) or f"${skill.name}" not in prompt:
-                    errors.append(f"{adapter.relative_to(ROOT)}: default_prompt must name ${skill.name}")
+                if not isinstance(prompt, str) or not re.search(rf"(?<![\w-]){re.escape(skill.name)}(?![\w-])", prompt):
+                    errors.append(f"{adapter.relative_to(ROOT)}: default_prompt must name {skill.name}")
                 if not isinstance(implicit, bool):
                     errors.append(f"{adapter.relative_to(ROOT)}: invocation policy must be boolean")
                 elif isinstance(description, str) and description.startswith(MANUAL_MARKER) == implicit:
@@ -107,13 +107,14 @@ def validate_catalog() -> list[str]:
     errors: list[str] = []
     rows: list[tuple[str, str, str]] = []
     for number, line in enumerate(CATALOG.read_text(encoding="utf-8").splitlines(), 1):
-        if not line.startswith("| [`$"):
+        if not line.startswith("| [`"):
             continue
         match = CATALOG_ROW.match(line)
         if not match:
             errors.append(f"skills/README.md:{number}: malformed catalog row")
-        else:
-            rows.append(match.groups())
+            continue
+        catalog_name, linked_name, mode = match.groups()
+        rows.append((catalog_name, linked_name, mode))
     names = [row[0] for row in rows]
     if set(names) != set(skill_names()) or len(names) != len(set(names)):
         errors.append("skills/README.md: every distributable skill must appear exactly once")
