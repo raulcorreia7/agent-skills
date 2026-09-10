@@ -44,6 +44,16 @@ the product repository instead of growing skill prose.
 7. Scan only the intended paths. Finish when the tested rule accounts for the
    expected match, the near miss, the scoped results, and known limitations.
 
+## Flow
+
+```text
+language, structure, included and excluded cases, paths, output ← identify
+if text search is reliable: use it and stop
+pattern ← direct
+test on one expected match and one near miss; refine until both hold
+scan only the intended paths; report matches and limitations
+```
+
 ## Guardrails
 
 - Infer absence only from a tested rule with positive and negative examples.

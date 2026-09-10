@@ -26,6 +26,16 @@ behavior.
 6. Finish when evidence identifies one root cause or one strongest remaining
    hypothesis, and a stated observation can falsify the conclusion.
 
+## Flow
+
+```text
+record symptom, environment, frequency, recent change
+reproduce the smallest failure, or preserve the artifacts
+locate the first incorrect state
+loop: rank hypotheses → run one probe → update
+stop at one cause, or one hypothesis plus a falsifying observation
+```
+
 ## Guardrails
 
 - Keep diagnosis read-only. Implement a fix only when the user requests it.

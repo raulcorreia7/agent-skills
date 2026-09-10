@@ -64,6 +64,16 @@ Make each material claim traceable to a current source.
    gaps are explicit. Do not claim an exhaustive or systematic review without
    a reproducible search and screening method.
 
+## Flow
+
+```text
+define question, boundary, and sufficient evidence
+for each question: search, open sources, note locator, date, status, limits
+compare conflicts; keep material ones unresolved
+synthesize from notes, citation beside each claim
+verify links and support; stop when gaps are explicit
+```
+
 ## Source appraisal
 
 For each decisive source, assess directness, ownership, method, independence,

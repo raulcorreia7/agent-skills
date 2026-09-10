@@ -49,6 +49,15 @@ Turn confirmed context and observed evidence into a source-backed system bundle.
    in `gaps.md`; require separate approval for IaC work and for staging,
    pushing, PR creation, or Wiki publication.
 
+## Flow
+
+```text
+intake → discovery → reconciliation → synthesis → validation
+each phase reads its own leaf: intake, discovery, reconciliation, synthesis, baseline
+context.md stays human-owned; evidence.md keeps normalized observations
+stop at IaC candidates in gaps.md; publishing and migration need separate approval
+```
+
 ## Assets
 
 Use the mandatory [home](assets/baseline/home.md),

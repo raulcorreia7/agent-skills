@@ -46,6 +46,16 @@ Run scanner checks and report thresholded findings.
    as a `quick` or `deep` side effect. Complete when coverage is run or
    listed pending.
 
+## Flow
+
+```text
+for family in families:
+    command ← native binary | uvx/npx | toolbox image   # nothing installed
+    result ← run(command) ; flag against the gate
+    report file:line, metric, threshold, verify command, or an unmeasured reason
+coverage runs only after the user confirms the announced command
+```
+
 ## Guardrails
 
 - Keep the scan read-only; coverage executes the test suite, so run it only

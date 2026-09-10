@@ -54,6 +54,16 @@ defect.
    each material part of the supplied artifact. Assign each finding `P0`
    through `P3` from the table above.
 
+## Flow
+
+```text
+branch ← change | pull-request | architecture
+finding ← violated criterion + precise locator + consequence + evidence
+reject each finding that fails its falsification attempt
+assign P0-P3 from the priorities above
+verdict ← pass | findings present | not reviewable, with residual risk
+```
+
 ## Guardrails
 
 - Keep review read-only. Return proposed fixes or review text as output.

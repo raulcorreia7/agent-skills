@@ -44,6 +44,16 @@ cost, or infrastructure change.
    or sequencing becomes the primary job. Re-measure when practical. Finish
    when the target is met or further work lacks likely value.
 
+## Flow
+
+```text
+target ← one measurable goal, smallest scope
+baseline ← measure, or label the proxy
+bottleneck ← profile or decompose
+loop: rank candidates → apply the approved one → re-measure
+stop when the target is met or further work lacks value
+```
+
 ## Depth Contract
 
 - `Quick`: inspect one target path with available local evidence, establish a

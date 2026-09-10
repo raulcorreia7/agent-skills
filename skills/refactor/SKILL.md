@@ -29,6 +29,18 @@ Improve code structure. Preserve observable behavior and public contracts.
 6. Finish when the target structure exists, all callers use the intended path,
    and evidence supports every material preservation claim.
 
+## Flow
+
+```text
+target, preserved behavior, contracts ← define
+for each preservation claim: map to existing evidence
+loop:
+    one coherent structural change
+    assess the claims against evidence; revert if a behavior differs
+remove obsolete paths only when callers and evidence show no use
+stop when the target structure exists and every claim has evidence
+```
+
 ## Guardrails
 
 - Keep behavior changes out of refactoring; this skill preserves observable

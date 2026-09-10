@@ -43,6 +43,15 @@ authority, and coverage limits.
    finding has applicable horizons and proof, and the portfolio has one
    executable dependency order.
 
+## Flow
+
+```text
+verify selected findings; reject unsupported
+map severity, preserve source labels
+for finding: Stabilize, Correct, Prevent, whatever the evidence supports
+order the portfolio, then name one executable first step
+```
+
 ## References
 
 Read [remediation practices](references/practices.md) only when source rationale

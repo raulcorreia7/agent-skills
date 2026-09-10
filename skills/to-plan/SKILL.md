@@ -41,6 +41,17 @@ plan with resolved decisions, ordered work, validation, and risk controls.
 9. Finish when every plan item has an owner or location, dependencies, outcome,
    and validation.
 
+## Flow
+
+```text
+mode ← sequential | parallel (parallel only when explicitly requested)
+goal, non-goals, constraints, deliverable, evidence boundary ← define
+resolve material decisions, or record the blocker
+shape ← target and ownership boundaries
+sequential: order by dependency and risk; parallel: slice per the delegation contract
+stop when every item has an owner, dependencies, outcome, and validation
+```
+
 ## Guardrails
 
 - Keep the deliverable as a plan unless the user separately requests

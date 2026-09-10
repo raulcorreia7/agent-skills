@@ -45,6 +45,16 @@ owning tools. Prefer types, tests, and linters; comments are last.
 8. Stop when every candidate has a classification and every edit has supporting
    source evidence.
 
+## Flow
+
+```text
+for candidate in requested scope:
+    classify keep | revise | remove | add, against current code and guidance
+    preserve syntax, placement, generated ownership, directive semantics
+compare every changed comment with the current code; run the owning check
+stop when every candidate has a classification and evidence for its edit
+```
+
 ## Guardrails
 
 - Keep standalone product or system documentation with the documentation owner.

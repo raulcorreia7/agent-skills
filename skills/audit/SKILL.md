@@ -63,6 +63,17 @@ unspecified.
 7. Recommend the smallest follow-up. Finish when each selected domain has
    evidence, a finding or no-finding result, and a stated coverage limit.
 
+## Flow
+
+```text
+for mode in selected:
+    evidence ← local first, then approval-gated live evidence
+    finding or no-finding, plus the coverage limit
+rank by impact, confidence, blast radius or exploitability, verification path
+recommend the smallest follow-up, with its owner
+stop when every selected domain has evidence and a stated limit
+```
+
 ## Findings
 
 For each finding, give its severity, evidence, verification path, smallest fix

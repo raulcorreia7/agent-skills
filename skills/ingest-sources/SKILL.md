@@ -59,6 +59,18 @@ Stop when the manifest links raw and derived artifacts, representative
 validation records losses, retention is decided, and skipped sources have
 reasons.
 
+## Flow
+
+```text
+purpose, limits, retention ← approved scope
+branch ← the one that matches the source format
+raw ← acquire, store immutable
+derived ← convert with the selected tool; keep every warning
+manifest ← link raw and derived, record validation and losses
+curate ← minimize, deduplicate, chunk, retrieve, evaluate
+remove raw and derived at the end of the retention period
+```
+
 ## Guardrails
 
 - Obtain explicit approval before network acquisition, credential use, paid

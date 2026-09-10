@@ -28,6 +28,16 @@ effects.
    verification. Do not add a second tool for an owned job. For an
    already-satisfied request, stop after this check and report no change.
 
+## Flow
+
+```text
+job, inputs, outputs, side effects, success result ← define
+classify automation: missing | partial | sufficient
+if missing or partial: implement one entrypoint; else skip the edit
+run the aggregate check, or the supported checks for material risk
+stop when the request is satisfied and the check result is recorded
+```
+
 ## References
 
 Read one implementation guide:

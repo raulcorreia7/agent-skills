@@ -41,6 +41,19 @@ work moving without consuming the specialists who do it.
    the actionable set starts with one executable step; and every item left in
    flight has a follow-up point.
 
+## Flow
+
+Per item, in this order:
+
+```text
+for item in queue:
+    skip closed or already-triaged items
+    classify kind and evidence state
+    incident → escalate; not judgeable → needs evidence; else → an outcome
+assign owner, first action, revisit condition
+order: harm → reversible mitigation → the rest
+```
+
 ## Outcomes
 
 | Outcome | Meaning |
