@@ -29,8 +29,8 @@ DEPENDENCY_HINT = (
     "error: the wizard needs questionary. Run `uv run python wizard.py`, or `pip install questionary` first; "
     "`python skills.py install --all` needs nothing extra."
 )
-SCOPE_USER = "User  (~/.agents/skills)"
-SCOPE_PROJECT = "This repository  (./.agents/skills)"
+SCOPE_GLOBAL = "Global  (~/.agents/skills)"
+SCOPE_REPOSITORY = "Current repository  (./.agents/skills)"
 ACTION_PREVIEW = "Preview (dry run)"
 ACTION_INSTALL = "Install"
 ACTION_CANCEL = "Cancel"
@@ -89,10 +89,8 @@ def calls_for(chosen: Sequence[str], *, global_scope: bool, dry_run: bool, overw
     ]
 
 
-def show_plan(
-    questionary: ModuleType, chosen: Sequence[str], state: Survey, bridge: str, *, global_scope: bool
-) -> None:
-    where = "user" if global_scope else "repository"
+def show_plan(chosen: Sequence[str], state: Survey, bridge: str, *, global_scope: bool) -> None:
+    where = "global" if global_scope else "current repository"
     shown = ", ".join(chosen[:4]) + (", …" if len(chosen) > 4 else "")
     lines = [f"scope      {where}", f"skills     {len(chosen)} ({shown})"]
     if global_scope:
@@ -105,9 +103,9 @@ def show_plan(
         lines.append("catalog    refresh")
     if state.baseline_pending:
         lines.append("baselines  refresh")
-    questionary.print("\nPlan", style="bold")
+    print("\nPlan")
     for line in lines:
-        questionary.print(f"  {line}", style="fg:#888888")
+        print(f"  {line}")
 
 
 def validate() -> int:
@@ -122,45 +120,45 @@ def validate() -> int:
 
 
 def run(questionary: ModuleType) -> int:
-    style = questionary.Style(
-        [
-            ("qmark", "fg:cyan bold"),
-            ("question", "bold"),
-            ("pointer", "fg:cyan bold"),
-            ("highlighted", "fg:cyan bold"),
-            ("answer", "fg:cyan bold"),
-        ]
-    )
-    prompt = {"style": style, "qmark": "?"}
-
     print(textwrap.fill("Agent Skills installer: three questions, one plan, then install and validate.", width=80))
 
     global_scope = questionary.select(
         "Where should the skills live?",
         choices=[
-            questionary.Choice(SCOPE_USER, value=True),
-            questionary.Choice(SCOPE_PROJECT, value=False),
+            questionary.Choice(SCOPE_GLOBAL, value=True),
+            questionary.Choice(SCOPE_REPOSITORY, value=False),
         ],
         default=True,
-        **prompt,
     ).ask()
     if global_scope is None:
         return cancel()
 
     names = list(skills.skill_names())
-    chosen = questionary.checkbox(
+    mode = questionary.select(
         "Which skills?",
-        choices=[questionary.Choice(name, checked=True) for name in names],
-        instruction="(space toggles, enter accepts)",
-        **prompt,
+        choices=[
+            questionary.Choice(f"All ({len(names)})", value=True),
+            questionary.Choice("Choose from a list", value=False),
+        ],
+        default=True,
     ).ask()
-    if not chosen:
-        print("no skills selected; nothing written.")
-        return 0
+    if mode is None:
+        return cancel()
+    if mode:
+        chosen = names
+    else:
+        chosen = questionary.checkbox(
+            "Choose skills",
+            choices=[questionary.Choice(name, checked=True) for name in names],
+            instruction="(space toggles, enter accepts)",
+        ).ask()
+        if not chosen:
+            print("no skills selected; nothing written.")
+            return 0
 
     state = survey(chosen, global_scope=global_scope)
     bridge = skills.sync_claude_bridge(dry_run=True, verbose=False) if global_scope else "skipped"
-    show_plan(questionary, chosen, state, bridge, global_scope=global_scope)
+    show_plan(chosen, state, bridge, global_scope=global_scope)
 
     action = questionary.select(
         "Now what?",
@@ -170,14 +168,13 @@ def run(questionary: ModuleType) -> int:
             questionary.Choice(ACTION_CANCEL, value="cancel"),
         ],
         default="preview",
-        **prompt,
     ).ask()
     if action is None or action == "cancel":
         return cancel()
     if action == "preview":
         for pending in calls_for(chosen, global_scope=global_scope, dry_run=True, overwrite=False):
             skills.run_install(pending)
-        if not questionary.confirm("Install for real now?", default=False, **prompt).ask():
+        if not questionary.confirm("Install for real now?", default=False).ask():
             print("nothing written.")
             return 0
 
@@ -185,7 +182,7 @@ def run(questionary: ModuleType) -> int:
     if state.conflicts:
         plural = "y" if state.conflicts == 1 else "ies"
         print(f"\n{state.conflicts} installed director{plural} differ from this checkout.")
-        overwrite = bool(questionary.confirm("Replace them with this checkout?", default=False, **prompt).ask())
+        overwrite = bool(questionary.confirm("Replace them with this checkout?", default=False).ask())
         if not overwrite:
             print("nothing written. Re-run and choose to replace when you are ready.")
             return 0
