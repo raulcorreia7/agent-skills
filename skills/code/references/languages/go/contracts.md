@@ -35,6 +35,24 @@ Use `//` for rationale and invariants. Document exported packages and symbols
 when linting or caller clarity requires it. Begin an exported declaration
 comment with the declaration name.
 
+## Example
+
+```go
+func CancelOrder(ctx context.Context, id OrderID) (Order, error) {
+	order, err := store.Cancel(ctx, id)
+	if err != nil {
+		return Order{}, fmt.Errorf("cancel order %s: %w", id, err)
+	}
+
+	return order, nil
+}
+```
+
+```text
+nil slice ≠ empty slice ≠ absent value: keep the difference observable
+goroutine → owner, shutdown path, and error collection named at spawn
+```
+
 ## Sources
 
 - [Go doc comments](https://go.dev/doc/comment) and

@@ -17,3 +17,18 @@ support policy, and the nearest `.editorconfig` take precedence.
   original cause.
 - Use `StringComparison` deliberately. Protocol and identifier comparisons
   normally require `Ordinal` or `OrdinalIgnoreCase`.
+
+## Example
+
+```csharp
+async Task<Result<Order>> CancelAsync(OrderId id, CancellationToken ct)
+{
+    var order = await store.FindAsync(id, ct).ConfigureAwait(false); // async all the way
+    return order is null ? Result<Order>.NotFound() : Result<Order>.Ok(order);
+}
+```
+
+```text
+absent value → nullable annotation; invalid input → type, not `!` or a Boolean
+a.Equals(b, StringComparison.Ordinal) → protocol and identifier comparisons
+```

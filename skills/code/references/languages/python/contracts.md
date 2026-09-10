@@ -14,3 +14,17 @@ framework conventions take precedence.
   add useful context. Preserve the cause with `raise DomainError(...) from exc`.
 - Use context managers for owned resources. Keep async I/O async and preserve
   the framework's cancellation contract.
+
+## Example
+
+```python
+def parse_order(raw: object) -> Order:
+    data = order_schema.validate(raw)  # object stays object until validated
+    return Order(**data)
+
+
+try:
+    result = client.fetch(order_id)
+except TimeoutError as exc:  # catch only where the boundary can translate
+    raise DependencyUnavailable(order_id) from exc
+```

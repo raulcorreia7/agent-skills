@@ -14,3 +14,15 @@ precedence.
   exceptions and make shared-state ownership and concurrency rules explicit.
 - Keep persistence, framework, and provider details at a boundary. Return
   domain-relevant types to callers.
+
+## Example
+
+```java
+Optional<Order> findOrder(OrderId id); // return-value contract, not a field
+
+try (var connection = dataSource.getConnection()) { // owned resource
+    return orderStore.load(connection, id);
+} catch (SQLException cause) {
+    throw new OrderStoreUnavailable(id, cause); // translate at the boundary, keep the cause
+}
+```

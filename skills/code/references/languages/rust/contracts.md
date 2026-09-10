@@ -35,6 +35,20 @@ Use `//` for implementation rationale, `///` for public items, and `//!` for
 module or crate contracts. Add `# Errors`, `# Panics`, `# Safety`, and examples
 when those caller contracts apply.
 
+## Example
+
+```rust
+fn parse_order(raw: &[u8]) -> Result<Order, ParseError> {
+    serde_json::from_slice(raw).map_err(ParseError::from) // recoverable failure, source kept
+}
+```
+
+```text
+absence → Option; recoverable failure → Result
+match outcome { … } → every variant, no catch-all arm
+owned resource → RAII; spawned task → join or cancel named at spawn
+```
+
 ## Sources
 
 - [rustdoc guidance](https://doc.rust-lang.org/rustdoc/how-to-write-documentation.html)

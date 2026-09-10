@@ -14,3 +14,20 @@ take precedence.
   `import type` for type-only dependencies.
 - Await owned work and propagate cancellation and rejection behavior through
   the existing framework contract. Do not leave promises unobserved.
+
+## Example
+
+```ts
+type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
+
+function parseOrder(raw: unknown): Result<Order, "invalid_input"> {
+  const parsed = orderSchema.safeParse(raw); // unknown stays unknown until parsed
+  return parsed.success ? { ok: true, value: parsed.data } : { ok: false, error: "invalid_input" };
+}
+```
+
+```text
+raw: unknown → schema.parse → Order     # validate at the boundary
+raw: unknown → as Order                 # never
+switch (result.kind) → every case, no silent default
+```
