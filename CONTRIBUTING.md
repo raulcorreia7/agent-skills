@@ -1,113 +1,85 @@
 # Contributing
 
-Keep the kit focused, independently portable, predictable to install, and safe
-to review. `main` is the rolling stable branch.
+Keep the kit focused, portable, and safe to install. `main` is the rolling
+stable branch.
+
+Before adding a line to an always-loaded file (skill description, `SKILL.md`,
+`baselines/AGENTS.md`), ask: would removing it cause mistakes? If not, leave it
+out.
 
 ## Skill contract
 
-1. Give each skill one primary outcome and distinct trigger boundary.
-2. Keep it useful when copied without this repository.
-3. Use only `name` and `description` in `SKILL.md` frontmatter.
-4. Put `Manual invocation only.` in every manual skill description.
-5. Keep references local and route each branch from `SKILL.md`.
-6. Compose by skill name. Do not link to another skill's files. Keep composition edges acyclic.
-7. Include an explicit, useful `## Output` contract.
-8. Keep `agents/openai.yaml` explicit and aligned with invocation policy.
+1. One primary outcome and a distinct trigger boundary.
+2. Useful when copied alone; name skills in plain text.
+3. Frontmatter carries `name` and `description` only.
+4. Manual skills: the description starts with `Manual invocation only.` and the
+   adapter sets `allow_implicit_invocation: false`. Model-invoked skills:
+   discriminative triggers and `true`.
+5. Compose by skill name; no links to another skill's files, and no composition
+   cycles.
+6. Every skill carries an explicit, useful `## Output`, in the template's order:
+   `Job`, `Steps`, optional `Flow`, domain sections, `Guardrails`,
+   `Composition`, `Output`. Add `Flow` only when order, loops, or stop
+   conditions carry the essence.
+7. References stay local, each branch routes from `SKILL.md`, and every package
+   file is reachable from it.
+8. `agents/openai.yaml` stays explicit, aligned with invocation policy, and in
+   the client's own form.
 9. Update the curated catalog deliberately.
-10. Name skills in plain text in skills, templates, and baselines. `agents/openai.yaml` uses the client's own invocation form.
 
-Start from `templates/skill/`. Keep its common section order (Job, Steps,
-Guardrails, Composition, Output); place domain sections between Steps and
-Guardrails. Check discovery behavior when the change or user
-request needs that evidence.
-
-For manual invocation, put `Manual invocation only.` in the description and set
-`allow_implicit_invocation: false`. For model invocation, use discriminative
-trigger language and set `allow_implicit_invocation: true`.
+Start from `templates/skill/`. Check discovery behavior when a change or request
+needs that evidence.
 
 ## Reference contract
 
-Inline the steps and rules that every branch uses. Put branch-specific rules,
-caveats, and the smallest useful examples in a local reference. Each context
-pointer states the condition that loads its target.
-
-Point directly to a leaf reference when it completes the routing decision. Use
-a domain index only when the reader must make a second useful decision. An
-index is a routing map, not a summary of its children.
-
-Co-locate each definition with its rules and caveats. Keep parent workflow,
-generic agent behavior, outputs, and repeated navigation in `SKILL.md` or the
-repository guidance that owns them. Internal references can move or merge when
-all local pointers change in the same edit. Do not add compatibility files for
-obsolete internal paths.
-
-Preserve pinned source content, licenses, and provenance. Keep every skill
-usable when copied alone. Do not link one skill to another skill's files.
-
-For a substantial change, review invocation, executable process, completion,
-context economy, interface, output, feedback, and safety. Treat a missing
-invocation, completion, output, or safety contract as a release blocker when
-that dimension applies. Prefer forward checks over inspection-only scores.
-Verify that the common path uses progressive discovery, routes branch-specific
-context conditionally, selects existing repository or stack-aware tools when
-they own the evidence, bounds tool output, and states when broader evidence is
-necessary.
+- Inline what every branch uses; disclose branch-specific rules, caveats, and
+  the smallest useful example behind a pointer that states its loading
+  condition.
+- Point at a leaf when it completes the routing decision; use a domain index
+  only for a second decision, and keep the index a map.
+- Co-locate a definition with its rules and caveats; move or merge internal
+  references only when every local pointer changes in the same edit; add no
+  compatibility files.
+- Preserve pinned source content, licenses, and provenance.
+- For a substantial change, review invocation, process, completion, context
+  economy, interface, output, feedback, and safety; a missing invocation,
+  completion, output, or safety contract blocks release. Prefer forward checks
+  over scores, and verify progressive discovery, conditional routing, existing
+  evidence tools, and bounded tool output.
 
 ## Agent contract
 
-Start from `templates/agent/` and follow [agents/README.md](agents/README.md).
-Package upgrades and tool expansion are security changes: inspect schemas,
-annotations, inputs, returned fields, authentication, telemetry, and side
-effects, then update configuration and notes together.
-Allowlisting is authorization. `readOnly` annotations alone are not.
-
-## Skills command contract
-
-`skills.py` supports Python 3.11+ with only the standard library. Preserve full
-preflight before mutation, lexical symlink detection, atomic tree and file
-replacement, skill and catalog conflict protection, and explicit overwrite. An
-all-skill install creates `.agents/skills/README.md`. Later single-skill
-installs keep an existing installed catalog synchronized. Every global install
-also replaces the managed `AGENTS.md` and complete `guardrails/` tree from
-`baselines/` at `~/.agents/` and at `$CODEX_HOME`, or `~/.codex` by default.
-`~/.agents/` is the canonical shared installation location; the Codex location
-is a compatibility mirror. Run platform checks when the user requests them or
-when the change has a material platform risk.
+Start from `templates/agent/`; follow [agents/README.md](agents/README.md).
+Upgrades and tool expansion are security changes: inspect schemas, annotations,
+inputs, returned fields, authentication, telemetry, and side effects, then
+update configuration and notes together. Allowlisting is authorization;
+`readOnly` annotations alone are not.
 
 ## Command contract
 
-`skills.py` and `tools/validate.py` are the public commands. Poe is the
-maintainer task runner. The commands use conventional command-line syntax and
-long options. They support `-h`/`--help` and keep failures on stderr. They keep
-results on stdout and make the safe common path visible. Shared code in
-`tools/lib.py` and validation tasks under `tools/commands/` do not parse
-command-line arguments.
+`skills.py` and `tools/validate.py` are the public commands; Poe runs maintainer
+tasks. Conventional syntax, long options, `-h`/`--help`, failures on stderr,
+results on stdout. `tools/lib.py` and `tools/commands/` tasks never parse CLI
+arguments.
 
-## Maintainer commands
+`skills.py` is Python 3.11+, stdlib only, and preserves preflight, symlink
+detection, atomic replacement, conflict protection, and explicit overwrite. A
+global install replaces every file directly under `baselines/` and the
+`guardrails/` tree at `~/.agents` and `$CODEX_HOME` (default `~/.codex`), and
+creates `~/.claude/CLAUDE.md` importing `@~/.agents/AGENTS.md` when `~/.claude`
+exists, leaving an existing file untouched. `~/.agents` is canonical; Codex
+mirrors it. An all-skill install writes `.agents/skills/README.md`; later
+single-skill installs keep the catalog synchronized. Run platform checks when
+requested or when platform risk is material.
 
-Structural validation is available when a change needs it:
-
-```text
-uv run poe validate
-```
-
-The validator checks skills, adapters, output contracts, catalog entries,
-composition edges, reachable references, and local links. It also checks
-baseline files, setup behavior, and TOML syntax.
-It does not contact cloud services or change installed user files.
-
-Run validation and development linters together with:
-
-```text
-uv run poe check
-```
-
-Use `uv run poe lint` for linters only. Use `uv run poe serve` to preview the
-diagram gallery. `uv` supplies development dependencies for validation,
-linting, and task execution only.
+Checks: `uv run poe validate` (skills, adapters, output contracts, catalog,
+composition, reachable references, naming, links, baselines, setup, TOML),
+`uv run poe check` (validate + ruff + rumdl), `uv run poe lint` (ruff + rumdl),
+`uv run poe serve` (diagram preview). No cloud contact, no installed user files
+changed; `uv` supplies dev dependencies only.
 
 ## Retiring a skill
 
-Retirement requires explicit approval. Identify users and composition edges.
-Move still-owned guidance. Remove the skill, adapter, and catalog entry together.
-Document that existing installed copies remain until users remove them.
+Explicit approval required. Identify users and composition edges, move
+still-owned guidance, remove skill, adapter, and catalog entry together, and
+note that installed copies remain until users remove them.

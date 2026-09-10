@@ -6,15 +6,27 @@ This repository is the source of truth for the shared Agent Skills kit.
 
 - `skills/<name>/` contains independently distributable skills.
 - `skills/README.md` is the complete curated catalog.
-- `baselines/AGENTS.md` is optional user-level guidance.
+- `baselines/` holds installed user-level guidance: `AGENTS.md`, `TOOLS.md`,
+  `TASTE.md`, and `guardrails/`.
 - `templates/skill/` is the canonical minimal skill template.
 - `agents/<name>/` contains team-maintained shared-agent packages.
 - `skills.py` and `tools/validate.py` are public CLIs. Poe is the maintainer
   task runner. Shared Python code lives in `tools/lib.py`. Setup checks live in
   `tools/setup_checks.py`, and validation tasks live in `tools/commands/`.
 
-Read down this chain: `AGENTS.md` → `skills/README.md` (catalog) → the touched
-`skills/<name>/SKILL.md` → its `references/` leaves.
+## Discovery
+
+Load on condition, never up front.
+
+`AGENTS.md` → `skills/README.md` (catalog) → `skills/<name>/SKILL.md` → the
+`references/` leaves that skill names. `baselines/` installs user guidance,
+`templates/` seeds new skills and agents, `tools/commands/` holds validation
+tasks, and `docs/` holds research notes.
+
+Each skill states when to load its own references; follow those conditions
+instead of reading the whole tree. Before writing or reshaping a skill,
+guardrail, or baseline, read `CONTRIBUTING.md` for the contract and
+`baselines/TASTE.md` for the taste.
 
 ## Change rules
 
