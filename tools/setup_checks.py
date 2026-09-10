@@ -58,6 +58,7 @@ def run() -> list[str]:
             help_result = invoke(home, project, "install", "--help")
             require(help_result.returncode == 0, "install help")
             require("install docs" in help_result.stdout and "install --all" in help_result.stdout, "help examples")
+            require("--project" in help_result.stdout, "project scope option documented")
             for obsolete in ("--bundle", "--skill", "--scope", "--tool", "--target", "--baseline", "--agent"):
                 require(obsolete not in help_result.stdout, f"obsolete option in help: {obsolete}")
 
@@ -69,19 +70,19 @@ def run() -> list[str]:
             require(result.returncode == 2 and "select one skill" in result.stderr, "two selectors rejected")
             require(invoke(home, project, "install", "docs", "code").returncode == 2, "two skills rejected")
 
-            result = invoke(home, project, "install", "docs", "--dry-run")
+            result = invoke(home, project, "install", "docs", "--project", "--dry-run")
             require(result.returncode == 0, "dry run")
             require(not (project / ".agents/skills/docs").exists(), "dry run must not install")
             require(not (project / ".agents/skills/README.md").exists(), "dry run must not install catalog")
             require(not (home / ".codex").exists(), "local dry run must not install baseline")
 
-            result = invoke(home, project, "install", "docs")
+            result = invoke(home, project, "install", "docs", "--project")
             project_skills = project / ".agents/skills"
             require(result.returncode == 0 and (project_skills / "docs/SKILL.md").is_file(), "project install")
             require(not project_skills.joinpath("README.md").exists(), "partial install omits catalog")
-            require(invoke(home, project, "install", "docs").returncode == 0, "idempotent install")
+            require(invoke(home, project, "install", "docs", "--project").returncode == 0, "idempotent install")
 
-            result = invoke(home, project, "install", "scripts", "--global")
+            result = invoke(home, project, "install", "scripts")
             require(result.returncode == 0 and (home / ".agents/skills/scripts/SKILL.md").is_file(), "global install")
             codex_root = home / ".codex"
             agents_root = home / ".agents"
@@ -125,7 +126,7 @@ def run() -> list[str]:
                 "claude bridge left untouched",
             )
 
-            result = invoke(home, project, "install", "--all")
+            result = invoke(home, project, "install", "--all", "--project")
             require(result.returncode == 0, "all install")
             require(
                 {path.name for path in project_skills.iterdir()} == {*skill_names(), "README.md"},
@@ -140,9 +141,9 @@ def run() -> list[str]:
             docs_root.joinpath("SKILL.md").write_text("local change\n", encoding="utf-8")
             docs_root.joinpath("local-extra.txt").write_text("local change\n", encoding="utf-8")
             project_skills.joinpath("README.md").write_text("local change\n", encoding="utf-8")
-            result = invoke(home, project, "install", "docs")
+            result = invoke(home, project, "install", "docs", "--project")
             require(result.returncode == 2 and docs_root.joinpath("local-extra.txt").exists(), "conflict refusal")
-            result = invoke(home, project, "install", "docs", "--overwrite")
+            result = invoke(home, project, "install", "docs", "--project", "--overwrite")
             require(result.returncode == 0 and not docs_root.joinpath("local-extra.txt").exists(), "overwrite")
             require(
                 project_skills.joinpath("README.md").read_bytes() == (ROOT / "skills/README.md").read_bytes(),
@@ -153,7 +154,7 @@ def run() -> list[str]:
             blocked_project.mkdir()
             blocked = blocked_project / ".agents"
             blocked.write_text("file\n", encoding="utf-8")
-            result = invoke(home, blocked_project, "install", "docs")
+            result = invoke(home, blocked_project, "install", "docs", "--project")
             require(result.returncode == 2 and blocked.is_file(), "regular-file ancestor")
 
             if hasattr(os, "symlink"):
@@ -167,7 +168,7 @@ def run() -> list[str]:
                 except OSError:
                     pass
                 else:
-                    result = invoke(home, project, "install", "docs")
+                    result = invoke(home, project, "install", "docs", "--project")
                     require(result.returncode == 2, "symlink destination")
 
     except (OSError, SetupError) as error:

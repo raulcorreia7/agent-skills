@@ -16,24 +16,25 @@ You need:
 ```text
 git clone https://github.com/raulcorreia7/agent-skills.git
 cd agent-skills
-python skills.py install docs
+python skills.py install --all
 ```
 
-This command installs the `docs` skill in the current repository. A partial
-install omits the catalog because it lists skills that are not present.
+This command installs every skill for the current user and synchronizes the
+shared baseline. Add `--project` to install into a repository instead. A
+partial install omits the catalog because it lists skills that are not present.
 
 ### Common CLI workflows
 
-Install one skill for the current repository:
+Install every skill for the user, plus the shared baseline:
 
 ```text
-python skills.py install docs
+python skills.py install --all
 ```
 
-Install all skills and the shared global baseline for the current user:
+Install one skill into the current repository:
 
 ```text
-python skills.py install --all --global
+python skills.py install docs --project
 ```
 
 Restart your client after setup.
@@ -56,10 +57,12 @@ Setup checks selected directories, the applicable catalog, and the global
 baseline before writing. It rejects symlink traversal and replaces each
 complete tree and file atomically. It preserves changed skill and catalog
 content unless replacement is explicitly allowed. Run
-`python skills.py install docs --global --dry-run` to preview an installation.
+`python skills.py install --all --dry-run` to preview an installation.
 
-`install --all` creates the curated catalog at `.agents/skills/README.md`.
-Later single-skill installs refresh that file when it already exists.
+`install --all` writes the curated catalog (`README.md`) into the selected
+skills root: `~/.agents/skills/` by default, or `<repository>/.agents/skills/`
+with `--project`. Later single-skill installs refresh that file when it already
+exists.
 
 Every global install synchronizes the contents of `baselines/` to the shared
 `~/.agents/` location and to `$CODEX_HOME`, or `~/.codex` when `CODEX_HOME` is

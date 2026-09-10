@@ -27,8 +27,8 @@ from tools.lib import (
 EXAMPLES = """Examples:
   python skills.py install docs
   python skills.py install --all
-  python skills.py install docs --global
-  python skills.py install --all --global
+  python skills.py install docs --project
+  python skills.py install --all --project
 """
 
 CLAUDE_BRIDGE = BASELINES / "claude/CLAUDE.md"
@@ -325,20 +325,30 @@ def parser() -> argparse.ArgumentParser:
         "install",
         help="Install one skill or all skills.",
         description=(
-            "Install one skill or all skills for the current project by default. "
-            "Global installs synchronize the shared and Codex baselines."
+            "Install one skill or all skills for the user by default. "
+            "Use --project for the current repository; global installs "
+            "synchronize the shared and Codex baselines."
         ),
         epilog=EXAMPLES,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     install.add_argument("skill", nargs="?", help="Name of one skill to install.")
     install.add_argument("--all", dest="all_skills", action="store_true", help="Install all skills.")
-    install.add_argument(
+    scope = install.add_mutually_exclusive_group()
+    scope.add_argument(
         "-g",
         "--global",
         dest="global_scope",
         action="store_true",
-        help="Install for the user and synchronize the shared and Codex baselines.",
+        default=True,
+        help="Install for the user (default) and synchronize the shared and Codex baselines.",
+    )
+    scope.add_argument(
+        "-p",
+        "--project",
+        dest="global_scope",
+        action="store_false",
+        help="Install into the current repository instead.",
     )
     install.add_argument("-n", "--dry-run", action="store_true", help="Preview changes without modifying files.")
     install.add_argument("--overwrite", action="store_true", help="Replace differing installed skill directories.")

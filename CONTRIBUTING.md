@@ -69,9 +69,10 @@ global install replaces every file directly under `baselines/` and the
 `guardrails/` tree at `~/.agents` and `$CODEX_HOME` (default `~/.codex`), and
 creates `~/.claude/CLAUDE.md` importing `@~/.agents/AGENTS.md` when `~/.claude`
 exists, leaving an existing file untouched. `~/.agents` is canonical; Codex
-mirrors it. An all-skill install writes `.agents/skills/README.md`; later
-single-skill installs keep the catalog synchronized. Run platform checks when
-requested or when platform risk is material.
+mirrors it. Installs target the user unless `--project` is given; an all-skill
+install writes the catalog into the selected skills root, and later single-skill
+installs keep it synchronized. Run platform checks when requested or when
+platform risk is material.
 
 Checks: `uv run poe validate` (skills, adapters, output contracts, catalog,
 composition, reachable references, naming, links, baselines, setup, TOML),

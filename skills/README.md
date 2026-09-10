@@ -9,12 +9,13 @@ The primary skill owns the final deliverable.
 
 ## Install
 
-Install one skill for the current repository, or install all skills for the
-current user:
+Installs target the user by default; add `--project` for the current
+repository:
 
 ```text
 python skills.py install ast-grep
-python skills.py install --all --global
+python skills.py install --all
+python skills.py install ast-grep --project
 ```
 
 ## Build
