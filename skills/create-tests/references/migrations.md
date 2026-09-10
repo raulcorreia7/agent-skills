@@ -13,11 +13,11 @@ Do not assume that rollback is safe for a destructive data transformation.
 ## Example
 
 ```text
-Claim: a renamed account remains readable during a rolling deployment.
-Oracle: compatibility contract and migration invariant.
-Cases: old reader plus transition schema. New writer plus old reader.
-Data: representative pre-migration rows preserve keys, counts, and field values.
-Not proved: peak-volume lock duration. Run a load rehearsal.
+claim ← a renamed account stays readable during a rolling deployment
+oracle ← compatibility contract + migration invariant
+cases ← old reader + transition schema | new writer + old reader
+data ← representative pre-migration rows keep keys, counts, field values
+not proved ← peak-volume lock duration → load rehearsal
 ```
 
 ## Evidence Base

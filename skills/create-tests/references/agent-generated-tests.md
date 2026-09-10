@@ -19,10 +19,10 @@ A second instance of the same model is not automatically an independent oracle.
 ## Example
 
 ```text
-Candidate: an agent adds tests for a rounding defect and repairs the function.
-Oracle: published currency-rounding rule.
-Independent probe: mutate the boundary comparison. The focused test must fail.
-Stop: two repairs produce the same failure, so classify the requirement gap.
+candidate ← agent adds tests for a rounding defect and repairs the function
+oracle ← published currency-rounding rule
+probe ← mutate the boundary comparison; the focused test must fail
+stop ← two repairs, same failure → requirement gap
 ```
 
 ## Evidence Base

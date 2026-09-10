@@ -31,12 +31,12 @@ coverage shows reach, not correctness.
 ## Example
 
 ```text
-Claim: the API preserves a client-supplied request ID.
-Oracle: versioned public API contract.
-Level: transport integration test.
-Case: send a valid request ID. Assert the response header has the same value.
-Check: focused API integration command passes.
-Not proved: proxy behavior in the deployed environment.
+claim ← request ID is preserved
+oracle ← versioned public API contract
+level ← transport integration test
+case ← valid request → response header equals the request ID
+check ← focused API integration command passes
+not proved ← proxy behavior in the deployed environment
 ```
 
 ## Evidence Base

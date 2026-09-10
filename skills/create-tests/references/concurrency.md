@@ -13,10 +13,11 @@ Preserve a reproducible schedule for each failure.
 ## Example
 
 ```text
-Risk: cancellation races with completion and emits two terminal events.
-Invariant: each job emits exactly one terminal event.
-Schedules: cancel-before-complete, complete-before-cancel, and forced overlap.
-Evidence: controlled scheduler and race detector pass. Production timing remains unproved.
+risk ← cancellation races completion and emits two terminal events
+invariant ← exactly one terminal event per job
+schedules ← cancel → complete | complete → cancel | forced overlap
+evidence ← controlled scheduler + race detector pass
+not proved ← production timing
 ```
 
 ## Evidence Base

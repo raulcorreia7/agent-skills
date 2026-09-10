@@ -14,10 +14,10 @@ for a threat model.
 ## Example
 
 ```text
-Risk: a user can read another tenant's invoice by changing its identifier.
-Oracle: versioned authorization requirement and tenant-isolation contract.
-Cases: owner succeeds. Other tenant and anonymous caller receive no invoice data.
-Level: integration test with the real authorization policy and data query.
+risk ← changing an invoice identifier reads another tenant's invoice
+oracle ← versioned authorization requirement + tenant-isolation contract
+cases ← owner → invoice | other tenant → no data | anonymous → no data
+level ← integration with the real policy and data query
 ```
 
 ## Evidence Base

@@ -18,10 +18,10 @@ condition. Preserve the original failure and report the lost gate signal.
 ## Example
 
 ```text
-Failure: an expiry test fails only after the daylight-saving boundary case.
-Evidence: preserve the first log and run with a fixed clock in two time zones.
-Cause: the fixture mixes local and UTC timestamps.
-Fix check: both controlled variants pass repeatedly without retries.
+failure ← expiry test fails only at the daylight-saving boundary
+evidence ← first log + fixed clock in two time zones
+cause ← fixture mixes local and UTC timestamps
+fix check ← both controlled variants pass repeatedly, no retries
 ```
 
 ## Evidence Base

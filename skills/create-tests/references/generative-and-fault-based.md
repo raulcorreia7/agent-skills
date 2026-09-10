@@ -20,10 +20,10 @@ mutation score as a correctness score.
 ## Example
 
 ```text
-Risk: a decoder corrupts valid encoded values near size boundaries.
-Property: decode(encode(value)) equals value for every generated valid value.
-Generator: valid values around empty, maximum, and multibyte boundaries.
-Evidence: retain the minimized failing value as a regression case.
+risk ← decoder corrupts valid values near size boundaries
+property ← decode(encode(v)) = v for every generated valid v
+generator ← values around empty, maximum, multibyte boundaries
+evidence ← keep the minimized failing value as a regression row
 ```
 
 ## Evidence Base

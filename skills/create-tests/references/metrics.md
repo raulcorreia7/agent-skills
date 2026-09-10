@@ -20,9 +20,10 @@ held-out tasks for an agent gate.
 ## Example
 
 ```text
-Question: does the generated suite detect boundary-condition faults?
-Evidence: branch coverage reaches the boundary, but one focused mutant survives.
-Action: strengthen the boundary assertion. Do not raise a universal target.
+question ← does the suite detect boundary-condition faults?
+evidence ← branch coverage reaches the boundary; one focused mutant survives
+action ← strengthen the boundary assertion
+not ← raise a universal target
 ```
 
 ## Evidence Base
