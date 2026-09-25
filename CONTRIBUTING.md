@@ -36,6 +36,9 @@ needs that evidence.
 - Inline what every branch uses; disclose branch-specific rules, caveats, and
   the smallest useful example behind a pointer that states its loading
   condition.
+- Group the leaves one branch can need under one loading condition and state
+  each route's real cardinality — one artifact or the matching set — so the
+  reader loads the set in one operation.
 - Point at a leaf when it completes the routing decision; use a domain index
   only for a second decision, and keep the index a map.
 - Co-locate a definition with its rules and caveats; move or merge internal
@@ -45,8 +48,8 @@ needs that evidence.
 - For a substantial change, review invocation, process, completion, context
   economy, interface, output, feedback, and safety; a missing invocation,
   completion, output, or safety contract blocks release. Prefer forward checks
-  over scores, and verify progressive discovery, conditional routing, existing
-  evidence tools, and bounded tool output.
+  over scores, and verify progressive discovery, grouped leaf loading,
+  conditional routing, existing evidence tools, and bounded tool output.
 
 ## Agent contract
 
