@@ -9,7 +9,7 @@ overrides them where the client permits; in this repository, the root
 ## Discovery
 
 Use progressive discovery: load material when its condition applies, not up
-front.
+front, and load the set one decision selects in one operation.
 
 - Tool notes: `TOOLS.md` when the task involves a tool.
 - Taste: `TASTE.md` when a choice is open; it adds to this file, and this file

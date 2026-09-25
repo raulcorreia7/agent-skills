@@ -83,6 +83,10 @@ outweighs its setup, maintenance, and trust cost.
 - Run independent bounded operations together or concurrently when their
   outputs remain attributable. Keep dependent operations sequential when one
   result determines the next request.
+- Request a set that one decision already selects — several files, references,
+  excerpts, or records — in one operation: the interface's multi-target form, or
+  the independent requests issued in one round trip. Keep each target's path,
+  range, or identifier visible in the result.
 - Filter, join, deduplicate, rank, count, or aggregate large intermediate data
   before it enters model context. Return compact findings with provenance and
   material exceptions.
@@ -107,6 +111,8 @@ Include these cases:
 - A large structured or remote result that needs filtering and deliberate
   pagination.
 - Independent questions that benefit from bounded grouped operations.
+- A decision that selects several files, references, or records, which loads
+  them as one operation rather than one call per target.
 - Multi-source evidence that benefits from temporary programmatic aggregation.
 - A broad audit whose completion criterion requires broad coverage.
 - Truncated evidence with an explicit continuation path.

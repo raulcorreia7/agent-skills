@@ -192,8 +192,8 @@ reliable.
 Evaluate representative tasks with correctness and evidence coverage as hard
 gates. Track context tokens, tool calls, latency, cost, repeated retrieval, and
 avoidable raw output as separate secondary measures. Include exact-term,
-unknown-owner, multi-hop relationship, large structured result, full-file,
-programmatic aggregation, and broad-audit cases.
+unknown-owner, multi-hop relationship, a known multi-file set, large structured
+result, full-file, programmatic aggregation, and broad-audit cases.
 
 No reviewed source establishes a universal optimal excerpt size, repository-map
 budget, result count, or tool-call limit. SWE-agent's interface ablation is the
