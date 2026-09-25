@@ -1,6 +1,6 @@
 # Quality Router
 
-Read only the leaf whose trigger applies. Repository contracts and measured
+Read each leaf whose trigger applies. Repository contracts and measured
 system behavior take precedence over general guidance.
 
 | Trigger | Leaf |

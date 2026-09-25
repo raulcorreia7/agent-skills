@@ -30,7 +30,7 @@ defect.
 1. Establish the artifact, purpose, scope, material exclusions, contracts, and
    available validation evidence. Ask only when a missing answer changes risk
    or the review boundary.
-2. Select and load one review branch:
+2. Select and load each applicable review branch:
    - For a diff, branch, commit set, or implementation, read `references/change.md`.
    - For a PR/MR or story-backed change, read `references/pull-request.md` and
      also `references/change.md` when substantive implementation is present.

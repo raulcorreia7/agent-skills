@@ -77,11 +77,11 @@ blocker.
 - Read the [quality router](references/quality/index.md) when the change alters
   module ownership, abstraction, duplication, pattern use, functional design,
   performance, dependencies, observability, a code-owned user interface, a
-  quality measure, or a bounded high-assurance component. Load only the
-  matching leaf.
+  quality measure, or a bounded high-assurance component. Load each matching
+  leaf.
 - Read [languages/index.md](references/languages/index.md) only when behavior
   depends on language-specific rules or the repository has no clear convention.
-  Then read only the matching language and concern leaf.
+  Then read each matching language and concern leaf.
 - Read [code structure](references/readability/structure.md) for substantial
   control-flow, expression, naming, or semantic-block work.
 - Read [formatting](references/readability/formatting.md) only when wrapping or

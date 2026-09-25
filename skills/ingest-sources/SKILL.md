@@ -13,7 +13,7 @@ format-aware tools; validate their output instead of rewriting raw markup or
 binary-derived text in context.
 
 Resolve `<skill-root>` as the directory that contains this `SKILL.md`. Read only
-the one branch that matches the source format. Then read
+the branches that match the source formats. Then read
 [curate-and-retrieve.md](references/curate-and-retrieve.md).
 
 ## Steps
@@ -35,7 +35,7 @@ the one branch that matches the source format. Then read
    - Publisher-supplied Markdown or text.
    - Static rendered HTML or embedded PDF text.
    - Layout inference, browser rendering, or OCR only when required.
-8. Read the one required acquisition branch:
+8. Read the required acquisition branches:
 
 | Source | Required branch |
 | --- | --- |

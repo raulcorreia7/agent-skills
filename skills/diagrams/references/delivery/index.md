@@ -1,6 +1,6 @@
 # Delivery Router
 
-Load only the file matching the delivery decision or renderer in use.
+Load only the files matching the delivery decision or renderer in use.
 
 | Trigger | File |
 |---|---|

@@ -42,7 +42,7 @@ Resolve `<skill-root>` as the directory that contains this `SKILL.md`.
   selected family leaf.
 - For Graphviz DOT, read the trigger-to-file map in
   `references/graphviz/index.md`, then `references/graphviz/core.md` and only
-  the selected engine, pattern, or formal-model leaf.
+  the selected engine, pattern, or formal-model leaves.
 - For explicitly requested D2 work, read the trigger-to-file map in
   `references/d2/index.md`, then `references/d2/core.md` and only an applicable
   pattern leaf.
@@ -54,7 +54,7 @@ Resolve `<skill-root>` as the directory that contains this `SKILL.md`.
   `references/design/edge-labels.md` only when that feature is present.
 - For rendering, tool readiness, export, or destination compatibility, read the
   trigger-to-file map in `references/delivery/index.md`, then only the selected
-  delivery leaf. Before rendering unreviewed source, configuration, fonts,
+  delivery leaves. Before rendering unreviewed source, configuration, fonts,
   icons, images, imports, or includes, read
   `references/delivery/security.md`.
 - Read `references/sources.yml` only for versions, licenses, or provenance.

@@ -1,6 +1,6 @@
 # Language Guides
 
-Read only the leaf that matches both the implementation language and the task.
+Read each leaf that matches the implementation language and the task.
 
 | Language | Implement code or review contracts | Configure or audit quality gates | Select or run checks |
 | --- | --- | --- | --- |

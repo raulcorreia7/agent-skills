@@ -5,7 +5,7 @@ skill files and commands below are relative to that directory.
 
 1. Classify each block as a `procedure` or `description`. Apply the safety
 overlay to text that controls a risk.
-2. Read [core rules](core-rules.md), then read only the applicable branch:
+2. Read [core rules](core-rules.md), then read each applicable branch:
    - Read [procedures](procedures.md) for procedures.
    - Read [descriptions](descriptions.md) for descriptions.
    - For safety text, read both [procedures](procedures.md) and the [safety

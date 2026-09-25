@@ -16,7 +16,7 @@ effects.
    environments. Define the job, inputs, outputs, side effects, retries, and
    success result. Classify the automation as missing, partial, or already
    sufficient; record unresolved items as assumptions.
-2. Select the smallest suitable existing platform and read its one guide below.
+2. Select the smallest suitable existing platform and read its guide below.
    State the runner and portability boundary.
 3. If automation is missing or partial, implement one entrypoint. If already
    sufficient, skip the edit. Keep load time, discovery, and planning read-only.
@@ -40,7 +40,7 @@ stop: request satisfied + result recorded
 
 ## References
 
-Read one implementation guide:
+Read each applicable implementation guide:
 
 - `references/bash.md` for non-trivial Bash or Unix-local orchestration.
 - `references/powershell.md` for PowerShell or Windows automation.

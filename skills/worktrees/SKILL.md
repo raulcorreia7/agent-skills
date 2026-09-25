@@ -21,7 +21,7 @@ preflight checks, and cleanup guardrails.
    copy-on-write. For that branch, use simgit after its pilot passes. Use native
    Git only when the selected provider is unsuitable. Read
    `references/providers.md` for provider selection or a copy-on-write request.
-4. Load only the reference for the selected operation:
+4. Load only the references for the selected operation:
    - For Worktrunk or simgit, use the provider commands in
      `references/providers.md`. Read the native operation references for their
      guardrails and verification only.

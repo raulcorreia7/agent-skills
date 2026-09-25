@@ -25,7 +25,7 @@ owning tools. Prefer types, tests, and linters; comments are last.
    and source-backed accuracy.
 4. Read [comment guidance](references/guidance.md) when purpose, placement,
    freshness, security, privacy, or examples affect the classification. Then
-   read only the applicable automation leaf:
+   read each applicable automation leaf:
    - [directives and generated boundaries](references/automation/directives-and-generated.md)
      for suppressions, parser or tool directives, generated headers, and
      do-not-edit boundaries;

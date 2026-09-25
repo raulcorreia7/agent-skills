@@ -26,7 +26,7 @@ the product repository instead of growing skill prose.
 4. Start with a direct pattern:
    `ast-grep run --lang <language> --pattern '<pattern>' <path>`. When a direct
    pattern is insufficient and a YAML scan rule is necessary, read
-   [scan rules](references/scan-rules.md). Then read only the additional rule
+   [scan rules](references/scan-rules.md). Then read each additional rule
    concern that applies:
    - [relational rules](references/relational-rules.md) for ancestor,
      descendant, or sibling relationships;

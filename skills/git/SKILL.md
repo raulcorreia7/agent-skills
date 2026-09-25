@@ -25,7 +25,7 @@ mutate Git only after explicit approval for the exact operation and boundary.
    repository evidence supports the requested action or draft.
 3. If sensitive data appears, stop the exposure and identify only the affected
    file or field. Finish when the output contains no sensitive value.
-4. Load only the reference for the requested Git artifact:
+4. Load only the references for the requested Git artifact:
    - Read `references/commits.md` for commit messages and breaking-change markers.
    - Read `references/branch-names.md` for branch naming.
    - Read `references/work-item-links.md` for issue and work-item references.

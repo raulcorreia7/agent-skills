@@ -25,7 +25,7 @@ observable boundary.
 3. Read [the branch index](references/index.md) only when the task needs an
    extended evidence example, case shape or row count guidance, or involves
    broad input spaces, fault-based testing, flakiness, concurrency, migrations,
-   security, agent-generated tests, or test metrics; then load only the
+   security, agent-generated tests, or test metrics; then load each
    matching leaf.
 4. Inspect the test style, fixtures, helpers, commands, and continuous
    integration contract. Reuse a suitable local pattern.
