@@ -1,6 +1,7 @@
-reviewed_on: "2026-08-19"
+reviewed_on: "2026-10-12"
 limitations:
   - "Git documents linked-worktree behavior and generic paths; the repository-local .worktrees/ layout is this skill's convention, not a Git portability guarantee."
+  - "The Worktrunk entries describe version 0.68.0: its shipped documentation and the sources behind the bootstrap rules (src/config/user/path.rs, src/commands/step/shared.rs, src/config/commands.rs, src/commands/run_pipeline.rs, src/command_log.rs), read on 2026-10-12."
 sources:
   linked_worktrees:
     title: "Git worktree"
@@ -14,3 +15,15 @@ sources:
   cleanup:
     title: "Git clean"
     url: "https://git-scm.com/docs/git-clean"
+  hooks:
+    title: "Git hooks"
+    url: "https://git-scm.com/docs/githooks"
+  worktrunk:
+    title: "Worktrunk 0.68.0"
+    url: "https://crates.io/crates/worktrunk/0.68.0"
+  worktrunk_hooks:
+    title: "Worktrunk: wt hook"
+    url: "https://worktrunk.dev/hook/"
+  worktrunk_copy_ignored:
+    title: "Worktrunk: wt step copy-ignored"
+    url: "https://worktrunk.dev/step/"

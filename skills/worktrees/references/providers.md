@@ -25,8 +25,51 @@ is outside the source repository, report the actual path after creation, and do
 not change the template unless the user requests that configuration.
 
 Use its ignored-file copy step only when the repository explicitly selects the
-files and the filesystem supports the desired copy-on-write behavior. Do not
-assume that a copy saves disk space on every filesystem.
+files and the filesystem supports the desired copy-on-write behavior.
+
+### Bootstrap rules
+
+Apply these when a repository prepares new worktrees through hooks.
+
+- Pass `--config <file>` to every `wt` call inside a hook. The flag sets the
+  config path for the invoking process only, so a nested `wt step ...` reads the
+  default user config and silently ignores your exclude list. Keep shared
+  settings in the project config, which every process in the repository reads,
+  or export `WORKTRUNK_CONFIG_PATH`, which hook children inherit.
+- Exclude patterns match one ignored entry at a time, with no parent
+  propagation: `dir/` excludes the `dir` entry, while `dir/*` covers the entries
+  inside a partly tracked directory. Check the result with
+  `wt step copy-ignored --dry-run` from a worktree.
+- Table keys in a hook run concurrently, and a failed step aborts the rest of
+  the pipeline. Keep ordered steps in one string hook or in `[[hook]]` pipeline
+  blocks, make every step idempotent, and guard best-effort steps so a failed
+  copy cannot skip an essential later step.
+- Never copy a directory another process is writing: a source file that vanishes
+  mid-copy aborts the copy.
+- Prefer the filesystem's own copy-on-write for large trees (reflink on btrfs
+  and XFS, clone on APFS, block clone on ReFS), and verify it with a probe copy
+  (GNU `cp --reflink=always`, macOS `cp -c`) before relying on it. Without it,
+  link large read-only assets where the platform permits (Windows symlinks can
+  need Developer Mode, otherwise copy them) and skip regenerable caches when a
+  cold rebuild is cheap.
+- Never hardlink build outputs: compilers rewrite files in place and would
+  corrupt the primary checkout.
+- Link only ignored paths (`git check-ignore`) so tracked files stay real, and
+  test the existing link target first to keep the step idempotent.
+- A copied virtual environment or runtime can still resolve absolute paths to
+  the primary checkout: run project code against the worktree instead, or
+  reinstall dependencies in place.
+- Call `command wt` from scripts and agents in POSIX shells; the shell wrapper
+  changes the caller's directory.
+- Diagnose hook failures from Worktrunk's command log at
+  `<git-common-dir>/wt/logs/commands.jsonl`, which records each hook command
+  with its exit status.
+- Plain `git worktree` covers the essentials portably: tracked files only, so a
+  new worktree is already minimal, plus bootstrap from a `post-checkout` hook,
+  which `git worktree add` fires with a null old ref, or from a small POSIX
+  setup script (Git for Windows runs it through its bundled `sh`). Worktrunk
+  adds the ignored-file copy, declarative lifecycle hooks, and the
+  `list`/`merge`/`remove` UX.
 
 Use native `git worktree prune` for stale Git registrations. Use
 `wt step prune` only after explicit approval because it removes merged
