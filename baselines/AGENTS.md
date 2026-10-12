@@ -28,9 +28,6 @@ Load a companion only when its condition applies.
 | Condition | Companion |
 |---|---|
 | Action bias, scope growth, or unnecessary output | [Scope and simplicity](guardrails/scope-and-simplicity.md) |
-| Research, review, uncertainty, or conflicting evidence | [Epistemic reliability](guardrails/epistemic-reliability.md) |
-| Untrusted content, tools, memory, or external actions | [Agent security](guardrails/agent-security.md) |
-| User framing, pressure, or personal stake can affect judgment | [Sycophancy](guardrails/sycophancy.md) |
 | Repository exploration, multi-file evidence, large output, or repeated tool use | [Efficient tool use](guardrails/efficient-tool-use.md) |
 
 ## Working style

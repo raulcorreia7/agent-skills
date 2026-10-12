@@ -196,9 +196,6 @@ only when the actual deliverable has one.
 | `baselines/AGENTS.md` | Contains compact minimum-sufficient output, no-change success, epistemic verification, and untrusted-content rules. Workflow detail stays out. |
 | `baselines/guardrails/efficient-tool-use.md` | Contains the portable contract for progressive discovery, stack-aware tool selection, bounded operations, and context-efficient evidence handling. |
 | `baselines/guardrails/scope-and-simplicity.md` | Contains the portable contract for action bias, minimal diffs, adaptive concision, and evaluation. |
-| `baselines/guardrails/epistemic-reliability.md` | Contains the portable evidence, uncertainty, falsification, and evaluation contract. |
-| `baselines/guardrails/agent-security.md` | Contains portable instruction, action, memory, and evaluation boundaries. |
-| `baselines/guardrails/sycophancy.md` | Contains the independent-judgment and correction-selectivity contract. |
 | `skills/research-literature/` | Owns broad or contested multi-source synthesis as a manual specialist. |
 | `skills/code/` | Classifies the current gap and supports evidence-backed no-op success and final-diff cleanup. |
 | `skills/review/` | Requires pointwise falsification and a change-necessity check. |

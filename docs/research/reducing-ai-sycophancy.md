@@ -141,16 +141,14 @@ The [`baselines/AGENTS.md`](../../baselines/AGENTS.md) evidence contract treats
 user claims, confidence, preferences, and prior conclusions as inputs rather
 than evidence. It separates empathy from agreement and requires an evidence
 re-check before an agent reverses a supported answer. It also requires
-proportionate assessment of the central question and routes material
-counterevidence and falsification through the epistemic-reliability companion.
+proportionate assessment of the central question, including material
+counterevidence and falsification.
 Specialist review workflows can require failure modes or viable alternatives
 when their task contract needs them.
 
-The [`sycophancy` companion](../../baselines/guardrails/sycophancy.md) provides
-the portable extended contract and evaluation cases. The packaged
-read-only discovery agents remain focused on observed facts. They separate
-observation from inference and do not treat public web results as evidence for
-private environments.
+The packaged read-only discovery agents remain focused on observed facts. They
+separate observation from inference and do not treat public web results as
+evidence for private environments.
 
 These instructions are evidence-backed practical inferences. They do not prove
 that a baseline prompt eliminates model-level behavior. They avoid “always
