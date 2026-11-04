@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/can1357/oh-my-pi/main/packages/coding-agent/src/config/mcp-schema.json",
+  "mcpServers": {
+    "azure": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y", "@azure/mcp@3.0.0", "server", "start", "--read-only",
+        "--namespace", "subscription", "--namespace", "group", "--namespace", "role",
+        "--namespace", "policy", "--namespace", "advisor", "--namespace", "resourcehealth",
+        "--namespace", "quota", "--namespace", "monitor", "--namespace", "applicationinsights",
+        "--namespace", "compute", "--namespace", "aks", "--namespace", "acr",
+        "--namespace", "containerapps", "--namespace", "appservice", "--namespace", "functionapp",
+        "--namespace", "sql", "--namespace", "redis", "--namespace", "servicebus",
+        "--namespace", "eventhubs", "--namespace", "eventgrid", "--namespace", "signalr"
+      ],
+      "env": { "AZURE_TOKEN_CREDENTIALS": "AzureCliCredential" }
+    }
+  }
+}

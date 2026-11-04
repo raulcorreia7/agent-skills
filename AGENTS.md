@@ -10,7 +10,7 @@ every artifact live in `CONTRIBUTING.md`; this file only routes.
 | `skills/<name>/` | One distributable skill each; `skills/README.md` is the curated catalog. |
 | `baselines/` | User-level guidance the installer copies to `~/.agents/` (and the Claude bridge in `claude/`). |
 | `templates/` | Starting points for new skills and agents. |
-| `agents/` | Shared agent packages (none packaged yet). |
+| `agents/` | Shared agent packages; `agents/README.md` lists them. |
 | `skills.py`, `wizard.py` | Installer and its guided front end. |
 | `tools/` | Validator (`validate.py`), its checks (`commands/`), shared code (`lib.py`), installer checks (`setup_checks.py`). |
 | `docs/` | Research reports and the diagram gallery; they never override a contract. |

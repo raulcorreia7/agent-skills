@@ -4,13 +4,15 @@ Shared agents are optional, team-maintained configurations for recurring jobs
 that need a distinct model, tool boundary, or operating policy. Skills remain
 the portable default.
 
-No shared agents are packaged yet.
+| Agent | Job | Clients |
+|---|---|---|
+| [`azure_explorer`](azure_explorer/README.md) | Read-only Azure and Azure DevOps metadata exploration | Codex, Claude Code, omp |
 
 The skills installer does not install agents. Codex loads personal agents from
 `$CODEX_HOME/agents/<name>.toml` (default `~/.codex/agents/`) and project agents
 from `.codex/agents/`; copy the TOML file there. The package here keeps the TOML
 with its policy and operating notes. See the
-[Codex custom-agent contract](https://developers.openai.com/codex/subagents).
+[Codex custom-agent contract](https://learn.chatgpt.com/docs/agent-configuration/subagents).
 
 ## Add an agent
 
