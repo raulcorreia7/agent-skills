@@ -74,7 +74,10 @@ global install replaces every file directly under `baselines/` and the
 `guardrails/` tree at `~/.agents` and `$CODEX_HOME` (default `~/.codex`), and
 creates `~/.claude/CLAUDE.md` importing `@~/.agents/AGENTS.md` when `~/.claude`
 exists, leaving an existing file untouched. `~/.agents` is canonical; Codex
-mirrors it. Installs target the user unless `--project` is given; an all-skill
+mirrors it. Every install links each installed skill into
+`.claude/skills/<name>` (user or project) because Claude Code does not read
+`.agents/skills`. It creates a link only for a free name and never replaces an
+existing entry. A user install links only when `~/.claude` exists. Installs target the user unless `--project` is given; an all-skill
 install writes the catalog into the selected skills root, and later single-skill
 installs keep it synchronized. Run platform checks when requested or when
 platform risk is material.

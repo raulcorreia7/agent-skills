@@ -10,6 +10,9 @@ stays standard-library only.
 from __future__ import annotations
 
 import argparse
+import contextlib
+import io
+import shutil
 import subprocess
 import sys
 import textwrap
@@ -29,10 +32,10 @@ DEPENDENCY_HINT = (
     "error: the wizard needs questionary. Run `uv run python wizard.py`, or `pip install questionary` first; "
     "`python skills.py install --all` needs nothing extra."
 )
-SCOPE_GLOBAL = "Global  (~/.agents/skills)"
-SCOPE_REPOSITORY = "Current repository  (./.agents/skills)"
-ACTION_PREVIEW = "Preview (dry run)"
-ACTION_INSTALL = "Install"
+SCOPE_GLOBAL = "Your user account  (~/.agents/skills)"
+SCOPE_REPOSITORY = "This repository  (./.agents/skills)"
+ACTION_PREVIEW = "Preview first (dry run)"
+ACTION_INSTALL = "Install now"
 ACTION_CANCEL = "Cancel"
 
 # Green accent, colour only: the cursor row is bold green with a pointer, ticked
@@ -49,6 +52,7 @@ STYLE_RULES = [
     ("text", "noreverse"),
     ("separator", "fg:ansibrightblack"),
 ]
+MANUAL_PREFIX = "Manual invocation only."
 POINTER = "❯"
 SELECT_HINT = "(↑/↓ move, enter confirms)"
 CHECKBOX_HINT = "(↑/↓ move, space toggles, a all/none, i invert, enter confirms)"
@@ -60,6 +64,9 @@ class Survey:
     conflicts: int
     catalog_pending: bool
     baseline_pending: bool
+    bridge: str
+    links: int
+    links_kept: int
 
 
 def namespace(
@@ -90,11 +97,25 @@ def survey(chosen: Sequence[str], *, global_scope: bool) -> Survey:
         if not skills.matches(tree) or any(not skills.file_matches(file) for file in files):
             baseline_changed = True
             break
+    links = [
+        state
+        for name in chosen
+        for _, _, state in skills.claude_links(
+            namespace(skill=name, all_skills=False, global_scope=global_scope, dry_run=True, overwrite=False)
+        )
+    ]
+    bridge = "skipped"
+    if global_scope:
+        with contextlib.redirect_stdout(io.StringIO()):
+            bridge = skills.sync_claude_bridge(dry_run=True, verbose=False)
     return Survey(
         pending=pending,
         conflicts=conflicts,
         catalog_pending=bool(catalog and not skills.file_matches(catalog)),
         baseline_pending=baseline_changed,
+        bridge=bridge,
+        links=links.count("new"),
+        links_kept=links.count("kept"),
     )
 
 
@@ -107,33 +128,41 @@ def calls_for(chosen: Sequence[str], *, global_scope: bool, dry_run: bool, overw
     ]
 
 
-def show_plan(chosen: Sequence[str], state: Survey, bridge: str, *, global_scope: bool) -> None:
-    where = "global" if global_scope else "current repository"
+def show_plan(chosen: Sequence[str], state: Survey, *, global_scope: bool) -> None:
+    home = "~" if global_scope else "."
     shown = ", ".join(chosen[:4]) + (", …" if len(chosen) > 4 else "")
-    lines = [f"scope      {where}", f"skills     {len(chosen)} ({shown})"]
-    if global_scope:
-        lines.append("baselines  ~/.agents/{AGENTS.md, TOOLS.md, TASTE.md, guardrails/}")
-        lines.append(f"bridge     ~/.claude/CLAUDE.md  ({bridge})")
-    lines.append(f"update     {state.pending} skill director{'y' if state.pending == 1 else 'ies'}")
+    rows = [
+        ("scope", "your user account" if global_scope else "this repository"),
+        ("skills", f"{len(chosen)} ({shown}) · {state.pending} to update"),
+    ]
     if state.conflicts:
-        lines.append(f"conflicts  {state.conflicts} differ from this checkout")
+        rows.append(
+            ("conflicts", f"{state.conflicts} differ from this checkout; the wizard asks before it replaces them")
+        )
+    claude = f"{skills.plural(state.links, 'new link')} into {home}/.claude/skills"
+    if state.links_kept:
+        claude += f" · {state.links_kept} of yours kept"
+    if state.links or state.links_kept:
+        rows.append(("claude", claude))
+    if global_scope:
+        rows.append(("baseline", f"~/.agents and ~/.codex · {'refresh' if state.baseline_pending else 'up to date'}"))
+        rows.append(("bridge", f"~/.claude/CLAUDE.md · {state.bridge}"))
     if state.catalog_pending:
-        lines.append("catalog    refresh")
-    if state.baseline_pending:
-        lines.append("baselines  refresh")
+        rows.append(("catalog", "refresh"))
     print("\nPlan")
-    for line in lines:
-        print(f"  {line}")
+    for label, value in rows:
+        print(f"  {label:<10} {value}")
 
 
 def validate() -> int:
     print("\nValidating…")
     result = subprocess.run([sys.executable, str(ROOT / "tools/validate.py"), "--quiet"], cwd=ROOT, check=False)
     if result.returncode != 0:
-        print("validation reported issues; run tools/validate.py for detail", file=sys.stderr)
+        print("Validation found problems. Run tools/validate.py for details.", file=sys.stderr)
         return result.returncode
-    print("validation passed.")
-    print("\nNext: restart your client, then read the catalog beside the installed skills.")
+    print("Validation passed.")
+    print("\nNext: Claude Code loads the new skills without a restart. If the install created its skills")
+    print("folder, run /reload-skills in Claude Code. Restart other clients.")
     return 0
 
 
@@ -145,11 +174,25 @@ def pick(questionary: ModuleType, message: str, options: Sequence[tuple[str, obj
     ).ask()
 
 
+def describe(name: str) -> str:
+    """One-line hint for a skill: its name plus the start of its description."""
+    text = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
+    line = next((x for x in text.splitlines()[:6] if x.startswith("description:")), "")
+    summary = line.removeprefix("description:").strip().strip("\"'")
+    manual = summary.startswith(MANUAL_PREFIX)
+    summary = summary.removeprefix(MANUAL_PREFIX).strip()
+    name = f"{name} (manual)" if manual else name
+    room = max(20, shutil.get_terminal_size().columns - len(name) - 12)
+    if len(summary) > room:
+        summary = summary[: room - 1].rstrip() + "…"
+    return f"{name}  {summary}" if summary else name
+
+
 def pick_skills(questionary: ModuleType, names: Sequence[str], style: object) -> list[str] | None:
     """Checklist with every skill ticked; refuses an empty selection so Enter never ends in a dead end."""
     return questionary.checkbox(
         "Choose skills",
-        choices=[questionary.Choice(name, checked=True) for name in names],
+        choices=[questionary.Choice(describe(name), value=name, checked=True) for name in names],
         style=style,
         pointer=POINTER,
         instruction=CHECKBOX_HINT,
@@ -158,11 +201,11 @@ def pick_skills(questionary: ModuleType, names: Sequence[str], style: object) ->
 
 
 def run(questionary: ModuleType) -> int:
-    print(textwrap.fill("Agent Skills installer: three questions, one plan, then install and validate.", width=80))
+    print(textwrap.fill("Agent Skills installer. Answer three questions, review the plan, then install.", width=80))
     style = questionary.Style(STYLE_RULES)
 
     global_scope = pick(
-        questionary, "Where should the skills live?", [(SCOPE_GLOBAL, True), (SCOPE_REPOSITORY, False)], style
+        questionary, "Where do you want the skills?", [(SCOPE_GLOBAL, True), (SCOPE_REPOSITORY, False)], style
     )
     if global_scope is None:
         return cancel()
@@ -178,12 +221,11 @@ def run(questionary: ModuleType) -> int:
         return cancel()
 
     state = survey(chosen, global_scope=global_scope)
-    bridge = skills.sync_claude_bridge(dry_run=True, verbose=False) if global_scope else "skipped"
-    show_plan(chosen, state, bridge, global_scope=global_scope)
+    show_plan(chosen, state, global_scope=global_scope)
 
     action = pick(
         questionary,
-        "Now what?",
+        "What next?",
         [(ACTION_PREVIEW, "preview"), (ACTION_INSTALL, "install"), (ACTION_CANCEL, "cancel")],
         style,
     )
@@ -192,17 +234,16 @@ def run(questionary: ModuleType) -> int:
     if action == "preview":
         for pending in calls_for(chosen, global_scope=global_scope, dry_run=True, overwrite=False):
             skills.run_install(pending)
-        if not questionary.confirm("Install for real now?", default=False, style=style).ask():
+        if not questionary.confirm("Install now?", default=False, style=style).ask():
             print("nothing written.")
             return 0
 
     overwrite = False
     if state.conflicts:
-        plural = "y" if state.conflicts == 1 else "ies"
-        print(f"\n{state.conflicts} installed director{plural} differ from this checkout.")
+        print(f"\n{skills.plural(state.conflicts, 'installed skill')} differ from this checkout.")
         overwrite = bool(questionary.confirm("Replace them with this checkout?", default=False, style=style).ask())
         if not overwrite:
-            print("nothing written. Re-run and choose to replace when you are ready.")
+            print("nothing written. To replace them, run the wizard again and answer yes.")
             return 0
 
     for call in calls_for(chosen, global_scope=global_scope, dry_run=False, overwrite=overwrite):
@@ -238,7 +279,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         return run(questionary)
     except KeyboardInterrupt:
-        print("\ncancelled; re-run the wizard to continue.", file=sys.stderr)
+        print("\ncancelled. Run the wizard again to continue.", file=sys.stderr)
         return 130
 
 

@@ -10,6 +10,9 @@ from pathlib import Path
 
 from lib import ROOT, SetupError, TreeTask, matches, skill_names, tree_entry_map
 
+# Symlinks need privileges on Windows; the installer then keeps going without links.
+LINKS = os.name != "nt"
+
 
 def invoke(home: Path, project: Path, *arguments: str) -> subprocess.CompletedProcess[str]:
     environment = os.environ.copy()
@@ -140,15 +143,24 @@ def run() -> list[str]:
             require(not (project / ".agents/skills/docs").exists(), "dry run must not install")
             require(not (project / ".agents/skills/README.md").exists(), "dry run must not install catalog")
             require(not (home / ".codex").exists(), "local dry run must not install baseline")
+            require(not (project / ".claude/skills/docs").is_symlink(), "dry run must not link Claude skills")
 
             result = invoke(home, project, "install", "docs", "--project")
             project_skills = project / ".agents/skills"
             require(result.returncode == 0 and (project_skills / "docs/SKILL.md").is_file(), "project install")
             require(not project_skills.joinpath("README.md").exists(), "partial install omits catalog")
             require(invoke(home, project, "install", "docs", "--project").returncode == 0, "idempotent install")
+            if LINKS:
+                link = project / ".claude/skills/docs"
+                require(link.is_symlink() and link.resolve() == (project_skills / "docs").resolve(), "project link")
 
             result = invoke(home, project, "install", "scripts")
             require(result.returncode == 0 and (home / ".agents/skills/scripts/SKILL.md").is_file(), "global install")
+            if LINKS:
+                link = home / ".claude/skills/scripts"
+                require(
+                    link.is_symlink() and link.resolve() == (home / ".agents/skills/scripts").resolve(), "user link"
+                )
             codex_root = home / ".codex"
             agents_root = home / ".agents"
             require_baseline_files(codex_root, "global baseline")
@@ -175,6 +187,9 @@ def run() -> list[str]:
             agents_root.joinpath("AGENTS.md").write_text("local change\n", encoding="utf-8")
             agents_root.joinpath("guardrails/local-extra.md").write_text("local change\n", encoding="utf-8")
             home.joinpath(".claude/CLAUDE.md").write_text("local change\n", encoding="utf-8")
+            own_skill = home / ".claude/skills/docs"
+            own_skill.mkdir(parents=True)
+            own_skill.joinpath("SKILL.md").write_text("mine\n", encoding="utf-8")
             result = invoke(home, project, "install", "docs", "--global")
             require(
                 result.returncode == 0 and not codex_root.joinpath("guardrails/local-extra.md").exists(),
@@ -189,6 +204,10 @@ def run() -> list[str]:
             require(
                 home.joinpath(".claude/CLAUDE.md").read_text(encoding="utf-8") == "local change\n",
                 "claude bridge left untouched",
+            )
+            require(
+                not own_skill.is_symlink() and own_skill.joinpath("SKILL.md").read_text(encoding="utf-8") == "mine\n",
+                "existing Claude skill left untouched",
             )
 
             result = invoke(home, project, "install", "--all", "--project")

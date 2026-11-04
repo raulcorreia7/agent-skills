@@ -25,10 +25,12 @@ from tools.lib import (
 )
 
 EXAMPLES = """Examples:
-  python skills.py install docs
-  python skills.py install --all
-  python skills.py install docs --project
-  python skills.py install --all --project
+  python skills.py install --all --dry-run   show every change; write nothing
+  python skills.py install --all             install all skills and the baseline for your user
+  python skills.py install docs              install one skill for your user
+  python skills.py install docs --project    install one skill into this repository
+
+For a guided install, run: uv run python wizard.py
 """
 
 CLAUDE_BRIDGE = BASELINES / "claude/CLAUDE.md"
@@ -231,6 +233,64 @@ def sync_claude_bridge(*, dry_run: bool, verbose: bool) -> str:
     return "installed"
 
 
+def claude_links(args: argparse.Namespace) -> list[tuple[Path, Path, str]]:
+    """Plan symlinks from Claude Code's skills folder to the installed skills.
+
+    Claude Code reads `.claude/skills`, not `.agents/skills`, and follows symlinked
+    skill directories. Each entry is (link, target, state): "new" for a free name,
+    "linked" when our link already exists, "kept" for anything of the user's.
+    """
+    base = user_home() if args.global_scope else Path.cwd().resolve()
+    claude_root = base / ".claude"
+    if args.global_scope and not claude_root.is_dir():
+        return []
+    plan = []
+    for task in tasks_for(args):
+        link = claude_root / "skills" / task.destination.name
+        if link.is_symlink() and link.resolve() == task.destination.resolve():
+            state = "linked"
+        elif link.exists() or link.is_symlink():
+            state = "kept"
+        else:
+            state = "new"
+        plan.append((link, task.destination, state))
+    return plan
+
+
+def link_claude_skills(args: argparse.Namespace, *, dry_run: bool) -> tuple[int, int]:
+    """Create the missing Claude links; return (linked, kept). Never replaces anything."""
+    linked = kept = 0
+    for link, target, state in claude_links(args):
+        if state == "linked":
+            continue
+        if state == "kept":
+            kept += 1
+            continue
+        if dry_run:
+            print(f"would link: {link} -> {target}")
+            linked += 1
+            continue
+        try:
+            link.parent.mkdir(parents=True, exist_ok=True)
+            link.symlink_to(target, target_is_directory=True)
+        except OSError:
+            kept += 1
+            continue
+        linked += 1
+    return linked, kept
+
+
+def plural(count: int, singular: str, many: str | None = None) -> str:
+    return f"{count} {singular if count == 1 else many or singular + 's'}"
+
+
+def link_parts(linked: int, kept: int) -> list[str]:
+    parts = [plural(linked, "Claude link")] if linked else []
+    if kept:
+        parts.append(f"{plural(kept, 'existing Claude entry', 'existing Claude entries')} kept")
+    return parts
+
+
 def run_install(args: argparse.Namespace) -> int:
     skill_tasks = tasks_for(args)
     catalog = catalog_task(args)
@@ -257,13 +317,14 @@ def run_install(args: argparse.Namespace) -> int:
                         action = "replace" if destination.exists() else "install"
                         print(f"would {action} baseline: {destination}")
         bridge_state = sync_claude_bridge(dry_run=True, verbose=args.verbose) if baselines else "skipped"
-        summary = f"{len(pending)} skill{'s' if len(pending) != 1 else ''}"
+        parts = [plural(len(pending), "skill")]
         if catalog_pending:
-            summary += " and the catalog"
+            parts.append("the catalog")
         if baseline_pending:
-            summary += " and the baseline"
+            parts.append("the baseline")
         if bridge_state == "would install":
-            summary += " and the Claude bridge"
+            parts.append("the Claude bridge")
+        summary = "; ".join([", ".join(parts), *link_parts(*link_claude_skills(args, dry_run=True))])
         print(f"Would install {summary}. No files changed.")
         return 0
 
@@ -296,16 +357,15 @@ def run_install(args: argparse.Namespace) -> int:
             if args.verbose and target_changed:
                 print(f"installed baseline {tree.managed_root}")
     bridge_state = sync_claude_bridge(dry_run=False, verbose=args.verbose) if baselines else "skipped"
-    baseline_summary = ""
-    if baselines:
-        baseline_summary = f"; baseline {'updated' if baseline_changed else 'unchanged'}"
-        if bridge_state != "skipped":
-            baseline_summary += f"; bridge {bridge_state}"
+    parts = [f"Installed {plural(changed, 'skill')}"]
     if catalog is not None:
-        catalog_result = "updated" if catalog_changed else "unchanged"
-        print(f"Installed {changed} skill{'s' if changed != 1 else ''}; catalog {catalog_result}{baseline_summary}.")
-    else:
-        print(f"Installed {changed} skill{'s' if changed != 1 else ''}{baseline_summary}.")
+        parts.append(f"catalog {'updated' if catalog_changed else 'unchanged'}")
+    if baselines:
+        parts.append(f"baseline {'updated' if baseline_changed else 'unchanged'}")
+        if bridge_state != "skipped":
+            parts.append(f"bridge {bridge_state}")
+    parts += link_parts(*link_claude_skills(args, dry_run=False))
+    print("; ".join(parts) + ".")
     return 0
 
 
@@ -318,16 +378,16 @@ def parser() -> argparse.ArgumentParser:
     commands = result.add_subparsers(dest="command", required=True)
     install = commands.add_parser(
         "install",
-        help="Install one skill or all skills.",
+        help="Install skills (see `install --help`).",
         description=(
-            "Install one skill or all skills for the user by default. "
-            "Use --project for the current repository; global installs "
-            "synchronize the shared and Codex baselines."
+            "Install one skill, or all skills with --all, into ~/.agents/skills. Each installed skill also gets a "
+            "link in ~/.claude/skills for Claude Code; an existing entry there is never replaced. With --project, "
+            "the same layout goes into the current repository. Only a user install updates the baseline."
         ),
         epilog=EXAMPLES,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    install.add_argument("skill", nargs="?", help="Name of one skill to install.")
+    install.add_argument("skill", nargs="?", help="Name of one skill (omit when using --all).")
     install.add_argument("--all", dest="all_skills", action="store_true", help="Install all skills.")
     scope = install.add_mutually_exclusive_group()
     scope.add_argument(
@@ -336,7 +396,7 @@ def parser() -> argparse.ArgumentParser:
         dest="global_scope",
         action="store_true",
         default=True,
-        help="Install for the user (default) and synchronize the shared and Codex baselines.",
+        help="Install for your user account (default).",
     )
     scope.add_argument(
         "-p",
@@ -345,9 +405,11 @@ def parser() -> argparse.ArgumentParser:
         action="store_false",
         help="Install into the current repository instead.",
     )
-    install.add_argument("-n", "--dry-run", action="store_true", help="Preview changes without modifying files.")
-    install.add_argument("--overwrite", action="store_true", help="Replace differing installed skill directories.")
-    install.add_argument("-v", "--verbose", action="store_true", help="Show each changed or unchanged skill.")
+    install.add_argument("-n", "--dry-run", action="store_true", help="Show every change and write nothing.")
+    install.add_argument(
+        "--overwrite", action="store_true", help="Replace installed skills that differ from this checkout."
+    )
+    install.add_argument("-v", "--verbose", action="store_true", help="Print each skill, changed or unchanged.")
     install.set_defaults(func=run_install)
     return result
 
