@@ -1,7 +1,7 @@
 name = "agent_name"
 description = "Use only when the user explicitly asks for agent_name to perform its narrow job."
-sandbox_mode = "read-only"
-approval_policy = "never"
+# sandbox_mode, approval_policy, and mcp_servers come from the parent session;
+# narrow capabilities with [features], e.g. shell_tool = false.
 
 developer_instructions = """
 You are agent_name. Run only when the user explicitly requests this agent.
