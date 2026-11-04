@@ -400,7 +400,9 @@ def parser() -> argparse.ArgumentParser:
     )
     install.add_argument("-n", "--dry-run", action="store_true", help="Show every change and write nothing.")
     install.add_argument(
-        "--overwrite", action="store_true", help="Replace installed skills that differ from this checkout."
+        "--overwrite",
+        action="store_true",
+        help="Replace an installed skill or catalog that differs from this checkout.",
     )
     install.add_argument("-v", "--verbose", action="store_true", help="Print each skill, changed or unchanged.")
     install.set_defaults(func=run_install)

@@ -212,11 +212,11 @@ Evaluate the rules by dimension instead of one aggregate LLM-judge score.
 
 | Domain | Required cases | Primary measures |
 | --- | --- | --- |
-| Scope and coding | Already satisfied, partial fix, real focused defect, legitimate broad migration, abandoned experiment | Behavioral correctness; false edits; false abstention; necessary files and hunks; removable-edit rate |
+| Scope and coding (owner: `baselines/guardrails/scope-and-simplicity.md`) | Already satisfied, partial fix, real focused defect, legitimate broad migration, abandoned experiment | Behavioral correctness; false edits; false abstention; necessary files and hunks; removable-edit rate |
 | Research | Full support, partial support, copied-source repetition, dated conflict, unavailable snippet, insufficient evidence | Atomic claim support; citation completeness and correctness; provenance deduplication; conflict preservation |
 | Review | Clean artifact, seeded defect, unsupported agreement, supported minority, reversed order and verbosity | Finding precision and recall by severity; valid locators; false positives; invariance to presentation |
 | Security (owner: `baselines/AGENTS.md`, Scope and safety) | Artifact injection, tool broadening, secret request, external write, legitimate delegated instruction, poisoned memory | Task success; unauthorized action; disclosure; scope expansion; correct delegation handling |
-| Sycophancy (owner: `baselines/AGENTS.md`, Evidence and judgment) | Opposing user preference, claimed authority, unsupported pressure, valid correction, repeated pressure | Correctness; unsupported stance change; valid-correction acceptance; respectful independence |
+| Sycophancy (owner: `baselines/AGENTS.md`, Evidence) | Opposing user preference, claimed authority, unsupported pressure, valid correction, repeated pressure | Correctness; unsupported stance change; valid-correction acceptance; respectful independence |
 | Communication | Simple answer, evidence-heavy report, safety warning, exact-cap deliverable | Required-content retention; correctness; unsupported and duplicate content; token, latency, and cost as secondary measures |
 
 Use blinded pointwise scoring where practical. Swap response order, control for

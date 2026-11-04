@@ -2,7 +2,7 @@
 """Walk a human through installing this kit.
 
 The wizard is a terminal-only front end over skills.py: it detects the current
-state, asks three questions, shows the exact plan, then installs and validates.
+state, asks a few questions, shows the exact plan, then installs and validates.
 Prompts come from questionary, so this script needs it installed; skills.py
 stays standard-library only.
 """
@@ -92,6 +92,9 @@ def survey(chosen: Sequence[str], *, global_scope: bool) -> Survey:
                 conflicts += 1 if task.destination.exists() else 0
     wide = namespace(skill=None, all_skills=True, global_scope=global_scope, dry_run=True, overwrite=False)
     catalog = skills.catalog_task(wide)
+    catalog_pending = bool(catalog and not skills.file_matches(catalog))
+    if catalog_pending and catalog.destination.exists():
+        conflicts += 1  # a differing catalog also needs --overwrite
     baseline_changed = any(not skills.task_matches(task) for task in skills.baseline_tasks(wide))
     links = [
         state
@@ -107,7 +110,7 @@ def survey(chosen: Sequence[str], *, global_scope: bool) -> Survey:
     return Survey(
         pending=pending,
         conflicts=conflicts,
-        catalog_pending=bool(catalog and not skills.file_matches(catalog)),
+        catalog_pending=catalog_pending,
         baseline_pending=baseline_changed,
         bridge=bridge,
         links=links.count("new"),
@@ -197,7 +200,7 @@ def pick_skills(questionary: ModuleType, names: Sequence[str], style: object) ->
 
 
 def run(questionary: ModuleType) -> int:
-    print(textwrap.fill("Agent Skills installer. Answer three questions, review the plan, then install.", width=80))
+    print(textwrap.fill("Agent Skills installer. Answer a few questions, review the plan, then install.", width=80))
     style = questionary.Style(STYLE_RULES)
 
     global_scope = pick(
@@ -236,7 +239,8 @@ def run(questionary: ModuleType) -> int:
 
     overwrite = False
     if state.conflicts:
-        print(f"\n{skills.plural(state.conflicts, 'installed skill')} differ from this checkout.")
+        verb = "differs" if state.conflicts == 1 else "differ"
+        print(f"\n{skills.plural(state.conflicts, 'installed item')} {verb} from this checkout.")
         overwrite = bool(questionary.confirm("Replace them with this checkout?", default=False, style=style).ask())
         if not overwrite:
             print("nothing written. To replace them, run the wizard again and answer yes.")

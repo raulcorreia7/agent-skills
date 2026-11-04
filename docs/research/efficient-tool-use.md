@@ -193,7 +193,8 @@ Evaluate representative tasks with correctness and evidence coverage as hard
 gates. Track context tokens, tool calls, latency, cost, repeated retrieval, and
 avoidable raw output as separate secondary measures. Include exact-term,
 unknown-owner, multi-hop relationship, a known multi-file set, large structured
-result, full-file, programmatic aggregation, and broad-audit cases.
+result, full-file, programmatic aggregation, broad-audit, and truncated-evidence
+cases.
 
 No reviewed source establishes a universal optimal excerpt size, repository-map
 budget, result count, or tool-call limit. SWE-agent's interface ablation is the
@@ -205,5 +206,5 @@ reduction are different optimizations and must not be conflated.
 
 The implemented runtime contract is
 [`baselines/guardrails/efficient-tool-use.md`](../../baselines/guardrails/efficient-tool-use.md).
-It keeps the portable decision rules and evaluation cases. This report owns the
+It keeps the portable decision rules. This report owns the evaluation cases,
 evidence, examples, and implementation rationale.

@@ -1,8 +1,6 @@
 # Documentation
 
-Use this index to find the user baseline, repository-only visual references,
-and research reports. Runtime contracts remain the sources of truth for agent
-behavior.
+Research reports and the diagram gallery for this repository.
 
 | Reader task | Document |
 | --- | --- |

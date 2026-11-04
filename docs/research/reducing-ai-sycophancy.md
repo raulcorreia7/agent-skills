@@ -1,6 +1,6 @@
 # Reducing AI Sycophancy
 
-**Decision:** The baseline's "Evidence and judgment" rules carry a small
+**Decision:** The baseline's "Evidence" rules carry a small
 epistemic-independence contract.
 This report also defines an evaluation contract for resistance to unsupported
 pressure and acceptance of valid corrections. The repository does not contain

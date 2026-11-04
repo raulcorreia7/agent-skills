@@ -1,11 +1,7 @@
 # Skill Catalog
 
-> Choose the smallest skill that owns the requested outcome.
-
-Skills marked `implicit` can activate from a matching request. Request `manual`
-skills explicitly by name. Compose skills only when their jobs are independently
-useful.
-The primary skill owns the final deliverable.
+An `implicit` skill activates when a request matches its description. Ask for a
+`manual` skill by name.
 
 ## Build
 

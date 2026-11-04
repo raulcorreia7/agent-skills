@@ -14,6 +14,55 @@ SKILL_TEMPLATE = ROOT / "templates/skill"
 CATALOG_ROW = re.compile(r"^\| \[`([a-z][a-z0-9-]*)`\]\(([^/]+)/SKILL\.md\) \| `(implicit|manual)` \|")
 MANUAL_MARKER = "Manual invocation only."
 SHORT_DESCRIPTION_MAX = 64
+CONTRIBUTING = ROOT / "CONTRIBUTING.md"
+
+# Template order. Any other heading is a domain section and sits between the
+# Steps/Flow block and Guardrails.
+LEADING_SECTIONS = ("Job", "Modes", "Depth", "Steps", "Flow")
+TRAILING_SECTIONS = ("Guardrails", "Composition", "Output")
+REQUIRED_SECTIONS = ("Job", "Steps", "Output")
+FLOW_STEP_THRESHOLD = 3
+HEADING = re.compile(r"^## (.+)$", re.MULTILINE)
+STEP = re.compile(r"^(\d+)\. ", re.MULTILINE)
+CRITERION = "Complete when"
+SEVERITY_START = "- `Critical`:"
+
+
+def sections(text: str) -> dict[str, str]:
+    """Map each `## ` heading to its body, outside fenced code."""
+    body = re.sub(r"^```.*?^```", "", text, flags=re.MULTILINE | re.DOTALL)
+    parts = HEADING.split(body)
+    return {parts[i].strip(): parts[i + 1] for i in range(1, len(parts) - 1, 2)}
+
+
+def section_order_errors(names: list[str]) -> list[str]:
+    def rank(name: str) -> int:
+        if name in LEADING_SECTIONS:
+            return LEADING_SECTIONS.index(name)
+        if name in TRAILING_SECTIONS:
+            return len(LEADING_SECTIONS) + 1 + TRAILING_SECTIONS.index(name)
+        return len(LEADING_SECTIONS)
+
+    errors = [f"missing section: {name}" for name in REQUIRED_SECTIONS if name not in names]
+    ranks = [rank(name) for name in names]
+    for previous, current, name in zip(ranks, ranks[1:], names[1:], strict=False):
+        if current < previous:
+            errors.append(f"section out of template order: {name}")
+    return errors
+
+
+def steps(body: str) -> list[str]:
+    """Split a Steps body into its top-level numbered items."""
+    starts = [match.start() for match in STEP.finditer(body)]
+    return [body[start:end] for start, end in zip(starts, [*starts[1:], len(body)], strict=False)]
+
+
+def severity_block() -> str:
+    """The shared severity scale owned by CONTRIBUTING.md."""
+    text = CONTRIBUTING.read_text(encoding="utf-8")
+    start = text.index(SEVERITY_START)
+    end = text.index("\n\n", start)
+    return text[start:end]
 
 
 def skill_dirs() -> list[Path]:
@@ -41,6 +90,20 @@ def validate_skill(skill: Path) -> list[str]:
     output = re.search(r"^## Output\n\n(.+?)(?=\n## |\Z)", text, re.MULTILINE | re.DOTALL)
     if not output or not output.group(1).strip():
         errors.append(f"{relative}/SKILL.md: explicit non-empty Output contract required")
+
+    found = sections(text)
+    for problem in section_order_errors(list(found)):
+        errors.append(f"{relative}/SKILL.md: {problem}")
+    items = steps(found.get("Steps", ""))
+    for number, item in enumerate(items, 1):
+        if CRITERION not in item:
+            errors.append(f"{relative}/SKILL.md: step {number} needs a '{CRITERION} ...' criterion")
+    if len(items) > FLOW_STEP_THRESHOLD and "Flow" not in found:
+        errors.append(f"{relative}/SKILL.md: more than {FLOW_STEP_THRESHOLD} steps need a Flow")
+    if isinstance(description, str) and not description.startswith(MANUAL_MARKER) and "Use when" not in description:
+        errors.append(f"{relative}/SKILL.md: implicit description needs a 'Use when' trigger")
+    if SEVERITY_START in text and severity_block() not in text:
+        errors.append(f"{relative}/SKILL.md: severity scale differs from CONTRIBUTING.md")
 
     adapter = skill / "agents/openai.yaml"
     if not adapter.is_file():

@@ -13,6 +13,9 @@ MENTION = re.compile(r"`([^`]*)`|\$([a-z][a-z0-9-]*)")
 LABEL = re.compile(r"^\s*[-*]\s+`[^`]+`\s*:")
 SIGIL = re.compile(r"(?<![\w./\\:>-])([$/])([a-z][a-z0-9-]*)(?![\w-])")
 WORD = re.compile(r"[A-Za-z0-9_./-]+")
+# A boundary ("Not for X; use `y`.") names a neighbour without composing it,
+# so two skills can point at each other's territory without forming a cycle.
+BOUNDARY = re.compile(r"Not for [^.]*\.?")
 
 
 def _content_lines(path: Path) -> Iterator[tuple[int, str]]:
@@ -37,17 +40,17 @@ def _mentioned(line: str) -> set[str]:
 def composition_graph() -> dict[str, dict[str, str]]:
     """Map each skill to its referenced siblings and the first mention site.
 
-    Table rows and label bullets (``- `branch`: ...``) hold names that are not
-    routing references.
+    Table rows, label bullets (``- `branch`: ...``), the frontmatter description,
+    and "Not for ..." boundaries hold names that are not routing references.
     """
     names = set(skill_names())
     graph: dict[str, dict[str, str]] = {name: {} for name in sorted(names)}
     for name in sorted(names):
         for path in sorted((SKILLS / name).rglob("*.md")):
             for number, line in _content_lines(path):
-                if line.lstrip().startswith("|") or LABEL.match(line):
+                if line.lstrip().startswith("|") or LABEL.match(line) or line.startswith("description:"):
                     continue
-                for token in _mentioned(line) & names:
+                for token in _mentioned(BOUNDARY.sub("", line)) & names:
                     if token != name:
                         graph[name].setdefault(token, f"{path.relative_to(ROOT)}:{number}")
     return graph

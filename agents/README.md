@@ -6,9 +6,11 @@ the portable default.
 
 No shared agents are packaged yet.
 
-The skills installer does not install agents. For Codex, place a copy of the
-standalone TOML file at `$CODEX_HOME/agents/<name>.toml`. The source package
-stays together here with its policy and operating notes.
+The skills installer does not install agents. Codex loads personal agents from
+`$CODEX_HOME/agents/<name>.toml` (default `~/.codex/agents/`) and project agents
+from `.codex/agents/`; copy the TOML file there. The package here keeps the TOML
+with its policy and operating notes. See the
+[Codex custom-agent contract](https://developers.openai.com/codex/subagents).
 
 ## Add an agent
 
@@ -19,8 +21,3 @@ stays together here with its policy and operating notes.
 4. Add only current, tested tool configuration.
 5. Add a reviewed policy when external tools or sensitive data are in scope.
 6. List the agent in this README, replacing the "No shared agents" line.
-
-Codex loads personal agents from `~/.codex/agents/` and project agents from
-`.codex/agents/`. This repository packages shared agents but does not activate
-them as project agents. See the
-[Codex custom-agent contract](https://developers.openai.com/codex/subagents).

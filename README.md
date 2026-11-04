@@ -2,13 +2,18 @@
 
 > Portable, reviewed workflows for consistent agent-assisted work.
 
-The kit provides independently portable skills. Shared Codex agents remain
-optional and separate from the skills installer.
+You get two things:
+
+- **Skills**: focused workflows (code, review, debug, docs, plans, diagrams, and
+  more) that any [Agent Skills](https://agentskills.io) client can load. Browse
+  them in the [skill catalog](skills/README.md).
+- **Baseline**: a short, always-loaded `AGENTS.md` with working rules for
+  evidence, scope, safety, and handoff, plus two guardrails it loads on demand.
 
 ## Install
 
 You need Git, Python 3.11 or newer, [uv](https://docs.astral.sh/uv/), and an
-Agent Skills-compatible client.
+Agent Skills client.
 
 ```text
 git clone https://github.com/raulcorreia7/agent-skills.git
@@ -16,12 +21,10 @@ cd agent-skills
 uv run python wizard.py
 ```
 
-The wizard asks where to install and which skills to install. It then shows
-the plan, offers a dry run, installs, and validates. Use the arrow keys to
-move, space to toggle, enter to confirm, and Ctrl-C to cancel.
+The wizard asks where to install and which skills, shows the plan, offers a
+dry run, then installs and validates.
 
-To install without prompts, use `skills.py`. It needs only the Python standard
-library.
+To install without prompts, use `skills.py` (standard library only):
 
 | Goal                                     | Command                                    |
 | ---------------------------------------- | ------------------------------------------ |
@@ -31,59 +34,55 @@ library.
 | Install one skill into this repository   | `python skills.py install docs --project`  |
 | Show all options                         | `python skills.py --help`                  |
 
-Every user install also sets up the baseline guidance described below.
-After the install, Claude Code loads new skills without a restart. If the
-install created the Claude skills folder, run `/reload-skills` in Claude Code.
-Restart other clients.
+After installing, Claude Code picks up the skills without a restart; if the
+install created its skills folder, run `/reload-skills`. Restart other clients.
+To update, `git pull` and run the same command again.
 
 ## What gets installed
 
-| Item              | User install (default)                              | `--project` install           |
-| ----------------- | --------------------------------------------------- | ----------------------------- |
-| Skills            | `~/.agents/skills/<name>`                           | `.agents/skills/<name>`       |
-| Claude Code links | `~/.claude/skills/<name>`, if `~/.claude` exists    | `.claude/skills/<name>`       |
+| Item              | User install (default)                              | `--project` install                      |
+| ----------------- | --------------------------------------------------- | ---------------------------------------- |
+| Skills            | `~/.agents/skills/<name>`                           | `.agents/skills/<name>`                  |
+| Claude Code links | `~/.claude/skills/<name>`, if `~/.claude` exists    | `.claude/skills/<name>`                  |
 | Catalog           | `~/.agents/skills/README.md`, with `--all`          | `.agents/skills/README.md`, with `--all` |
-| Baseline          | `~/.agents/`, plus `AGENTS.md` in `~/.codex/`       | Not installed                 |
-| Claude bridge     | `~/.claude/CLAUDE.md`, created once                 | Not installed                 |
+| Baseline          | `~/.agents/`, plus a copy of `AGENTS.md` in `~/.codex/` | Not installed                        |
+| Claude bridge     | `~/.claude/CLAUDE.md`, created once                 | Not installed                            |
 
 `.agents/skills` is the cross-client location in the
 [Agent Skills convention](https://agentskills.io/client-implementation/adding-skills-support),
 so it holds the only copy of each skill. Claude Code reads only
-`.claude/skills`, but it follows symbolic links. The installer therefore
-creates one link for each skill.
+`.claude/skills` but follows symbolic links, so the installer adds one link per
+skill. Codex reads only `$CODEX_HOME/AGENTS.md` (default `~/.codex`), so it
+gets a copy of the baseline's `AGENTS.md`, which points back to `~/.agents/`.
 
-## Safety
+## Your files stay yours
 
-- `--dry-run` shows every change and writes nothing. The wizard shows its plan
-  before it writes.
-- The installer keeps your files. It does not replace an existing entry in
-  `.claude/skills` or an existing `~/.claude/CLAUDE.md`. It replaces an
-  installed skill or catalog that differs from this checkout only with
-  `--overwrite`.
-- The installer refuses to write through a symbolic link in a destination
-  path, and it replaces each skill folder and file in one atomic step.
-- A partial install does not install the catalog, because the catalog lists
-  skills that are not installed.
-- The baseline's `AGENTS.md` and `guardrails/` follow this checkout, so each
-  user install replaces local edits to them. `TASTE.md` and `TOOLS.md` are
-  yours: the installer creates them once and never overwrites them. Put your
-  preferences there. Codex gets a copy of `AGENTS.md` in `$CODEX_HOME`
-  (default `~/.codex`).
+- `TASTE.md` and `TOOLS.md` in `~/.agents/` are yours: the installer creates
+  them once and never overwrites them. Put your preferences and tool notes
+  there.
+- The baseline's `AGENTS.md` and `guardrails/` follow this checkout; each user
+  install replaces local edits to them.
+- An existing entry in `.claude/skills` or an existing `~/.claude/CLAUDE.md` is
+  never replaced.
+- An installed skill or catalog that differs from this checkout is replaced
+  only with `--overwrite`.
+- `--dry-run` shows every change and writes nothing. The installer never writes
+  through a symbolic link and replaces each folder and file atomically.
 
-## Maintaining
+## Contributing
 
-Run `uv sync --all-groups` once, then `uv run poe check` before every PR.
-[Contributing](CONTRIBUTING.md) lists every task and the contracts for skills,
-references, agents, and commands.
+`main` is the rolling stable branch. Read [CONTRIBUTING.md](CONTRIBUTING.md)
+for the contracts, then run `uv sync --all-groups` once and
+`uv run poe check` before every PR.
 
-## Learn More
+## Learn more
 
-| Topic                                         | Documentation                                     |
-| --------------------------------------------- | ------------------------------------------------- |
-| Skills, invocation, and boundaries            | [Skill catalog](skills/README.md)                 |
-| User baseline and guardrails                  | [Baseline guidance](baselines/AGENTS.md)          |
-| Shared agents and adding future agents        | [Agent catalog](agents/README.md)                 |
-| Diagram visual language gallery                | [Diagram visual design](docs/diagram-visual-design/index.html) |
-| Repository maintenance and review             | [Contributing](CONTRIBUTING.md)                   |
+| Topic                                   | Documentation                                                  |
+| --------------------------------------- | -------------------------------------------------------------- |
+| Skills, invocation, and boundaries      | [Skill catalog](skills/README.md)                              |
+| The baseline rules                      | [Baseline](baselines/AGENTS.md)                                |
+| Shared agents                           | [Agent catalog](agents/README.md)                              |
+| Research behind the rules               | [Documentation index](docs/README.md)                          |
+| Diagram visual language gallery         | [Diagram visual design](docs/diagram-visual-design/index.html) |
 
 Released under the [MIT license](LICENSE).
