@@ -48,12 +48,13 @@ def require(condition: bool, message: str) -> None:
         raise SetupError(f"setup check failed: {message}")
 
 
+def require_same(installed: Path, source: Path, label: str) -> None:
+    require(installed.is_file() and installed.read_bytes() == source.read_bytes(), label)
+
+
 def require_baseline_files(root: Path, label: str) -> None:
-    for path in sorted((ROOT / "baselines").iterdir()):
-        if not path.is_file():
-            continue
-        installed = root / path.name
-        require(installed.is_file() and installed.read_bytes() == path.read_bytes(), f"{label}: {path.name}")
+    for name in ("AGENTS.md", "TASTE.md", "TOOLS.md"):
+        require_same(root / name, ROOT / "baselines" / name, f"{label}: {name}")
 
 
 def run_wizard_session(home: Path, project: Path, keys: str = "\r\r\r\r") -> str | None:
@@ -163,10 +164,10 @@ def run() -> list[str]:
                 )
             codex_root = home / ".codex"
             agents_root = home / ".agents"
-            require_baseline_files(codex_root, "global baseline")
+            require_same(codex_root / "AGENTS.md", ROOT / "baselines/AGENTS.md", "codex AGENTS.md")
             require(
-                matches(TreeTask(ROOT / "baselines/guardrails", codex_root / "guardrails", codex_root)),
-                "global guardrails install",
+                {path.name for path in codex_root.iterdir()} == {"AGENTS.md"},
+                "codex gets only AGENTS.md",
             )
             require_baseline_files(agents_root, "shared baseline")
             require(
@@ -183,7 +184,8 @@ def run() -> list[str]:
             )
 
             codex_root.joinpath("AGENTS.md").write_text("local change\n", encoding="utf-8")
-            codex_root.joinpath("guardrails/local-extra.md").write_text("local change\n", encoding="utf-8")
+            agents_root.joinpath("TASTE.md").write_text("my taste\n", encoding="utf-8")
+            agents_root.joinpath("TOOLS.md").unlink()
             agents_root.joinpath("AGENTS.md").write_text("local change\n", encoding="utf-8")
             agents_root.joinpath("guardrails/local-extra.md").write_text("local change\n", encoding="utf-8")
             home.joinpath(".claude/CLAUDE.md").write_text("local change\n", encoding="utf-8")
@@ -191,16 +193,18 @@ def run() -> list[str]:
             own_skill.mkdir(parents=True)
             own_skill.joinpath("SKILL.md").write_text("mine\n", encoding="utf-8")
             result = invoke(home, project, "install", "docs", "--global")
+            require(result.returncode == 0, "reinstall over local baseline edits")
+            require_same(codex_root / "AGENTS.md", ROOT / "baselines/AGENTS.md", "codex AGENTS.md overwrite")
+            require_same(agents_root / "AGENTS.md", ROOT / "baselines/AGENTS.md", "shared AGENTS.md overwrite")
             require(
-                result.returncode == 0 and not codex_root.joinpath("guardrails/local-extra.md").exists(),
-                "automatic baseline synchronization",
+                agents_root.joinpath("TASTE.md").read_text(encoding="utf-8") == "my taste\n",
+                "TASTE.md left untouched",
             )
-            require_baseline_files(codex_root, "baseline file overwrite")
+            require_same(agents_root / "TOOLS.md", ROOT / "baselines/TOOLS.md", "missing TOOLS.md recreated")
             require(
                 not agents_root.joinpath("guardrails/local-extra.md").exists(),
                 "automatic shared baseline synchronization",
             )
-            require_baseline_files(agents_root, "shared baseline file overwrite")
             require(
                 home.joinpath(".claude/CLAUDE.md").read_text(encoding="utf-8") == "local change\n",
                 "claude bridge left untouched",

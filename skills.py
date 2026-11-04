@@ -26,7 +26,7 @@ from tools.lib import (
 
 EXAMPLES = """Examples:
   python skills.py install --all --dry-run   show every change; write nothing
-  python skills.py install --all             install all skills and the baseline for your user
+  python skills.py install --all             install all skills for your user
   python skills.py install docs              install one skill for your user
   python skills.py install docs --project    install one skill into this repository
 
@@ -34,6 +34,7 @@ For a guided install, run: uv run python wizard.py
 """
 
 CLAUDE_BRIDGE = BASELINES / "claude/CLAUDE.md"
+SEED_FILES = ("TASTE.md", "TOOLS.md")
 
 
 @dataclass(frozen=True)
@@ -86,27 +87,30 @@ def tasks_for(args: argparse.Namespace) -> list[TreeTask]:
     return [TreeTask(SKILLS / name, root / name, root) for name in selected_skills(args)]
 
 
-def baseline_tasks(args: argparse.Namespace) -> tuple[tuple[TreeTask, tuple[FileTask, ...]], ...]:
+def baseline_tasks(args: argparse.Namespace) -> list[TreeTask | FileTask]:
+    """The user-scope baseline, with `~/.agents` as its one home.
+
+    `AGENTS.md` and `guardrails/` follow this checkout. `TASTE.md` and `TOOLS.md`
+    are created once and then belong to the user. Codex reads only
+    `$CODEX_HOME/AGENTS.md`, so it gets a copy of that file, which names its
+    companions by their `~/.agents` paths.
+    """
     if not args.global_scope:
-        return ()
-    agents_root = installation_root(global_scope=True).parent
-    roots = tuple(dict.fromkeys((agents_root, codex_baseline_root())))
-    return tuple(
-        (
-            TreeTask(BASELINES / "guardrails", root / "guardrails", root, replace_different=True),
-            baseline_file_tasks(root),
-        )
-        for root in roots
-    )
+        return []
+    shared = installation_root(global_scope=True).parent
+    tasks: list[TreeTask | FileTask] = [
+        TreeTask(BASELINES / "guardrails", shared / "guardrails", shared, replace_different=True),
+        FileTask(BASELINES / "AGENTS.md", shared / "AGENTS.md", shared, replace_different=True),
+    ]
+    tasks += [FileTask(BASELINES / name, shared / name, shared) for name in SEED_FILES if not (shared / name).exists()]
+    codex = codex_baseline_root()
+    if codex != shared:
+        tasks.append(FileTask(BASELINES / "AGENTS.md", codex / "AGENTS.md", codex, replace_different=True))
+    return tasks
 
 
-def baseline_file_tasks(root: Path) -> tuple[FileTask, ...]:
-    """Ship every file directly under baselines/ to a baseline root."""
-    return tuple(
-        FileTask(path, root / path.name, root, replace_different=True)
-        for path in sorted(BASELINES.iterdir())
-        if path.is_file()
-    )
+def task_matches(task: TreeTask | FileTask) -> bool:
+    return file_matches(task) if isinstance(task, FileTask) else matches(task)
 
 
 def catalog_task(args: argparse.Namespace) -> FileTask | None:
@@ -295,8 +299,9 @@ def run_install(args: argparse.Namespace) -> int:
     skill_tasks = tasks_for(args)
     catalog = catalog_task(args)
     baselines = baseline_tasks(args)
-    tree_tasks = [*skill_tasks, *(tree for tree, _ in baselines)]
-    file_tasks = [*([catalog] if catalog else []), *(file for _, files in baselines for file in files)]
+    tree_tasks = [*skill_tasks, *(task for task in baselines if isinstance(task, TreeTask))]
+    file_tasks = [*([catalog] if catalog else []), *(task for task in baselines if isinstance(task, FileTask))]
+    baseline_pending = [task for task in baselines if not task_matches(task)]
     preflight(tree_tasks, file_tasks, allow_different=args.overwrite or args.dry_run)
     if args.dry_run:
         pending = [task.destination for task in skill_tasks if not matches(task)]
@@ -307,15 +312,9 @@ def run_install(args: argparse.Namespace) -> int:
         if catalog and catalog_pending:
             action = "replace" if catalog.destination.exists() else "install"
             print(f"would {action} catalog: {catalog.destination}")
-        baseline_pending = any(
-            not matches(tree) or any(not file_matches(file) for file in files) for tree, files in baselines
-        )
-        if baseline_pending:
-            for tree, files in baselines:
-                if not matches(tree) or any(not file_matches(file) for file in files):
-                    for destination in (*(file.destination for file in files), tree.destination):
-                        action = "replace" if destination.exists() else "install"
-                        print(f"would {action} baseline: {destination}")
+        for task in baseline_pending:
+            action = "replace" if task.destination.exists() else "install"
+            print(f"would {action} baseline: {task.destination}")
         bridge_state = sync_claude_bridge(dry_run=True, verbose=args.verbose) if baselines else "skipped"
         parts = [plural(len(pending), "skill")]
         if catalog_pending:
@@ -343,25 +342,19 @@ def run_install(args: argparse.Namespace) -> int:
         atomic_copy_file(catalog)
         if args.verbose:
             print(f"installed catalog {catalog.destination}")
-    baseline_changed = any(
-        not matches(tree) or any(not file_matches(file) for file in files) for tree, files in baselines
-    )
-    if baseline_changed:
-        for tree, files in baselines:
-            target_changed = not matches(tree) or any(not file_matches(file) for file in files)
-            if not matches(tree):
-                atomic_copy_tree(tree)
-            for file in files:
-                if not file_matches(file):
-                    atomic_copy_file(file)
-            if args.verbose and target_changed:
-                print(f"installed baseline {tree.managed_root}")
+    for task in baseline_pending:
+        if isinstance(task, TreeTask):
+            atomic_copy_tree(task)
+        else:
+            atomic_copy_file(task)
+        if args.verbose:
+            print(f"installed baseline {task.destination}")
     bridge_state = sync_claude_bridge(dry_run=False, verbose=args.verbose) if baselines else "skipped"
     parts = [f"Installed {plural(changed, 'skill')}"]
     if catalog is not None:
         parts.append(f"catalog {'updated' if catalog_changed else 'unchanged'}")
     if baselines:
-        parts.append(f"baseline {'updated' if baseline_changed else 'unchanged'}")
+        parts.append(f"baseline {'updated' if baseline_pending else 'unchanged'}")
         if bridge_state != "skipped":
             parts.append(f"bridge {bridge_state}")
     parts += link_parts(*link_claude_skills(args, dry_run=False))

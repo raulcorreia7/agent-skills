@@ -92,11 +92,7 @@ def survey(chosen: Sequence[str], *, global_scope: bool) -> Survey:
                 conflicts += 1 if task.destination.exists() else 0
     wide = namespace(skill=None, all_skills=True, global_scope=global_scope, dry_run=True, overwrite=False)
     catalog = skills.catalog_task(wide)
-    baseline_changed = False
-    for tree, files in skills.baseline_tasks(wide):
-        if not skills.matches(tree) or any(not skills.file_matches(file) for file in files):
-            baseline_changed = True
-            break
+    baseline_changed = any(not skills.task_matches(task) for task in skills.baseline_tasks(wide))
     links = [
         state
         for name in chosen
@@ -145,7 +141,7 @@ def show_plan(chosen: Sequence[str], state: Survey, *, global_scope: bool) -> No
     if state.links or state.links_kept:
         rows.append(("claude", claude))
     if global_scope:
-        rows.append(("baseline", f"~/.agents and ~/.codex · {'refresh' if state.baseline_pending else 'up to date'}"))
+        rows.append(("baseline", f"~/.agents · {'refresh' if state.baseline_pending else 'up to date'}"))
         rows.append(("bridge", f"~/.claude/CLAUDE.md · {state.bridge}"))
     if state.catalog_pending:
         rows.append(("catalog", "refresh"))

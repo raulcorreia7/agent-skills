@@ -2,9 +2,8 @@
 
 > Maximize relevant evidence per unit of context, time, and tool use.
 
-The rules in [`AGENTS.md`](../AGENTS.md) are authoritative. Apply this
-companion when repository exploration, multi-file evidence, large tool output,
-or repeated tool use is material.
+Apply this guardrail when repository exploration, multi-file evidence, large
+tool output, or repeated tool use is material. `AGENTS.md` wins on conflict.
 
 ## Behavior contract
 

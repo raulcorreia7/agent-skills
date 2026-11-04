@@ -1,24 +1,12 @@
 # Taste
 
-Your additions to `AGENTS.md`, for choices its rules leave open. `AGENTS.md`
-wins on conflict, and instructions given in the moment win over both. Edit
-freely.
-
-## Defaults
-
-- Plain words, active voice, no filler.
-- Code reads in blocks: consistent indentation, one blank line between small
-  logic blocks.
-- A procedure's essence fits in short pseudocode: order, loops, stop
-  conditions.
-- Small diffs, one story per commit; leave untouched work alone.
-- Self-contained beats cross-referenced: duplicate before you point.
-- Same shape for similar artifacts; name what to read next and when.
-- Evidence first; when tradeoffs are close, take the boring option.
+Your preferences, for choices `AGENTS.md` leaves open. `AGENTS.md` wins on
+conflict, and instructions given in the moment win over both. The installer
+creates this file once and never overwrites it.
 
 ## Yours
 
-<!-- Replace or extend the defaults above. Agents apply what is here. -->
+<!-- Agents apply what you write here. -->
 
 ### Patterns
 

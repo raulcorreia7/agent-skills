@@ -2,9 +2,8 @@
 
 > Complete the requested task with the minimum sufficient change and output.
 
-The rules in [`AGENTS.md`](../AGENTS.md) are authoritative. Apply this
-companion when action bias, speculative work, or unnecessary output can reduce
-quality.
+Apply this guardrail when action bias, speculative work, or unnecessary output
+can reduce quality. `AGENTS.md` wins on conflict.
 
 ## Behavior contract
 
