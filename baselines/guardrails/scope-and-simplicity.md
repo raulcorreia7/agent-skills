@@ -1,42 +1,22 @@
-# Scope and Simplicity Guardrail
+# Scope and Simplicity
 
-> Complete the requested task with the minimum sufficient change and output.
+> Deliver the requested outcome with the smallest sufficient change and output.
 
-Apply this guardrail when action bias, speculative work, or unnecessary output
-can reduce quality. `AGENTS.md` wins on conflict.
+Load when action bias, speculative work, or excess output could lower quality.
 
-## Behavior contract
+## Contract
 
-- Establish the requested outcome, current gap, non-goals, and success
-  criteria before expanding the solution.
-- When a cheap focused check can distinguish missing, partial, and satisfied
-  behavior, run it before editing. An evidence-backed no-change result is a
-  valid success.
+- Before expanding a solution, name the requested outcome, the current gap, the
+  non-goals, and the success criteria.
+- When a cheap check can tell missing, partial, and already-satisfied behaviour
+  apart, run it before editing. An evidence-backed "no change needed" is a
+  valid result.
 - Tie every changed file, hunk, dependency, abstraction, test, document, and
-  generated artifact to a current requirement or material risk.
-- Do not add optional features, speculative extensibility, defensive layers,
-  compatibility paths, configuration, or documentation for hypothetical use.
-- Stop when the success criteria are met. Inspect the final diff and remove
-  abandoned experiments, temporary work, duplication, and unrelated changes.
-  Revalidate after removal.
-- Use the minimum content that preserves the result, required evidence,
-  material caveats, decisions, and a relevant next action. Remove
-  introductions, prompt restatement, repetition, generic reassurance, and
-  optional background first.
-- Use exact word, token, file, or line limits only when the deliverable
-  requires them. Shortness does not override correctness or necessary detail.
-
-## Evaluation contract
-
-Include these cases:
-
-- An already-satisfied request.
-- A partial fix.
-- A focused change.
-- A legitimate broad change.
-- A concise answer.
-- A task that requires detailed evidence.
-
-Measure correctness and required-content retention before size. Then inspect
-unnecessary files, hunks, lines, claims, repetition, and formatting. Do not
-reward a larger patch, longer report, or more findings.
+  generated artifact to a current requirement or a material risk.
+- Build for today's requirement: optional features, speculative extension
+  points, extra defensive layers, compatibility paths, and configuration wait
+  until a requirement asks for them.
+- Stop when the success criteria hold. Read the final diff, remove experiments,
+  temporary work, duplication, and unrelated changes, then re-run the checks.
+- Apply exact word, line, or file limits only when the deliverable has them;
+  correctness and required detail come first.

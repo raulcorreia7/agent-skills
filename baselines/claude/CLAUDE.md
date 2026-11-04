@@ -2,4 +2,4 @@
 
 @~/.agents/AGENTS.md
 
-<!-- Managed by skills.py. Local edits to this file are kept. -->
+<!-- Created once by skills.py; your edits are kept. -->

@@ -1,8 +1,16 @@
 # Taste
 
-Your preferences, for choices `AGENTS.md` leaves open. `AGENTS.md` wins on
-conflict, and instructions given in the moment win over both. The installer
-creates this file once and never overwrites it.
+Your preferences for choices `AGENTS.md` leaves open. The installer creates
+this file once and never overwrites it, so edit it freely.
+
+## Defaults
+
+Interfaces people use (CLIs, prompts, errors, docs):
+
+- Familiar words; the common safe action is the obvious one.
+- Essential choices first, advanced options on request, consequences before
+  mechanics.
+- Errors say what failed, then the next safe action.
 
 ## Yours
 

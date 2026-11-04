@@ -1,121 +1,68 @@
-# Efficient Tool Use Guardrail
+# Efficient Tool Use
 
-> Maximize relevant evidence per unit of context, time, and tool use.
+> Get the most relevant evidence per unit of context, time, and tool calls.
 
-Apply this guardrail when repository exploration, multi-file evidence, large
-tool output, or repeated tool use is material. `AGENTS.md` wins on conflict.
+Load when exploring a repository, gathering multi-file evidence, handling large
+output, or repeating tool calls.
 
-## Behavior contract
+## Loop
 
-- Define the evidence question, required confidence, useful output shape, and
-  stopping condition before broad discovery.
-- Use progressive discovery: orient, locate, inspect, broaden, verify, and
-  stop. Each operation supplies the evidence needed to select the next one.
-- Discover applicable repository instructions, configured workflows, stack
-  metadata, and available tool capabilities before inventing a command.
-- Prefer an existing repository-owned or stack-aware tool that understands the
-  target semantics and can return bounded evidence.
-- Preserve provenance. Retain the paths, symbols, lines, identifiers, counts,
-  query parameters, or commands needed to verify a result.
-- Broaden when narrow evidence leaves ownership, dependencies, completeness,
-  correctness, or risk unresolved. Do not use a small output as a substitute
-  for sufficient coverage.
-- Reuse unchanged observations and cached metadata. Retrieve evidence again
-  when its source changed or the earlier result cannot support the new claim.
-- Evaluate task success, evidence coverage, safety, latency, cost, context use,
-  and tool calls together. Do not optimize one measure at the expense of the
-  result.
+```text
+question ← evidence needed, confidence, output shape, stop condition
+orient → locate → inspect → broaden? → verify → stop
+orient:  instructions, tracked/changed paths, manifests, task runners, config, tools
+locate:  names, symbols, exact terms, metadata, indexed relationships
+inspect: bounded excerpts, selected fields, counts, structured records, with their source
+broaden: only for a named unresolved question (ownership, dependencies, completeness, risk)
+verify:  the source owner, a repository check, or an observation that could falsify the claim
+stop:    evidence supports the outcome and coverage limits are stated
+```
 
-## Progressive discovery
+- Keep provenance: the paths, symbols, lines, identifiers, queries, or commands
+  that let someone re-check a result.
+- Reuse unchanged observations; fetch again when the source changed or the old
+  result cannot support the new claim.
+- Judge success, coverage, safety, latency, cost, context, and tool calls
+  together; a smaller output never substitutes for sufficient coverage.
 
-1. **Orient:** Inspect the applicable instructions and the smallest useful map
-   of tracked or changed paths, manifests, task runners, configuration, and
-   available capabilities.
-2. **Locate:** Use names, symbols, exact terms, metadata, or indexed
-   relationships to identify candidate owners and evidence.
-3. **Inspect:** Request bounded excerpts, selected fields, summaries, counts,
-   or structured records. Keep each result attributable to its source.
-4. **Broaden:** Expand paths, result ranges, relationship depth, history, or
-   pages only for a specific unresolved question.
-5. **Verify:** Use the source owner, a repository-defined check, or a direct
-   observation that can falsify the conclusion.
-6. **Stop:** Stop when the evidence supports the requested outcome and material
-   coverage limits are explicit.
+## Tool choice
 
-## Tool selection
+Pick the most semantically aware tool that answers the question with
+acceptable scope, side effects, setup cost, and reliability. Check
+`~/.agents/TOOLS.md` for what is installed. In order of preference:
 
-Use the most semantically aware available capability that answers the question with
-acceptable scope, output, side effects, setup cost, and reliability. This is a
-decision order, not a mandatory tool hierarchy:
+1. Repository-owned tasks, scripts, generators, and validators that own the
+   fact or check.
+2. An approved MCP server or connector, within its approved scope, using its
+   filters and structured fields.
+3. Stack-aware tools: compilers, type checkers, language servers, symbol
+   indexes, test runners, package managers, schema tools, read-only platform
+   clients.
+4. Structured APIs and CLIs with filters, field selection, stable identifiers,
+   and pagination.
+5. Syntax, graph, or semantic search when text search is too noisy or cannot
+   express the relationship.
+6. Generic file, version-control, text-search, and bounded-view tools.
+7. A temporary script when several inputs need parsing, joining, ranking,
+   deduplication, aggregation, or repeated pagination.
 
-Use an approved MCP or connector when it is the most semantically aware,
-least-privilege interface for the task. Use its filters and structured fields.
-Do not expand its approved scope.
+Install a new tool only when repeated use or a material correctness or safety
+risk outweighs its setup, maintenance, and trust cost.
 
-1. Use repository-owned tasks, scripts, manifests, generators, and validators
-   when they own the requested fact or check.
-2. Use stack-aware capabilities such as compilers, type checkers, language
-   servers, symbol indexes, test runners, package managers, framework
-   introspection, schema tools, and read-only platform clients.
-3. Use structured APIs or CLIs that support filters, field selection, stable
-   identifiers, structured output, and pagination.
-4. Use syntax, graph, or semantic search when lexical search cannot express the
-   relationship or returns excessive noise.
-5. Use generic filesystem, version-control, lexical-search, bounded-view, and
-   structured-data tools when they are the simplest reliable interface.
-6. Use a temporary programmatic operation when several inputs require parsing,
-   correlation, joining, ranking, deduplication, aggregation, repeated
-   pagination, or dependent transformations.
+## Operations
 
-Do not install a tool or add a dependency only to reduce context. A new tool is
-justified only when repeated use or a material correctness or safety risk
-outweighs its setup, maintenance, and trust cost.
-
-## Operation contract
-
-- Prefer discovery and summary modes before detailed content modes.
-- Filter at the source and select only required fields when the interface
-  supports it. Client-side projection can reduce model-visible output even
-  when it does not reduce the source payload.
-- Paginate only when the required coverage needs another page. Do not assume
-  that one page is complete or retrieve all pages by default.
-- Run independent bounded operations together or concurrently when their
-  outputs remain attributable. Keep dependent operations sequential when one
-  result determines the next request.
-- Request a set that one decision already selects — several files, references,
-  excerpts, or records — in one operation: the interface's multi-target form, or
-  the independent requests issued in one round trip. Keep each target's path,
-  range, or identifier visible in the result.
-- Filter, join, deduplicate, rank, count, or aggregate large intermediate data
-  before it enters model context. Return compact findings with provenance and
-  material exceptions.
-- Use complete files, full history, or broad results when whole-file
-  invariants, lifecycle, distant interactions, audit coverage, or edit safety
-  require them.
-- Make truncation visible. State the applied boundary and the next narrowing or
-  continuation operation when omitted results can affect the answer.
-- Keep one-off programmatic transformations temporary, inspectable, and
-  dependency-free when practical. Do not replace a direct native query with
-  custom code that adds more failure modes than it removes.
-
-## Evaluation contract
-
-Include these cases:
-
-- A known symbol or exact error with a narrow evidence path.
-- Unknown ownership that requires a repository or stack map before inspection.
-- A relationship that requires syntax, language-server, compiler, or graph
-  evidence instead of text matches.
-- A small or central file whose complete content is necessary.
-- A large structured or remote result that needs filtering and deliberate
-  pagination.
-- Independent questions that benefit from bounded grouped operations.
-- A decision that selects several files, references, or records, which loads
-  them as one operation rather than one call per target.
-- Multi-source evidence that benefits from temporary programmatic aggregation.
-- A broad audit whose completion criterion requires broad coverage.
-- Truncated evidence with an explicit continuation path.
-
-Measure task correctness and required evidence coverage first. Then compare
-context volume, tool calls, latency, cost, repeated retrieval, and avoidable raw
-output. Do not reward narrowness when it hides a material gap.
+- Start with discovery and summary modes; fetch detailed content after.
+- Filter at the source and select only the fields you need.
+- Fetch another page only when the coverage needs it, and treat one page as
+  possibly incomplete.
+- Batch what one decision selects (several files, references, or records) into
+  one operation or one round of parallel calls, keeping each target's path or
+  identifier visible. Keep dependent calls sequential.
+- Reduce large intermediate data (filter, join, deduplicate, rank, count)
+  before it enters context; return compact findings with provenance.
+- Read whole files, full history, or broad results when whole-file invariants,
+  lifecycle, distant interactions, audit coverage, or edit safety need them.
+- Make truncation visible: state the boundary and the next narrowing or
+  continuation step.
+- Keep one-off scripts temporary, inspectable, and dependency-free; prefer a
+  direct native query when it has fewer failure modes.
