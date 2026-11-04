@@ -7,17 +7,6 @@ skills explicitly by name. Compose skills only when their jobs are independently
 useful.
 The primary skill owns the final deliverable.
 
-## Install
-
-Installs target the user by default; add `--project` for the current
-repository:
-
-```text
-python skills.py install ast-grep
-python skills.py install --all
-python skills.py install ast-grep --project
-```
-
 ## Build
 
 | Skill | Invocation | Use |
@@ -32,7 +21,7 @@ python skills.py install ast-grep --project
 | Skill | Invocation | Use |
 |---|---|---|
 | [`research-highquality`](research-highquality/SKILL.md) | `manual` | Research broad or contested questions with traceable evidence |
-| [`ingest-sources`](ingest-sources/SKILL.md) | `implicit` | Acquire and prepare material external sources with provenance, safety, and retention controls |
+| [`ingest-sources`](ingest-sources/SKILL.md) | `implicit` | Acquire and prepare external sources with provenance, safety, and retention controls |
 | [`ast-grep`](ast-grep/SKILL.md) | `implicit` | Find code structures or author ast-grep rules |
 | [`debug`](debug/SKILL.md) | `implicit` | Isolate an evidence-backed failure cause |
 | [`audit`](audit/SKILL.md) | `manual` | Inspect repository or system state within a read-only boundary |

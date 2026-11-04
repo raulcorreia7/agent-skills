@@ -1,13 +1,20 @@
 ---
 name: <skill-name>
-description: "Use when <trigger and task>. Do not use for <closest non-goal>."
+description: "<What it does>. Use when <trigger>. Not for <closest non-goal>; use <other-skill>."
 ---
+
+<!-- Manual skills start the description with "Manual invocation only." and set
+allow_implicit_invocation: false in agents/openai.yaml. -->
 
 # <Skill Name>
 
 ## Job
 
 <State the primary outcome in one sentence.>
+
+## Modes
+
+<!-- Optional selector: Depth, Modes, or Branches that pick the path. Delete if unused. -->
 
 ## Steps
 
@@ -27,6 +34,8 @@ description: "Use when <trigger and task>. Do not use for <closest non-goal>."
 - <State exceptional safety, scope, authority, or compatibility boundaries.>
 
 ## Composition
+
+<!-- Optional. Keep when the skill routes adjacent jobs. -->
 
 - <Route an adjacent job to `skill-name` when that job is the deliverable.>
 

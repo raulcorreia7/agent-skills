@@ -28,9 +28,10 @@ Finish when every source claim remains, each sentence has one intended reading f
 
 ### Technical Clarity
 
-Use this level for procedures, descriptions, runbooks, API documentation,
-safety text, and technical comments. This level does not claim ASD-STE100
-compliance.
+Use this level for the prose of procedures, descriptions, runbooks, API
+documentation, safety text, and technical comments. When those artifacts are
+the deliverable, the docs or comments workflow owns them and this level serves
+as its prose pass. This level does not claim ASD-STE100 compliance.
 
 1. Classify each block as a `procedure` or `description`. Apply supplied safety
    and publication requirements.

@@ -63,7 +63,7 @@ order: harm → reversible mitigation → rest
 | `Scheduled` | Normal queue: a named owner, an entry point, and normal resource. |
 | `Needs evidence` | Not judgeable yet. Name the missing evidence and who can supply it, and keep the item in the queue. |
 | `Defer` | Real but not now. Record the revisit condition and the default outcome if it recurs. |
-| `Decline` | Duplicate, superseded, noise, or out of scope. Close with a reason, never silently. |
+| `Decline` | Duplicate, superseded, noise, or out of scope. Recommend closing with a reason; close only with approval. |
 
 ## Guardrails
 
@@ -72,8 +72,9 @@ order: harm → reversible mitigation → rest
   declare it early rather than waiting for certainty.
 - Prefer one extra look at a possible incident over a missed one, and label the
   uncertainty honestly. Overtriage costs attention; undertriage costs trust.
-- Do not close an item without a stated reason and a route back: what evidence,
-  event, or owner decision would reopen it.
+- Recommend a close only with a stated reason and a route back: what evidence,
+  event, or owner decision would reopen it. Closing the item is a separate,
+  approved action.
 - Label unverified items as unverified. Repetition does not promote a claim.
 - Keep one item per record. Do not hide distinct items inside a summary.
 - Read `references/sources.yml` only to audit or re-verify this skill's

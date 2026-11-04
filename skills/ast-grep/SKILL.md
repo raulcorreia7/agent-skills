@@ -9,8 +9,9 @@ description: Finds syntax-aware code structures and authors ast-grep rules. Use 
 
 Create the smallest reliable ast-grep pattern or rule for the structural search
 request. Verify it on representative code. Then run it against the intended
-scope. When a correction is a repeatable syntax pattern, commit a scan rule in
-the product repository instead of growing skill prose.
+scope. When a correction is a repeatable syntax pattern, propose a scan rule for
+the product repository instead of growing skill prose; add it only when an edit
+is requested.
 
 ## Steps
 

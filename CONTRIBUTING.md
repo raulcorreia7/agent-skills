@@ -17,11 +17,13 @@ out.
    discriminative triggers and `true`.
 5. Compose by skill name; no links to another skill's files, and no composition
    cycles.
-6. Every skill carries an explicit, useful `## Output`, in the template's order:
-   `Job`, `Steps`, optional `Flow`, domain sections, `Guardrails`,
-   `Composition`, `Output`. Add `Flow` only when order, loops, or stop
-   conditions carry the essence; keep it short arrow-style pseudocode, not a
-   full algorithm.
+6. Sections follow the template's order: `Job`, an optional selector (such as
+   `Depth`, `Modes`, or `Branches`) that picks the path, `Steps`, optional
+   `Flow`, domain sections, `Guardrails`, optional `Composition`, and `Output`.
+   Add `Flow` only when order, loops, or stop conditions carry the essence; keep
+   it short arrow-style pseudocode. Add `Composition` when the skill routes
+   adjacent jobs to other skills. Every skill ends with an explicit, useful
+   `## Output`.
 7. References stay local, each branch routes from `SKILL.md`, and every package
    file is reachable from it.
 8. `agents/openai.yaml` stays explicit, aligned with invocation policy, and in
@@ -57,7 +59,8 @@ Start from `templates/agent/`; follow [agents/README.md](agents/README.md).
 Upgrades and tool expansion are security changes: inspect schemas, annotations,
 inputs, returned fields, authentication, telemetry, and side effects, then
 update configuration and notes together. Allowlisting is authorization;
-`readOnly` annotations alone are not.
+`readOnly` annotations alone are not. Preserve exact MCP pins and allowlists
+until a new tool-policy review is complete.
 
 ## Command contract
 
@@ -69,24 +72,38 @@ the installer: it detects state, shows the plan, then installs and validates.
 It depends on questionary for prompts; `skills.py` stays standard-library only.
 
 `skills.py` is Python 3.11+, stdlib only, and preserves preflight, symlink
-detection, atomic replacement, conflict protection, and explicit overwrite. A
-global install replaces every file directly under `baselines/` and the
-`guardrails/` tree at `~/.agents` and `$CODEX_HOME` (default `~/.codex`), and
-creates `~/.claude/CLAUDE.md` importing `@~/.agents/AGENTS.md` when `~/.claude`
-exists, leaving an existing file untouched. `~/.agents` is canonical; Codex
-mirrors it. Every install links each installed skill into
-`.claude/skills/<name>` (user or project) because Claude Code does not read
-`.agents/skills`. It creates a link only for a free name and never replaces an
-existing entry. A user install links only when `~/.claude` exists. Installs target the user unless `--project` is given; an all-skill
-install writes the catalog into the selected skills root, and later single-skill
-installs keep it synchronized. Run platform checks when requested or when
-platform risk is material.
+detection, atomic replacement, conflict protection, and explicit overwrite.
+Installs target the user unless `--project` is given.
 
-Checks: `uv run poe validate` (skills, adapters, output contracts, catalog,
-composition, reachable references, naming, links, baselines, setup, TOML),
-`uv run poe check` (validate + ruff + rumdl), `uv run poe lint` (ruff + rumdl),
-`uv run poe serve` (diagram preview). No cloud contact, no installed user files
-changed; `uv` supplies dev dependencies only.
+- Skills: one copy in `.agents/skills/<name>` (user or project). An all-skill
+  install writes the catalog there; later single-skill installs keep it in
+  sync.
+- Claude Code: it does not read `.agents/skills`, so each install links every
+  installed skill into `.claude/skills/<name>`. A link is created only for a
+  free name; an existing entry is never replaced. A user install links only
+  when `~/.claude` exists.
+- Baseline (user installs only): `~/.agents` is its one home.
+  `baselines/AGENTS.md` and `baselines/guardrails/` replace the installed
+  copies. `TASTE.md` and `TOOLS.md` are created once and then belong to the
+  user. Codex reads only `$CODEX_HOME/AGENTS.md` (default `~/.codex`), so it
+  gets a copy of `AGENTS.md`, which names its companions by `~/.agents` paths.
+- Claude bridge: `~/.claude/CLAUDE.md` importing `@~/.agents/AGENTS.md`,
+  created when `~/.claude` exists and never edited afterward.
+
+Run platform checks when requested or when platform risk is material.
+
+Set up once with `uv sync --all-groups`, then run tasks with
+`uv run poe <task>`:
+
+| Task       | Purpose                                                                 |
+| ---------- | ----------------------------------------------------------------------- |
+| `check`    | `validate`, then `lint`. Run before every PR.                           |
+| `validate` | Skills, adapters, output contracts, catalog, composition, references, naming, links, setup, TOML. |
+| `lint`     | ruff and rumdl.                                                         |
+| `format`   | Format the Python sources.                                              |
+| `serve`    | Serve the diagram gallery locally.                                      |
+
+Checks make no cloud contact and change no installed user files.
 
 ## Retiring a skill
 

@@ -39,8 +39,8 @@ unspecified.
 
 1. Resolve scope and depth. Default to `quick` + `project`. Ask only when
    the boundary changes risk, cost, access, or deliverable.
-2. Route supplied changes and designs to the change-assessment workflow. Route
-   standalone documentation audits to `docs`.
+2. Route supplied changes and designs to the change-review workflow. Route standalone
+   documentation audits to `docs`.
 3. Load only the reference for the selected mode:
    - `project`: read `references/project.md`.
    - `tests`: read `references/tests.md`.
@@ -106,7 +106,8 @@ Example:
 ## Composition
 
 - Keep severity ordering here. Hand approved follow-up work to its artifact
-  owner. Use parallel `to-plan` only for a requested delegated plan.
+  owner. Use `plan-remediation` to plan fixes for the findings, and parallel
+  `to-plan` only for a requested delegated plan.
 
 ## Output
 

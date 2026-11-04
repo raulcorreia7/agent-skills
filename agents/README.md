@@ -18,7 +18,7 @@ stays together here with its policy and operating notes.
 3. Keep the TOML `name`, filename, and directory aligned.
 4. Add only current, tested tool configuration.
 5. Add a reviewed policy when external tools or sensitive data are in scope.
-6. Add the agent to the table above.
+6. List the agent in this README, replacing the "No shared agents" line.
 
 Codex loads personal agents from `~/.codex/agents/` and project agents from
 `.codex/agents/`. This repository packages shared agents but does not activate

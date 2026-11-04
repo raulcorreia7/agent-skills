@@ -1,14 +1,14 @@
 ---
 name: to-plan
-description: Manual invocation only. Produces implementation-ready plans after requirements are approved or material decisions are resolved; do not implement.
+description: Manual invocation only. Produces implementation-ready plans for a change whose requirements are approved; surfaces any open material decision as a blocker. Not for remediation of verified findings (plan-remediation); does not implement.
 ---
 
 # To Plan
 
 ## Job
 
-Turn an ambiguous or non-trivial change into the smallest implementation-ready
-plan with resolved decisions, ordered work, validation, and risk controls.
+Turn a non-trivial change with approved requirements into the smallest
+implementation-ready plan with ordered work, validation, and risk controls.
 
 ## Modes
 
@@ -63,6 +63,7 @@ stop: every item has owner, deps, outcome, validation
 
 - Use `diagrams` when dependencies, flow, ownership, or rollout are materially
   clearer visually.
+- Use `plan-remediation` when the input is a set of verified findings to fix.
 - Use `docs` when documentation structure or reader workflow is itself a major
   plan artifact.
 

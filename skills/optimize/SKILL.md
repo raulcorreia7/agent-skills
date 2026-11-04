@@ -16,7 +16,7 @@ cost, or infrastructure change.
    it, constraints, and trade-offs. If the request and available evidence do
    not establish the target, ask one short question with two or three
    context-specific choices and put the evidence-backed recommendation first.
-2. Default to `Quick`. Use `Focused` or `Deep` only for broader scope or
+2. Default to `quick`. Use `focused` or `deep` only for broader scope or
    requested confidence. Apply the selected depth contract below.
 3. State the claim and evidence needed to confirm, weaken, or reject it. Read
    `references/measurement.md`, then load only the applicable scope reference:
@@ -50,17 +50,17 @@ cost, or infrastructure change.
 target ← measurable goal, smallest scope
 baseline ← measure | labelled proxy
 bottleneck ← profile | decompose
-loop: rank → apply approved → re-measure
+loop: rank → hand approved change to its owner → re-measure
 stop: target met | further work lacks value
 ```
 
 ## Depth Contract
 
-- `Quick`: inspect one target path with available local evidence, establish a
+- `quick`: inspect one target path with available local evidence, establish a
   baseline or labelled proxy, and rank the next measurement or change.
-- `Focused`: trace one selected domain, collect representative measurements,
+- `focused`: trace one selected domain, collect representative measurements,
   compare credible candidates, and state the selection check.
-- `Deep`: define system and data boundaries, use a coverage matrix for the
+- `deep`: define system and data boundaries, use a coverage matrix for the
   applicable components and constraints, and report evidence limits and
   residual uncertainty before a broad recommendation.
 

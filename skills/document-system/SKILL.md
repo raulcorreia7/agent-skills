@@ -109,8 +109,9 @@ Create the logical diagram only when it materially improves clarity.
 - Use `docs` for documentation judgment not owned by this workflow.
 - Use `diagrams` for substantive diagram selection or renderer validation.
 - Remain usable without optional skills.
-- Read `references/sources.md` only to explain, review, or refresh the
-  workflow's external design provenance.
+
+Read `references/sources.md` only to explain, review, or refresh the
+workflow's external design provenance.
 
 ## Output
 

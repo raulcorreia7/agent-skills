@@ -13,8 +13,7 @@ format-aware tools; validate their output instead of rewriting raw markup or
 binary-derived text in context.
 
 Resolve `<skill-root>` as the directory that contains this `SKILL.md`. Read only
-the branches that match the source formats. Then read
-[curate-and-retrieve.md](references/curate-and-retrieve.md).
+the branches that match the source formats.
 
 ## Steps
 
