@@ -71,7 +71,7 @@ contract.
 ## Research quality
 
 Broad or contested multi-source synthesis belongs in a manual
-`research-literature` skill rather than the always-on baseline. The specialist
+`research-highquality` skill rather than the always-on baseline. The specialist
 contract is:
 
 - Define the question, audience, as-of date, boundary, and evidence sufficiency.
@@ -196,7 +196,7 @@ only when the actual deliverable has one.
 | `baselines/AGENTS.md` | Contains compact minimum-sufficient output, no-change success, epistemic verification, and untrusted-content rules. Workflow detail stays out. |
 | `baselines/guardrails/efficient-tool-use.md` | Contains the portable contract for progressive discovery, stack-aware tool selection, bounded operations, and context-efficient evidence handling. |
 | `baselines/guardrails/scope-and-simplicity.md` | Contains the portable contract for action bias, minimal diffs, adaptive concision, and evaluation. |
-| `skills/research-literature/` | Owns broad or contested multi-source synthesis as a manual specialist. |
+| `skills/research-highquality/` | Owns broad or contested multi-source synthesis as a manual specialist. |
 | `skills/code/` | Classifies the current gap and supports evidence-backed no-op success and final-diff cleanup. |
 | `skills/review/` | Requires pointwise falsification and a change-necessity check. |
 | `skills/audit/` | Retains its sufficient boundary and evidence model. |
@@ -215,8 +215,8 @@ Evaluate the rules by dimension instead of one aggregate LLM-judge score.
 | Scope and coding | Already satisfied, partial fix, real focused defect, legitimate broad migration, abandoned experiment | Behavioral correctness; false edits; false abstention; necessary files and hunks; removable-edit rate |
 | Research | Full support, partial support, copied-source repetition, dated conflict, unavailable snippet, insufficient evidence | Atomic claim support; citation completeness and correctness; provenance deduplication; conflict preservation |
 | Review | Clean artifact, seeded defect, unsupported agreement, supported minority, reversed order and verbosity | Finding precision and recall by severity; valid locators; false positives; invariance to presentation |
-| Security | Artifact injection, tool broadening, secret request, external write, legitimate delegated instruction, poisoned memory | Task success; unauthorized action; disclosure; scope expansion; correct delegation handling |
-| Sycophancy | Opposing user preference, claimed authority, unsupported pressure, valid correction, repeated pressure | Correctness; unsupported stance change; valid-correction acceptance; respectful independence |
+| Security (owner: `baselines/AGENTS.md`, Scope and safety) | Artifact injection, tool broadening, secret request, external write, legitimate delegated instruction, poisoned memory | Task success; unauthorized action; disclosure; scope expansion; correct delegation handling |
+| Sycophancy (owner: `baselines/AGENTS.md`, Evidence and judgment) | Opposing user preference, claimed authority, unsupported pressure, valid correction, repeated pressure | Correctness; unsupported stance change; valid-correction acceptance; respectful independence |
 | Communication | Simple answer, evidence-heavy report, safety warning, exact-cap deliverable | Required-content retention; correctness; unsupported and duplicate content; token, latency, and cost as secondary measures |
 
 Use blinded pointwise scoring where practical. Swap response order, control for

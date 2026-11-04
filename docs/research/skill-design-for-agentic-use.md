@@ -108,8 +108,9 @@ Apply these variations:
 
 ## Repository rubric
 
-Score each dimension from 0 to 3. Record evidence for the score; do not award
-points for polish alone.
+This rubric is advisory. `CONTRIBUTING.md` owns the review contract and prefers
+forward checks over scores. When a score helps, rate each dimension from 0 to 3
+with evidence; do not award points for polish alone.
 
 | Dimension | 0 | 1 | 2 | 3 |
 | --- | --- | --- | --- | --- |

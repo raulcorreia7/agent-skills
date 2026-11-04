@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data:; style-src 'self' 'unsafe-inline' blob: data:; img-src 'self' blob: data:; font-src 'self' blob: data:; media-src 'self' blob: data:; worker-src 'self' blob:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data:; style-src 'self' 'unsafe-inline' blob: data:; img-src 'self' blob: data:; font-src 'self' blob: data:; media-src 'self' blob: data:; worker-src 'self' blob:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Diagram Visual Design</title>
 <style>:root {
   color-scheme: light dark;
@@ -1412,9 +1412,12 @@ V001 | Vacant | Site Reliability Engineer | E014 | Vacant</code></pre></details>
     <img id="diagram-preview-image" alt="">
   </dialog>
 
-  <script src="./vendor/mermaid.min.js"></script>
-  <script src="./vendor/viz-global.min.js"></script>
-  <script src="./vendor/d2.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.min.js" integrity="sha384-T/0lMUdJpd2S1ZHtRiofG3htU3xPCrFVeAQ1UUE2TJwlEJSV5NUwn30kP28n238E" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@viz-js/viz@3.28.0/dist/viz-global.js" integrity="sha384-ANYuXtMDvIifog1HLM6HNclVCY3uriiGKDlUzhLg5Mtl/uT/xqkhY9hYZf3p8bff" crossorigin="anonymous"></script>
+  <script type="module">
+    import { D2 } from "https://cdn.jsdelivr.net/npm/@terrastruct/d2@0.1.33/dist/browser/index.js";
+    globalThis.D2Gallery = { D2 };
+  </script>
   <script type="module">
     const root = document.getElementById('diagram-renderer-alignment');
     const mermaidStatus = root.querySelector('#mermaid-status');
@@ -3040,7 +3043,7 @@ ${path}.style.font-color: "${text}"`;
 
     const loadMermaid = Promise.resolve(globalThis.mermaid)
       .then((api) => {
-        if (api == null) throw new Error('local Mermaid asset did not load');
+        if (api == null) throw new Error('Mermaid did not load from the CDN; check the network connection');
         mermaidApi = api;
         mermaidApi.initialize({ startOnLoad: false, securityLevel: 'strict', suppressErrorRendering: true });
         setRendererStatus(mermaidStatus, 'ready', 'Mermaid 11.16.0 · ready');
@@ -3053,7 +3056,7 @@ ${path}.style.font-color: "${text}"`;
 
     const loadViz = Promise.resolve(globalThis.Viz)
       .then((api) => {
-        if (api == null) throw new Error('local Viz.js asset did not load');
+        if (api == null) throw new Error('Viz.js did not load from the CDN; check the network connection');
         return api.instance();
       })
       .then((instance) => {
@@ -3068,7 +3071,7 @@ ${path}.style.font-color: "${text}"`;
 
     const loadD2 = Promise.resolve(globalThis.D2Gallery)
       .then(async (api) => {
-        if (api == null) throw new Error('local D2 asset did not load');
+        if (api == null) throw new Error('D2 did not load from the CDN; check the network connection');
         d2Api = new api.D2();
         setRendererStatus(d2Status, 'loading', 'D2.js 0.1.33 · initializing engine');
         await withTimeout(d2Api.ready, 15000, 'D2 engine initialization timed out');
@@ -3084,8 +3087,8 @@ ${path}.style.font-color: "${text}"`;
   </script>
 </div>
 
-<script src="./vendor/floating-ui.core.umd.min.js"></script>
-<script src="./vendor/floating-ui.dom.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js" integrity="sha384-Q/yMW/r6UZIOlJwJHZcWjbXbicukfsuiwED9BVSZgUZgCxFuI1TOIYZbTZ9rWGLA" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js" integrity="sha384-R7p1RqabZNhI+RdPNIzTouzd/LBVorZ0Tn3ApcogSOk+HF3o+P0HIenrUw/n0MOj" crossorigin="anonymous"></script>
 <script>
 (() => {
   if (window.FloatingUIDOM == null) {
@@ -3307,7 +3310,7 @@ ${path}.style.font-color: "${text}"`;
   window.addEventListener("pagehide", destroy, { once: true });
 })();
 </script>
-<script id="codex-visualization-lucide" async src="./vendor/lucide.min.js"></script>
+<script id="codex-visualization-lucide" async src="https://cdn.jsdelivr.net/npm/lucide@1.17.0/dist/umd/lucide.min.js" integrity="sha384-bdZtphetAEBgkGZvhZXOFDWc55tHGLqaSo1f4qZtgvEiolEBqlJ9u6FTk+CoLfj0" crossorigin="anonymous"></script>
 <script>
 (() => {
   const initialize = () => {

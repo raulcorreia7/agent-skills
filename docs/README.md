@@ -1,12 +1,12 @@
 # Documentation
 
-Use this index to find the optional baseline, repository-only visual references,
+Use this index to find the user baseline, repository-only visual references,
 and research reports. Runtime contracts remain the sources of truth for agent
 behavior.
 
 | Reader task | Document |
 | --- | --- |
-| Adopt the optional global baseline and its companions | [Baseline guidance](../baselines/AGENTS.md) |
+| Read the user baseline that every user install sets up | [Baseline guidance](../baselines/AGENTS.md) |
 | Review diagram themes, tokens, and renderer examples | [Diagram visual design gallery](diagram-visual-design/README.md) |
 | Review the evidence for cross-domain agent guardrails | [Evidence-based agent guardrails](research/evidence-based-agent-guardrails.md) |
 | Review evidence for context-efficient discovery and tool use | [Efficient tool use](research/efficient-tool-use.md) |

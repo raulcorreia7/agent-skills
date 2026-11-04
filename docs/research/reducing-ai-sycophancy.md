@@ -1,6 +1,7 @@
 # Reducing AI Sycophancy
 
-**Decision:** The baseline contains a small epistemic-independence contract.
+**Decision:** The baseline's "Evidence and judgment" rules carry a small
+epistemic-independence contract.
 This report also defines an evaluation contract for resistance to unsupported
 pressure and acceptance of valid corrections. The repository does not contain
 an executable sycophancy regression suite. Context, memory, and isolated-review
@@ -139,16 +140,9 @@ results vary by model is important.
 
 The [`baselines/AGENTS.md`](../../baselines/AGENTS.md) evidence contract treats
 user claims, confidence, preferences, and prior conclusions as inputs rather
-than evidence. It separates empathy from agreement and requires an evidence
-re-check before an agent reverses a supported answer. It also requires
-proportionate assessment of the central question, including material
-counterevidence and falsification.
-Specialist review workflows can require failure modes or viable alternatives
-when their task contract needs them.
-
-The packaged read-only discovery agents remain focused on observed facts. They
-separate observation from inference and do not treat public web results as
-evidence for private environments.
+than evidence, and separates respect from agreement. Specialist review
+workflows can require failure modes or viable alternatives when their task
+contract needs them.
 
 These instructions are evidence-backed practical inferences. They do not prove
 that a baseline prompt eliminates model-level behavior. They avoid “always
