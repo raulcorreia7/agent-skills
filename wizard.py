@@ -35,6 +35,24 @@ ACTION_PREVIEW = "Preview (dry run)"
 ACTION_INSTALL = "Install"
 ACTION_CANCEL = "Cancel"
 
+# Green accent, colour only: the cursor row is bold green with a pointer, ticked
+# rows are plain green, hints are dim. `noreverse` stops terminals from painting
+# rows as white blocks.
+STYLE_RULES = [
+    ("qmark", "fg:ansigreen bold"),
+    ("question", "bold"),
+    ("answer", "fg:ansigreen bold"),
+    ("pointer", "fg:ansigreen bold noreverse"),
+    ("highlighted", "fg:ansigreen bold noreverse"),
+    ("selected", "fg:ansigreen noreverse"),
+    ("instruction", "fg:ansibrightblack noreverse"),
+    ("text", "noreverse"),
+    ("separator", "fg:ansibrightblack"),
+]
+POINTER = "❯"
+SELECT_HINT = "(↑/↓ move, enter confirms)"
+CHECKBOX_HINT = "(↑/↓ move, space toggles, a all/none, i invert, enter confirms)"
+
 
 @dataclass(frozen=True)
 class Survey:
@@ -119,62 +137,62 @@ def validate() -> int:
     return 0
 
 
+def pick(questionary: ModuleType, message: str, options: Sequence[tuple[str, object]], style: object) -> object:
+    """Single-choice prompt; the first option is the default. Returns None on Ctrl-C."""
+    choices = [questionary.Choice(label, value=value) for label, value in options]
+    return questionary.select(
+        message, choices=choices, default=options[0][1], style=style, pointer=POINTER, instruction=SELECT_HINT
+    ).ask()
+
+
+def pick_skills(questionary: ModuleType, names: Sequence[str], style: object) -> list[str] | None:
+    """Checklist with every skill ticked; refuses an empty selection so Enter never ends in a dead end."""
+    return questionary.checkbox(
+        "Choose skills",
+        choices=[questionary.Choice(name, checked=True) for name in names],
+        style=style,
+        pointer=POINTER,
+        instruction=CHECKBOX_HINT,
+        validate=lambda picked: bool(picked) or "Pick at least one skill, or press Ctrl-C to cancel.",
+    ).ask()
+
+
 def run(questionary: ModuleType) -> int:
     print(textwrap.fill("Agent Skills installer: three questions, one plan, then install and validate.", width=80))
+    style = questionary.Style(STYLE_RULES)
 
-    global_scope = questionary.select(
-        "Where should the skills live?",
-        choices=[
-            questionary.Choice(SCOPE_GLOBAL, value=True),
-            questionary.Choice(SCOPE_REPOSITORY, value=False),
-        ],
-        default=True,
-    ).ask()
+    global_scope = pick(
+        questionary, "Where should the skills live?", [(SCOPE_GLOBAL, True), (SCOPE_REPOSITORY, False)], style
+    )
     if global_scope is None:
         return cancel()
 
     names = list(skills.skill_names())
-    mode = questionary.select(
-        "Which skills?",
-        choices=[
-            questionary.Choice(f"All ({len(names)})", value=True),
-            questionary.Choice("Choose from a list", value=False),
-        ],
-        default=True,
-    ).ask()
-    if mode is None:
+    everything = pick(
+        questionary, "Which skills?", [(f"All ({len(names)})", True), ("Choose from a list", False)], style
+    )
+    if everything is None:
         return cancel()
-    if mode:
-        chosen = names
-    else:
-        chosen = questionary.checkbox(
-            "Choose skills",
-            choices=[questionary.Choice(name, checked=True) for name in names],
-            instruction="(space toggles, enter accepts)",
-        ).ask()
-        if not chosen:
-            print("no skills selected; nothing written.")
-            return 0
+    chosen = names if everything else pick_skills(questionary, names, style)
+    if chosen is None:
+        return cancel()
 
     state = survey(chosen, global_scope=global_scope)
     bridge = skills.sync_claude_bridge(dry_run=True, verbose=False) if global_scope else "skipped"
     show_plan(chosen, state, bridge, global_scope=global_scope)
 
-    action = questionary.select(
+    action = pick(
+        questionary,
         "Now what?",
-        choices=[
-            questionary.Choice(ACTION_PREVIEW, value="preview"),
-            questionary.Choice(ACTION_INSTALL, value="install"),
-            questionary.Choice(ACTION_CANCEL, value="cancel"),
-        ],
-        default="preview",
-    ).ask()
+        [(ACTION_PREVIEW, "preview"), (ACTION_INSTALL, "install"), (ACTION_CANCEL, "cancel")],
+        style,
+    )
     if action is None or action == "cancel":
         return cancel()
     if action == "preview":
         for pending in calls_for(chosen, global_scope=global_scope, dry_run=True, overwrite=False):
             skills.run_install(pending)
-        if not questionary.confirm("Install for real now?", default=False).ask():
+        if not questionary.confirm("Install for real now?", default=False, style=style).ask():
             print("nothing written.")
             return 0
 
@@ -182,7 +200,7 @@ def run(questionary: ModuleType) -> int:
     if state.conflicts:
         plural = "y" if state.conflicts == 1 else "ies"
         print(f"\n{state.conflicts} installed director{plural} differ from this checkout.")
-        overwrite = bool(questionary.confirm("Replace them with this checkout?", default=False).ask())
+        overwrite = bool(questionary.confirm("Replace them with this checkout?", default=False, style=style).ask())
         if not overwrite:
             print("nothing written. Re-run and choose to replace when you are ready.")
             return 0

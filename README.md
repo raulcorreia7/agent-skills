@@ -7,11 +7,8 @@ optional and separate from the skills installer.
 
 ## Quick Start
 
-You need:
-
-- Python 3.11 or newer.
-- an Agent Skills-compatible client.
-- You need Git to clone the repository.
+You need Git, Python 3.11 or newer, [uv](https://docs.astral.sh/uv/), and an
+Agent Skills-compatible client.
 
 ```text
 git clone https://github.com/raulcorreia7/agent-skills.git
@@ -19,38 +16,39 @@ cd agent-skills
 uv run python wizard.py
 ```
 
-The wizard asks three questions, shows the exact plan, offers a dry run, then
-installs and validates. It needs questionary, which `uv run` installs from the
-declared dependency; `python skills.py install --all` needs nothing beyond the
-standard library.
+The wizard asks three questions (where to install, which skills, then what to
+do), shows the exact plan, offers a dry run, then installs and validates. Keys
+are shown on every prompt: arrows move, space toggles, enter confirms, Ctrl-C
+cancels. Restart your client afterward.
 
-This command installs every skill for the current user and synchronizes the
-shared baseline. Add `--project` to install into a repository instead. A
-partial install omits the catalog because it lists skills that are not present.
+The wizard needs questionary, which `uv run` installs from the declared
+dependency. `skills.py` needs nothing beyond the Python standard library.
 
-### Common CLI workflows
+## Command line
 
-Guided install, with a preview before anything is written:
+| Goal                                         | Command                                      |
+| -------------------------------------------- | -------------------------------------------- |
+| Install every skill and the shared baseline  | `python skills.py install --all`             |
+| Preview without writing                      | `python skills.py install --all --dry-run`   |
+| Install one skill into the current repo      | `python skills.py install docs --project`    |
+| See every option                             | `python skills.py --help`                    |
 
-```text
-uv run python wizard.py
-```
+Installs target the user unless `--project` is given. A partial install omits
+the catalog because it lists skills that are not present.
 
-Install every skill for the user, plus the shared baseline:
+## Maintaining
 
-```text
-python skills.py install --all
-```
+Poe runs the maintainer tasks through `uv run poe <task>`:
 
-Install one skill into the current repository:
+| Task           | Does                                  |
+| -------------- | ------------------------------------- |
+| `check`        | Validation plus linters (run before a PR) |
+| `validate`     | Repository validation only            |
+| `format`       | Format Python sources                 |
+| `serve`        | Serve the diagram gallery locally     |
 
-```text
-python skills.py install docs --project
-```
-
-Restart your client after setup.
-
-Run `python skills.py --help` for the complete installer interface.
+Read [Contributing](CONTRIBUTING.md) before changing a skill, guardrail, or
+baseline.
 
 ## Learn More
 
