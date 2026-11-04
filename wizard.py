@@ -12,10 +12,10 @@ from __future__ import annotations
 import argparse
 import contextlib
 import io
+import re
 import shutil
 import subprocess
 import sys
-import textwrap
 from collections.abc import Sequence
 from dataclasses import dataclass
 from types import ModuleType
@@ -38,9 +38,9 @@ ACTION_PREVIEW = "Preview first (dry run)"
 ACTION_INSTALL = "Install now"
 ACTION_CANCEL = "Cancel"
 
-# Green accent, colour only: the cursor row is bold green with a pointer, ticked
-# rows are plain green, hints are dim. `noreverse` stops terminals from painting
-# rows as white blocks.
+# Green accent, colour only: the pointer and ticked markers are green, hints are
+# dim. Skill rows carry their own classes so names, tags, and summaries read as
+# separate columns. `noreverse` stops terminals from painting rows as white blocks.
 STYLE_RULES = [
     ("qmark", "fg:ansigreen bold"),
     ("question", "bold"),
@@ -51,8 +51,12 @@ STYLE_RULES = [
     ("instruction", "fg:ansibrightblack noreverse"),
     ("text", "noreverse"),
     ("separator", "fg:ansibrightblack"),
+    ("skill", "bold"),
+    ("tag", "fg:ansiyellow"),
+    ("summary", ""),
 ]
 MANUAL_PREFIX = "Manual invocation only."
+MANUAL_TAG = "manual"
 POINTER = "❯"
 SELECT_HINT = "(↑/↓ move, enter confirms)"
 CHECKBOX_HINT = "(↑/↓ move, space toggles, a all/none, i invert, enter confirms)"
@@ -173,25 +177,39 @@ def pick(questionary: ModuleType, message: str, options: Sequence[tuple[str, obj
     ).ask()
 
 
-def describe(name: str) -> str:
-    """One-line hint for a skill: its name plus the start of its description."""
+def summarize(name: str) -> tuple[str, bool]:
+    """First sentence of a skill's description, and whether it is manual-only."""
     text = (ROOT / "skills" / name / "SKILL.md").read_text(encoding="utf-8")
     line = next((x for x in text.splitlines()[:6] if x.startswith("description:")), "")
     summary = line.removeprefix("description:").strip().strip("\"'")
     manual = summary.startswith(MANUAL_PREFIX)
     summary = summary.removeprefix(MANUAL_PREFIX).strip()
-    name = f"{name} (manual)" if manual else name
-    room = max(20, shutil.get_terminal_size().columns - len(name) - 12)
-    if len(summary) > room:
-        summary = summary[: room - 1].rstrip() + "…"
-    return f"{name}  {summary}" if summary else name
+    return re.split(r"(?<=\.)\s", summary, maxsplit=1)[0], manual
+
+
+def skill_choices(questionary: ModuleType, names: Sequence[str]) -> list[object]:
+    """Checklist rows in aligned columns: bold name, yellow manual tag, then the summary cut to fit."""
+    rows = [(name, *summarize(name)) for name in names]
+    name_width = max(len(name) for name in names)
+    tag_width = len(MANUAL_TAG) + 2 if any(manual for _, _, manual in rows) else 0
+    room = max(20, shutil.get_terminal_size().columns - name_width - tag_width - 9)
+    choices = []
+    for name, summary, manual in rows:
+        if len(summary) > room:
+            summary = summary[: room - 1].rstrip() + "…"
+        title = [("class:skill", f"{name:<{name_width}}  ")]
+        if tag_width:
+            title.append(("class:tag", f"{MANUAL_TAG if manual else '':<{tag_width}}"))
+        title.append(("class:summary", summary))
+        choices.append(questionary.Choice(title, value=name, checked=True))
+    return choices
 
 
 def pick_skills(questionary: ModuleType, names: Sequence[str], style: object) -> list[str] | None:
     """Checklist with every skill ticked; refuses an empty selection so Enter never ends in a dead end."""
     return questionary.checkbox(
         "Choose skills",
-        choices=[questionary.Choice(describe(name), value=name, checked=True) for name in names],
+        choices=skill_choices(questionary, names),
         style=style,
         pointer=POINTER,
         instruction=CHECKBOX_HINT,
@@ -200,8 +218,9 @@ def pick_skills(questionary: ModuleType, names: Sequence[str], style: object) ->
 
 
 def run(questionary: ModuleType) -> int:
-    print(textwrap.fill("Agent Skills installer. Answer a few questions, review the plan, then install.", width=80))
     style = questionary.Style(STYLE_RULES)
+    questionary.print("Agent Skills installer", style="bold fg:ansigreen")
+    questionary.print("Answer a few questions, review the plan, then install.\n", style="fg:ansibrightblack")
 
     global_scope = pick(
         questionary, "Where do you want the skills?", [(SCOPE_GLOBAL, True), (SCOPE_REPOSITORY, False)], style
