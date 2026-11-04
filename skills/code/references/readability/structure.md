@@ -33,7 +33,7 @@ return f"{first_name} {last_name}"
   decisions, computation, iteration, side effects, result.
 - Inside a loop or branch, apply the same rules: a blank line only where its
   purpose changes.
-- Leave value alignment to the formatter (see Stable Shapes in formatting).
+- Align value columns only as Stable Shapes in formatting allows.
 - Put a why-comment directly above the block it explains, at that block's
   indentation (see Comments).
 

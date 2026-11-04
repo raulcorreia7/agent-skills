@@ -40,5 +40,19 @@ return customer
   use the formatter's stable multi-line form instead of partial wrapping.
 - Keep a short collection on one line. Use one item or property per line for a
   multi-line collection and follow the language trailing-comma convention.
-- Avoid manually aligned columns. Let the formatter own indentation and
-  spacing.
+- Let the formatter own indentation and spacing, then match the surrounding
+  code. Both win over any alignment below.
+- Where neither decides, align a column inside one short, stable group where
+  it helps scanning: related declarations or assignments, a table of
+  constants, map entries, or shell continuation backslashes. Keep each group
+  separated by a blank line and aligned on its own.
+- Keep diffs small. Do not realign untouched lines, and skip alignment when
+  one rename or new entry would realign the whole group.
+
+```text
+timeout_ms  = 5_000
+retry_limit = 3
+backoff     = EXPONENTIAL
+
+log_level = INFO
+```
