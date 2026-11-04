@@ -23,6 +23,74 @@ last_name = user.last_name.strip()
 return f"{first_name} {last_name}"
 ```
 
+## Indentation And Blocks
+
+- Indent one level per scope, with the same width everywhere. Align each
+  closing delimiter or block end with the line that opened it.
+- Give each guard its own block with its early exit, and separate guards with
+  one blank line.
+- Order a function's blocks by phase: guards, lookups, derived facts,
+  decisions, computation, iteration, side effects, result.
+- Inside a loop or branch, apply the same rules: a blank line only where its
+  purpose changes.
+- Leave value alignment to the formatter (see Stable Shapes in formatting).
+- Put a why-comment directly above the block it explains, at that block's
+  indentation (see Comments).
+
+```text
+function settle_invoice(request, ledger, clock):
+    if request is missing:
+        return failure("request required")
+
+    if request.amount <= 0:
+        return failure("amount must be positive")
+
+    invoice = ledger.find_invoice(request.invoice_id)
+    customer = ledger.find_customer(invoice.customer_id)
+    now = clock.now()
+
+    # Clients retry on timeout; a repeat request must not charge twice.
+    if invoice.status == SETTLED:
+        return success(invoice)
+
+    is_overdue = now > invoice.due_date
+    has_credit = customer.credit_balance >= request.amount
+
+    if not has_credit:
+        # Finance reconciles rejected attempts, so record them before failing.
+        record_rejection(invoice, reason = "insufficient credit")
+
+        return failure("insufficient credit")
+
+    late_fee = 0
+    if is_overdue:
+        days_late = days_between(invoice.due_date, now)
+        # The contract caps late fees; MAX_LATE_FEE is that legal limit.
+        late_fee = min(days_late * DAILY_FEE, MAX_LATE_FEE)
+
+    total = request.amount + late_fee
+
+    for line in invoice.lines:
+        # Disputed lines stay open until support resolves them.
+        if line.is_disputed:
+            continue
+
+        line.status = PAID
+        line.paid_on = now
+
+    # Debit, status, and audit must agree, or the books drift.
+    begin transaction
+        ledger.debit(customer, total)
+        ledger.mark_settled(invoice, at = now)
+        ledger.append_audit(invoice, actor = request.actor)
+    end transaction
+
+    # Notify after commit so a failed send cannot undo a settled payment.
+    notify(customer, template = "invoice-settled", invoice = invoice)
+
+    return success(invoice)
+```
+
 ## Names And Expressions
 
 - Name values by their domain role or meaning, not only by their type or origin.
@@ -118,7 +186,7 @@ return field in managed_fields
 
 ## Comments
 
-Add a concise comment when it materially helps the next reader understand why.
+Add a concise comment when it helps the next reader understand why.
 Explain non-obvious rationale, invariants, constraints, risks, or trade-offs.
 Do not narrate visible mechanics or invent a reason.
 

@@ -13,13 +13,13 @@ coherent change.
 ## Steps
 
 1. Identify the requested behavior, non-goals, affected contracts,
-   compatibility needs, and material risks. Inspect the behavior owner, direct
-   callers, dependencies, types, focused tests, configuration, and repository
-   rules. Complete when the owner, each direct caller, and each affected
+   compatibility needs, and significant risks. Inspect the behavior owner,
+   direct callers, dependencies, types, focused tests, configuration, and
+   repository rules. Complete when the owner, each direct caller, and each affected
    contract are named.
 2. For an explanation, trace the relevant types, callers, state, contracts, and
    side effects without editing. For non-trivial work, define observable
-   criteria for the result, preserved behavior, material failures, and
+   criteria for the result, preserved behavior, significant failures, and
    operational constraints. Complete when the explanation answers the question
    with source locations, or every criterion has an observable pass condition.
 3. Implement each criterion. Load only the references whose condition the
@@ -49,10 +49,9 @@ coherent change.
      convention; then each matching language and concern leaf. For a language
      without a guide, use repository evidence.
    - [code structure](references/readability/structure.md): substantial
-     control-flow, expression, naming, or semantic-block work.
+     control-flow, expression, naming, indentation, or semantic-block work.
    - [formatting](references/readability/formatting.md): only when wrapping or
-     layout materially affects readability and repository rules are
-     insufficient.
+     layout affects readability and repository rules are insufficient.
    - `references/readability/sources.yml`: only to audit or re-verify the
      external readability evidence.
 
@@ -111,4 +110,4 @@ artifact or concern is primary:
 - The implemented application behavior or code explanation
 - Updated directly coupled artifacts
 - Public, data-shape, and compatibility changes that are part of the result
-- Checks run, their results, and material residual risk
+- Checks run, their results, and significant residual risk
