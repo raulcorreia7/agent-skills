@@ -1,119 +1,140 @@
 # Tool catalog
 
-Native binary or `uvx`/`npx` first, toolbox image as fallback. Try the
-primary; on a missing binary use the image instead of installing anything.
-If Docker is also unavailable, report the family as unmeasured with the
-exact missing command.
+`<skill-root>` is the directory that holds `SKILL.md`. Examples scan `.`; use
+the target path instead.
 
-Fallback pattern (native-first default, image fills missing scanners):
+Each example shows the native command. When `command -v <tool>` finds
+nothing, run the same command through the toolbox image, or install the binary
+with `fetch-tools`. If neither works, report the family as unmeasured with the
+missing command. Install nothing into the system.
 
-```text
-docker build -t code-scanner:latest skills/code-scanner
-docker run --rm -v /abs/path/to/target:/src:ro code-scanner:latest <scanner-command> /src
+## Toolbox image
+
+The image holds every binary pinned in `tools.txt`, plus semgrep, git,
+ripgrep, and ctags.
+
+```sh
+docker build -t code-scanner:latest <skill-root>     # once; pulls layers
+<skill-root>/code-scanner . trivy fs                  # scans . mounted at /src
+<skill-root>/code-scanner . semgrep scan --config p/default /src/apps
 ```
-Transparent wrapper (mounts and appends the target): `skills/code-scanner/code-scanner <path> <scanner-command>`.
 
-The mount always uses an absolute host path with `:ro`.
+- The wrapper mounts the target read-only at `/src` and appends `/src` unless
+  an argument already names it.
+- Scanner caches persist in the `code-scanner-cache` volume, so the second
+  vulnerability scan is fast.
+- Write reports on the host: `... --format json > trivy.json`.
+- `permission denied ... docker.sock`: the user is not in the `docker` group.
+  Ask them to add it; do not use `sudo`.
+- A Git worktree's history is outside the mount. Run Git-history scans
+  (`gitleaks git`, `trufflehog git`) natively or on the main checkout.
 
-## Language coverage
+## Reading results
 
-| Tool | Languages |
-|---|---|
-| `lizard` | C/C++, Java, C#, JS/TS, Python, Go, Rust, Ruby, PHP, Swift, Kotlin, and more |
-| `jscpd` | 150+ formats, effectively all languages |
-| `osv-scanner` | Go, npm, PyPI, crates, RubyGems, Maven, NuGet, Pub, Swift, plus OS packages |
-| `semgrep` | 30+ languages, including Python, JS/TS, Go, Java, C/C++, Ruby, PHP, C# |
-| `gitleaks`, `trufflehog` | language-blind, all text |
-| `trivy` | language-blind deps and OS; config for Docker, Kubernetes, Terraform, CloudFormation |
-| `ruff` | Python only |
-| `shellcheck` | shell only |
-| `gosec` | Go only |
-| `git log` | language-blind, churn only |
+- Ask for JSON, then count and filter with `jq`. Show the user the summary,
+  not raw output.
+- Treat a hit as a lead: confirm each secret or CVE in the file before you
+  report it. Tests, fixtures, and docs often hold fake keys.
 
 ## Complexity
 
-| Tool | Command |
-|---|---|
-| `lizard` (primary) | `lizard <target>` |
-| language linter (fallback) | the linter already configured for the repo |
+| Tool | Covers | Example |
+|---|---|---|
+| lizard | Most languages | `uvx lizard -w -C 20 -L 100 -s cyclomatic_complexity .` |
+
+`-w` prints only functions over a gate. Fall back to the repo's configured
+linter rule when lizard cannot parse the language.
 
 ## Duplication
 
-| Tool | Command |
-|---|---|
-| `jscpd` (primary, 5.1.2: `-s, --silent` verified) | `jscpd <target> --silent` |
+| Tool | Covers | Example |
+|---|---|---|
+| jscpd | Most languages | `npx jscpd . --min-tokens 50 -i "**/node_modules/**,**/dist/**"` |
+
+Use the repo's jscpd config when one exists. Expect clones in generated files
+and per-type schemas; report them as such, not as defects.
 
 ## Churn
 
-| Tool | Command |
+| Tool | Example |
 |---|---|
-| `git log` (primary) | `git log --numstat --since=6.months.ago -- <paths>` |
-| `git log` (primary) | `git log --format=%h\ %ad\ %s --date=short -- <paths>` |
+| git | `git log --since=6.months.ago --name-only --format= -- . \| sort \| uniq -c \| sort -rn \| head` |
+| git | `git log --since=6.months.ago --numstat --format= -- <path>` |
 
-Top-churned files = highest commit count / added+deleted lines.
+A hotspot is a top-churned file that also holds a complexity offender.
 
 ## Coverage
 
-Run at most the matching manifest command, on confirmation only. If the repo
-has no coverage configured, report "no coverage configured" plus the setup
-pointer instead of inventing config.
+Run only after the user confirms the command: it runs the test suite. Use the
+repo's own coverage task when one exists. Report line and branch rates.
 
-| Ecosystem | Command |
+| Ecosystem | Example |
 |---|---|
-| Python | `coverage run -m pytest && coverage report -m && coverage xml -o coverage.xml` |
+| Python | `coverage run --branch -m pytest && coverage report -m` |
 | Go | `go test -coverprofile=cover.out ./... && go tool cover -func=cover.out` |
-| Rust | `cargo llvm-cov --summary` (fallback `cargo tarpaulin --out Xml`) |
-| JS/TS | `npx vitest run --coverage` or `npx c8 <test-command>` where configured |
+| Rust | `cargo llvm-cov --summary-only` |
+| JS/TS | `npx vitest run --coverage`, or `npx c8 <test command>` |
 
-Report line + branch rates.
+When the repo has no coverage setup, report "no coverage configured" instead
+of adding one.
 
 ## Dependencies
 
-| Tool | Command |
-|---|---|
-| `osv-scanner` (primary, native if present else toolbox) | `osv-scanner --recursive <dir>` |
-| npm (fallback) | `npm audit --json` |
-| Python (fallback) | `uvx pip-audit` |
-| Rust (fallback) | `cargo audit --json` |
+| Tool | Covers | Example |
+|---|---|---|
+| osv-scanner | Lockfiles of most ecosystems | `osv-scanner scan source -r --format json . > osv.json` |
+| trivy | Lockfiles and OS packages | `trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed .` |
+| npm, pip, cargo | One ecosystem | `npm audit --json`, `uvx pip-audit`, `cargo audit --json` |
+
+A finding is introduced only when the change edits the lockfile that holds the
+package.
 
 ## Secrets
 
-| Tool | Command |
-|---|---|
-| `gitleaks` (native if present else toolbox) | `gitleaks detect --source <dir>` |
-| `trufflehog` (native if present else toolbox) | `trufflehog filesystem <dir>` |
+| Tool | Scans | Example |
+|---|---|---|
+| gitleaks | Files | `gitleaks dir . --no-banner` |
+| gitleaks | Commits | `gitleaks git . --log-opts="main..HEAD" --no-banner` |
+| trufflehog | Files | `trufflehog filesystem . --results=verified,unknown --no-update` |
+| trufflehog | Commits | `trufflehog git file://. --since-commit main --results=verified,unknown --no-update` |
 
-## SAST and quality
+gitleaks matches patterns offline. trufflehog checks each hit with its
+provider, so a verified hit is a live credential.
 
-| Tool | Command |
+## Static analysis
+
+| Tool | Covers | Example |
+|---|---|---|
+| semgrep | 30+ languages | `semgrep scan --config p/default --metrics=off --json .` |
+| ruff | Python | `ruff check .` |
+| shellcheck | Shell | `shellcheck <files>` |
+| gosec | Go | `gosec ./...` |
+| hadolint | Dockerfiles | `hadolint --failure-threshold warning Dockerfile` |
+
+Add the stack's packs to `p/default` (`--config p/default --config p/python`):
+
+| Stack | Packs |
 |---|---|
-| `ruff` | `ruff check <dir>` |
-| `shellcheck` | `shellcheck <files>` |
-| `hadolint` (native if present else toolbox) | `hadolint <Dockerfile>` |
-| `gosec` (native if present else toolbox) | `gosec <dir>` |
+| TypeScript, JavaScript | `p/typescript`; servers add `p/nodejs` or `p/expressjs` |
+| Python | `p/python`; add `p/django` or `p/flask` |
+| Go | `p/golang` |
+| Java | `p/java` |
+
+`p/react` and `p/nextjs` hold almost no public rules. `--config auto` needs
+`--metrics=on`. Every pack downloads rules.
 
 ## Containers and IaC
 
-| Tool | Command |
-|---|---|
-| `trivy` (native if present else toolbox) | `trivy fs --severity HIGH,CRITICAL <dir>` |
-| `trivy` (native if present else toolbox) | `trivy config <dir>` |
+| Tool | Covers | Example |
+|---|---|---|
+| trivy | Dockerfile, Kubernetes, Terraform, CloudFormation, Helm | `trivy config --severity HIGH,CRITICAL .` |
+| trivy | Images | `trivy image --severity HIGH,CRITICAL <image>` |
 
-## Experimental accelerators
+## Experimental
 
-Corroboration-only: use to corroborate or prioritize tool findings,
-never as a sole gate.
+ripwire only corroborates or ranks findings from the tools above; never gate
+on it alone.
 
-- `ripwire <dir> --quality-panel`
-- `ripwire <dir> --hotspots`
-- `ripwire <dir> --clones`
-- `ripwire <dir> --deps`
-- `ripwire <dir> --metrics`
-- `ripwire <dir> --quality-delta`
-
-No other experimental tools in v1.
-
-Tool homepages: lizard at lizard.ws, jscpd at github.com/kucherenko/jscpd,
-osv-scanner at github.com/google/osv-scanner, gitleaks at
-github.com/gitleaks/gitleaks, trufflehog at github.com/trufflesecurity/trufflehog,
-semgrep at semgrep.dev, trivy at aquasec.github.io/trivy.
+```sh
+ripwire . --quality-panel   # also: --hotspots --clones --deps --metrics --quality-delta
+```

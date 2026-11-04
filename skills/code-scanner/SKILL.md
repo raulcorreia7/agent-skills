@@ -60,10 +60,12 @@ coverage → only after the user confirms the announced command
 
 - Keep the scan read-only; coverage executes the test suite, so run it only
   after explicit confirmation.
-- Use native binaries, `uvx`/`npx`, or the bundled toolbox for missing
-  binaries: run the `code-scanner` wrapper, take commands from `help.txt`, build
-  its image from `Dockerfile`, and provision pinned binaries with
-  `fetch-bin.sh`. Install nothing into the system.
+- Get approval before network access: `uvx`/`npx` downloads, dependency and
+  CVE lookups, registry rule sets such as `semgrep --config auto`, and image
+  builds that pull layers.
+- Install nothing into the system. Fill a missing binary with `uvx`/`npx`,
+  the toolbox image (`Dockerfile`, `code-scanner` wrapper), or `fetch-tools`,
+  in the catalog's runner order.
 - Treat thresholds as signals, not verdicts.
 - Report tool findings, quantitative and qualitative. Send audit verdicts to
   `audit`, change verdicts to `review`, fixes to `code`/`refactor`.

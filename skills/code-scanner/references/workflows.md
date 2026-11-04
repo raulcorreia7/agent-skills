@@ -1,36 +1,72 @@
 # Workflows
 
-Commands live in the sibling `tool-catalog.md`. Every finding row has file:line,
-metric value, threshold, and verify command. All gates are flaggable per invocation.
+Commands come from `tool-catalog.md`. The repo's own config wins over these
+gates, and the user can change any gate for one run.
 
 ## Gates
 
-| Gate | Value | Source |
-|---|---|---|
-| Cyclomatic complexity (CCN) | warn at CCN > 15 | lizard documented default (`lizard --help`: `-C/--CCN`, default 15) |
-| Function length | lizard warns at length > 1000 (`lizard --help`: `-L/--length`, default 1000); skill fallback flags functions > 80 lines for review | tool default + fallback, marked as such |
-| Duplication | gate on the repo's configured `jscpd --threshold`; fallback flags any clone block at default sensitivity or file duplication > 5% | fallback, marked as such (tool source silent on a universal gate) |
-| Line coverage | flag at < 80% | fallback from documented industry practice, marked as such |
-| Branch coverage | flag at < 70% | fallback from documented industry practice, marked as such |
-| Churn hotspot | top-decile churn intersecting a complexity offender | defined here: `git log` top commit count / added+deleted lines ∩ CCN offender |
+Gates flag what needs a look; they are not pass or fail verdicts.
 
-Where a source is silent, the CCN > 15, function > 80 lines, line < 80% /
-branch < 70% fallbacks apply and are marked as such above.
+| Gate | Flag when | Basis |
+|---|---|---|
+| Cyclomatic complexity | CCN > 20 | ESLint default; golangci-lint suggests 10–20 |
+| Function length | > 100 lines | Above ESLint (50) and funlen (60) defaults, for legacy code |
+| Duplication | > 3% of changed lines; whole repo is report-only | SonarQube new-code gate |
+| Coverage | < 80% of changed lines, or < 60% for the project | SonarQube new-code gate; Google "acceptable" |
+| Churn hotspot | Top-10% churned file that also fails the complexity gate | Defined here |
+| Vulnerability | HIGH or CRITICAL (CVSS ≥ 7.0) with a fix available | CVSS bands; trivy `--ignore-unfixed` |
+| Secret | A verified hit, or one that survives a look at the file | trufflehog verification |
+| IaC | HIGH or CRITICAL | trivy severity |
+
+Safety-critical code needs stricter gates (CCN ≤ 10, full branch coverage);
+use them only when the repo or user says so.
+
+## Report row
+
+Every finding is one row:
+
+| file:line | Metric | Value | Gate | Verify |
+|---|---|---|---|---|
+| `src/page.tsx:88` | Function length | 245 lines | > 100 | `uvx lizard -w -L 100 src/page.tsx` |
+| `pnpm-lock.yaml` | CVE-2026-1234 (lodash) | HIGH, fixed in 4.17.22 | HIGH+ with fix | `trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed .` |
+
+A family with no rows gets one line: `clean` or `unmeasured: <reason>`.
 
 ## quick
 
-Triage only. Run: lizard top-10 offenders, git top-churn files,
-osv-scanner criticals/highs, gitleaks quick pass. Output is a ranked table
-with file:line, metric value, threshold, verify command.
+Triage the worst offenders, one command per family:
+
+```sh
+uvx lizard -w -C 20 -L 100 -s cyclomatic_complexity . | head -10
+git log --since=6.months.ago --name-only --format= | sort | uniq -c | sort -rn | head -10
+trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed .
+gitleaks dir . --no-banner
+```
 
 ## focused
 
-One selected family deep, including coverage on confirmation: run only that
-family's catalog commands, report line + branch rates for coverage, name the
-single next measurement or fix owner.
+One family, in depth: run every catalog command for that family, report each
+row with its verify command, and name one next measurement or fix owner.
 
 ## deep
 
-Full matrix across all seven families with the same per-row shape plus an
-explicit unknowns/coverage-limits list. Coverage still requires
-confirmation: list its command as pending until confirmed.
+Every family, with the same row shape, plus a list of unknowns and limits.
+
+## PR or branch
+
+Scan what the change adds, then label each finding `introduced` or
+`pre-existing`:
+
+```sh
+base=$(git merge-base main HEAD)
+files=$(git diff --name-only --diff-filter=AM "$base"...HEAD)
+
+uvx lizard -w -C 20 -L 100 $files
+npx jscpd $files --min-tokens 50
+semgrep scan --config p/default --metrics=off $files
+gitleaks git . --log-opts="$base..HEAD" --no-banner
+trufflehog git file://. --since-commit "$base" --results=verified,unknown --no-update
+```
+
+Dependency and IaC scanners read whole lockfiles and configs. Run them on the
+repo, then keep only findings in files the change touches.
