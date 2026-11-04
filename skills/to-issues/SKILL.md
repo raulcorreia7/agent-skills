@@ -18,11 +18,11 @@ readiness and dependencies.
    target tracker and publication intent before publication. Take tracker
    values from evidence or the user. Complete when each item is resolved or
    explicitly deferred.
-2. Verify that decision owners resolved material scope, contracts, data,
+2. Verify that decision owners resolved significant scope, contracts, data,
    ownership, rollout, and validation. For each delivery-graph decision that
    remains, create a preceding decision issue with an owner, criterion, and
    output, and keep the implementation drafts it can change blocked on it.
-   Complete when every material decision is resolved or has a decision issue
+   Complete when every significant decision is resolved or has a decision issue
    that blocks its affected drafts.
 3. Slice coherent outcomes by stable ownership. Put shared contracts before
    consumers; order migrations and rollout. Write each draft per the issue
@@ -72,7 +72,7 @@ B; use that direction in drafts and tracker links.
 
 ## Output
 
-- Source and material decomposition assumptions
+- Source and significant decomposition assumptions
 - Ordered issue drafts and hierarchy
 - Dependency, collision, and critical-path map
 - Decision issues and the implementation drafts that they block

@@ -20,7 +20,7 @@ its target platform.
    requests it. Select one diagram family and one abstraction level, then load
    their references. Complete when the language, family, and abstraction level
    are chosen and their references are read.
-3. Draft canonical source with explicit labels, direction, boundaries, and
+3. Draft the source with explicit labels, direction, boundaries, and
    relationships. Include only elements that support the reader question.
    Apply visual style after the structure is accurate. Complete when every
    element and relationship traces to evidence and supports the reader
@@ -31,7 +31,7 @@ its target platform.
    alone.
 5. Validate. Syntax and theme belong to the renderer and any project schema.
    If the user requests validation, run the applicable syntax or render check.
-   Otherwise, run a small existing check only when it addresses a material
+   Otherwise, run a small existing check only when it addresses a significant
    risk. Complete when every selected check has a recorded result.
 6. Render when the output needs an image. For a standard local render, use
    `<skill-root>/scripts/render.py`, where `<skill-root>` is the directory that
@@ -72,13 +72,13 @@ stop: source answers the reader question, selected checks have results, target-s
   delivery leaves. Before rendering unreviewed source, configuration, fonts,
   icons, images, imports, or includes, read
   `references/delivery/security.md`.
-- Read `references/sources.yml` only for versions, licenses, or provenance.
+- Read `references/sources.yml` only for versions, licenses, or where each came from.
 
 ## Guardrails
 
 - Keep unverified systems, dependencies, ownership, flows, states, and platform
   support out of the diagram.
-- Keep canonical source with each delivered image.
+- Keep the source with each delivered image.
 - Obtain explicit approval before source goes to a public rendering service.
 
 ## Composition
@@ -88,7 +88,7 @@ stop: source answers the reader question, selected checks have results, target-s
 
 ## Output
 
-- Canonical source or targeted edits
+- Source or targeted edits
 - SVG or PNG when rendered output is necessary
 - Accessible title and description
 - Evidence, assumptions, and target decisions

@@ -4,7 +4,7 @@
 > renderer and reviewed delivery path before team adoption.
 
 D2 is strongest when automatic composition and nested architecture matter more
-than native Markdown rendering. Keep `.d2` as the canonical source and publish
+than native Markdown rendering. Keep `.d2` as the source of truth and publish
 a reviewed PNG.
 
 ## Core Syntax

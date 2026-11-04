@@ -1,6 +1,6 @@
 # Python Verification
 
-Run repository scripts first. A minimal high-quality gate for a Python package
+Run repository scripts first. A minimal gate for a Python package
 using the baseline is:
 
 ```text

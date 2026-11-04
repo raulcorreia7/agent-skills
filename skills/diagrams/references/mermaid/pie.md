@@ -11,7 +11,7 @@ pie showData
     "Address invalid" : 18
 ```
 
-State the takeaway, units, provenance, and whether values are measured or
+State the takeaway, units, source, and whether values are measured or
 illustrative. Preserve the data in prose or a table. Avoid many slices, similar
 colors, three-dimensional effects, or incompatible bases. Prefer a bar chart
 for close comparisons.

@@ -10,17 +10,15 @@ docs, portals, and agent-facing maps.
   second source of truth.
 - Put it at `/llms.txt` for a website or at the root of an intentionally scoped,
   trusted documentation surface.
-- Point to canonical docs. Prefer clean Markdown variants when the publisher
+- Point to official docs. Prefer clean Markdown variants when the publisher
   exposes them.
-- Use `llms.txt` as a curated publishing boundary, not a second source of
-  truth.
 
 ## Add It When
 
 - the docs surface is stable and large enough to need a curated route.
 - the intended agent and trust boundary are explicit.
 - important concepts, setup, APIs, examples, errors, limits, and support paths
-  have canonical pages.
+  have main pages.
 - someone or some build process will keep the index current.
 
 Skip or defer when docs are stale, contradictory, too small, sensitive for the
@@ -32,7 +30,7 @@ target context, or expected to enforce crawling, training, or licensing rules.
 2. A blockquote with scope and audience.
 3. Optional brief notes that prevent common wrong assumptions.
 4. H2 sections with curated Markdown links.
-5. An optional `Optional` section for material outside a small context.
+5. An optional `Optional` section for content that does not fit a small context.
 
 Each entry needs a descriptive title, stable URL, and short explanation of the
 question it answers.
@@ -70,14 +68,14 @@ Important: sandbox credentials do not work in production.
 - Exclude secrets, credentials, customer data, private hostnames, and
   privileged operational detail unless the surface is explicitly private and
   trusted.
-- Generate from canonical navigation when it is clean and stable. Curate
+- Generate from main navigation when it is clean and stable. Curate
   manually when generated navigation is noisy.
 
 ## Validation
 
 When practical, verify the published path and links. Check important Markdown
 mirrors and test realistic and near-miss questions against the expanded
-context. Compare answers with canonical docs. A stale index can be worse than
+context. Compare answers with official docs. A stale index can be worse than
 none.
 
 Sources: [llms.txt proposal](https://llmstxt.org/) and [llms-txt repository](https://github.com/AnswerDotAI/llms-txt).

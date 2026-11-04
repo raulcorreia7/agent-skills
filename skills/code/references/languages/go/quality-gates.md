@@ -1,8 +1,7 @@
 # Go Quality Gates
 
 Repository policy, the Go version, and package conventions take precedence.
-Keep the toolchain and
-analysis policy in the repository. Do not make an editor or developer-machine
+Keep the toolchain and analysis policy in the repository. Do not make an editor or developer-machine
 setting the source of truth.
 
 ## Toolchain And Configuration

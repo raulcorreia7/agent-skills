@@ -13,7 +13,7 @@ packet-beta
 ```
 
 Keep ranges contiguous unless gaps are meaningful. Declare bit order in nearby
-text and use another artifact for large normative protocol specifications.
+text and use another document for large normative protocol specifications.
 Reduce scope and label length before increasing the canvas.
 
 Source: [Mermaid packet diagram](https://mermaid.js.org/syntax/packet.html).

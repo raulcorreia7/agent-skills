@@ -46,7 +46,7 @@ parallel trees that describe the same facts.
 
 For a service or library with several durable documents, keep the root README
 as the default task map. Add `docs/README.md` only when the docs tree has enough
-independently navigable pages that local routing materially reduces search. Do
+independently navigable pages that local routing reduces search. Do
 not duplicate root navigation or introduce a taxonomy made of thin pages.
 
 For example, route reader tasks rather than mirroring the source tree:

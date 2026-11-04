@@ -46,7 +46,7 @@ effects.
    Complete when the entrypoint implements every input, output, side effect,
    and exit behavior defined in step 1.
 4. Run the existing aggregate check when available. Otherwise run only
-   supported, non-overlapping checks for material risk: formatting, static
+   supported, non-overlapping checks for significant risk: formatting, static
    analysis, strict typing, dependency validation, and focused behavior
    verification. Use the one tool that already owns each job. Complete when
    each selected check passes, or the reason no safe relevant check ran is
@@ -74,4 +74,4 @@ stop: contract implemented + each check passes or its absence is explained
 - The script or automation change and its invocation.
 - The command contract: inputs, outputs, side effects, and exit behavior.
 - The check command and result, or why no safe relevant check was run.
-- Portability limits and unresolved material behavior.
+- Portability limits and significant unresolved behavior.

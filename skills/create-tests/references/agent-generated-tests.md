@@ -11,7 +11,7 @@ Treat an agent-generated test as a candidate, not as evidence by itself.
 5. Inspect the final implementation and test diff together.
 
 Stop a repair loop when evidence repeats or oscillates. Preserve the first
-failure and each material change in evidence. Do not expose hidden evaluation
+failure and each significant change in evidence. Do not expose hidden evaluation
 tests or their exact feedback to the repair loop.
 
 A second instance of the same model is not automatically an independent oracle.

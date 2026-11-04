@@ -2,7 +2,7 @@
 
 When documentation already exists:
 
-1. Inventory pages, canonical claims, links, navigation, and diagrams.
+1. Inventory pages, key claims, links, navigation, and diagrams.
 2. Map useful content to the page that owns its reader question.
 3. Preserve source attribution and stable links where possible.
 4. Update moved-page links and confirmed destination-specific navigation files

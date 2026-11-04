@@ -13,7 +13,7 @@ timestamp: "{{timestamp}}"
 
 # operational contracts
 
-{{material delivery guarantees, data handling constraints, dependency ownership, and escalation path with portable evidence citations}}
+{{relevant delivery guarantees, data handling constraints, dependency ownership, and escalation path with portable evidence citations}}
 
 # safe validation
 

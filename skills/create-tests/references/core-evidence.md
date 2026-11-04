@@ -2,7 +2,7 @@
 
 ## Oracle
 
-Name an independent source for every material expected result. Use a
+Name an independent source for every expected result. Use a
 requirement, public contract, reproduced bug, invariant, reference
 implementation, consumer expectation, or reviewed domain example.
 
@@ -25,7 +25,7 @@ boundary that it replaces.
 ## Evidence
 
 Record the claim, oracle, cases, command, result, and relevant environment.
-State each material boundary that the command did not exercise. Structural
+State each relevant boundary that the command did not exercise. Structural
 coverage shows reach, not correctness.
 
 ## Example

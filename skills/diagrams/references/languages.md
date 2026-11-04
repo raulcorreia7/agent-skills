@@ -19,7 +19,7 @@ DOT are the default authoring languages.
   language that merely offers the required shapes.
 
 Evaluate D2 only when the user explicitly requests it and automatic composition
-or nested architecture offers a concrete advantage. Require a pinned team
+or nested architecture gives a concrete advantage. Require a pinned team
 renderer and verified delivery before adoption.
 
 ## Migration

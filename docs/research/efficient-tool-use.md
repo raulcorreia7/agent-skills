@@ -22,7 +22,7 @@ behavior.
 
 The sources use different models, repositories, tasks, interfaces, and cost
 measures. Their numeric results do not define portable thresholds. The runtime
-contract derives conservative behavior from converging results and retains an
+contract derives conservative behavior from converging results and keeps an
 explicit path to broader evidence.
 
 ## What the evidence establishes
@@ -118,15 +118,14 @@ configuration takes precedence over the examples below.
 | Which dependency, version, or package owns this behavior? | Package-manager metadata, dependency graphs, module resolvers, and lockfiles | Query ownership and reachability before reading full manifests or locks | Query, install, update, and audit operations can have different side effects. |
 | What does the framework own? | Framework route, schema, migration, configuration, or generator introspection | Select the owned contract and its producer | Generated output remains evidence, not the edit owner. |
 | What remote records are relevant? | Read-only API, GraphQL, or platform CLI with filters and field selection | Server-side filtering, stable IDs, structured output, deliberate pages | One page can be incomplete; exhaustive pagination can multiply cost and noise. |
-| How do several structured sources relate? | Structured-data query tool or temporary program | Parse, join, deduplicate, rank, count, and return findings with provenance | Transformation logic can hide omissions or introduce a new bug. |
+| How do several structured sources relate? | Structured-data query tool or temporary program | Parse, join, deduplicate, rank, count, and return findings with their sources | Transformation logic can hide omissions or introduce a new bug. |
 | Which documentation contract applies? | Documentation generator, navigation source, schema, link checker, or focused docs build | Inspect the source owner and run the relevant check | Rendered or generated pages can be stale derivatives. |
 
 This model prefers the most semantically aware available capability, not the most
-specialized tool by default. A direct lexical search can be better than a stale
-semantic index. A repository-owned task can be better than reconstructing its
-steps. A temporary program can be better than sending thousands of records to
-the model, but it is worse than a direct query when it duplicates native
-semantics.
+specialized tool. A direct lexical search can beat a stale semantic index. A
+repository-owned task can beat reconstructing its steps. A temporary program can
+beat sending thousands of records to the model, but loses to a direct query when
+it duplicates native semantics.
 
 ## Concrete mechanisms
 
@@ -182,10 +181,9 @@ provider](https://docs.continue.dev/customize/deep-dives/custom-providers)
    are explicit.
 
 Independent bounded queries can share one tool round trip or run concurrently
-when their outputs remain attributable. Dependent queries remain sequential.
-Parallelism is not an unconditional optimization: rate limits, shared state,
-result volume, and a dependency on earlier evidence can make it slower or less
-reliable.
+when their outputs stay attributable. Dependent queries stay sequential.
+Parallelism is not always faster: rate limits, shared state, result volume, and
+a dependency on earlier evidence can make it slower or less reliable.
 
 ## Evaluation and limits
 
@@ -204,7 +202,7 @@ Semantic indexes can be stale. Programmatic transformations can introduce
 errors. Server-side filtering, client-side projection, and model-context
 reduction are different optimizations and must not be conflated.
 
-The implemented runtime contract is
+The runtime contract is
 [`baselines/guardrails/efficient-tool-use.md`](../../baselines/guardrails/efficient-tool-use.md).
-It keeps the portable decision rules. This report owns the evaluation cases,
+It holds the portable decision rules. This report owns the evaluation cases,
 evidence, examples, and implementation rationale.

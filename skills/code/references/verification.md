@@ -1,10 +1,10 @@
 # Check Selection And Interpretation
 
-Use the smallest existing repository-owned check that addresses a material
+Use the smallest existing repository-owned check that addresses a significant
 risk. Inspect repository scripts before you state what a generic command runs.
 Use the repository package manager, wrapper, and declared tool versions.
 
-Map each material success criterion and preserved behavior to an oracle and a
+Map each significant success criterion and preserved behavior to an oracle and a
 check level. A missing oracle is a requirements gap; current output is not an
 automatic expected result.
 
@@ -19,13 +19,13 @@ When broader validation is in scope, use this order as applicable:
 
 Create tests or expand test scope only when the user requests tests or the
 deliverable requires them. Test observable behavior through the narrowest
-credible boundary. Cover the changed success path, material failures, boundary
-values, and the specific regression. Stop when another case protects no
+credible boundary. Cover the changed success path, significant failures,
+boundary values, and the specific regression. Stop when another case protects no
 distinct risk.
 
 Interpret the actual result. Separate product failures from environment or
 tool failures. State the command, relevant scope, and result. A check supports
-only the behavior and platform that it exercises. Report a material evidence
+only the behavior and platform that it exercises. Report a significant evidence
 gap as blocked when no safe check is available.
 
 Example—evidence stays proportional to the change:
@@ -49,7 +49,7 @@ contract → discriminating check → classify failure → one evidence-driven e
          → rerun the same check → required broader check → inspect final diff
 ```
 
-Preserve the first failure and each material change in evidence. Stop when the
+Preserve the first failure and each significant change in evidence. Stop when the
 same failure repeats, results oscillate, or the next edit would be speculative.
 Do not change a failing test only to accept the implementation. Change its
 oracle only when the requested contract changed, and review that contract

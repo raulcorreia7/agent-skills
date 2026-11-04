@@ -1,6 +1,6 @@
 ---
 name: to-plan
-description: Manual invocation only. Produces implementation-ready plans for a change whose requirements are approved; surfaces any open material decision as a blocker. Not for remediation of verified findings; use `plan-remediation`.
+description: Manual invocation only. Produces implementation-ready plans for a change whose requirements are approved; flags any open key decision as a blocker. Not for remediation of verified findings; use `plan-remediation`.
 ---
 
 # To Plan
@@ -25,11 +25,11 @@ The deliverable is a plan; implementation is a separate request.
    repository evidence when it can change ownership, contracts, data, rollout,
    tests, generated artifacts, or risk. Complete when each item is stated and
    the evidence boundary is named.
-2. Resolve material decisions. If a choice changes scope, behavior, contracts,
+2. Resolve significant decisions. If a choice changes scope, behavior, contracts,
    security, data, cost, rollout, or architecture, ask or record it as a
-   blocker. Assume only bounded, reversible detail. Resolve material public
+   blocker. Assume only bounded, reversible detail. Resolve significant public
    contracts, storage, rollout, and ownership before implementation starts.
-   Complete when every material decision is resolved or listed as a blocker.
+   Complete when every significant decision is resolved or listed as a blocker.
 3. Describe the target shape and affected ownership boundaries; leave out
    implementation detail the plan does not need. Complete when each affected
    boundary and contract is named.
@@ -51,15 +51,15 @@ stop: every item has owner, deps, outcome, validation
 
 ## Composition
 
-- Use `diagrams` when dependencies, flow, ownership, or rollout are materially
-  clearer visually.
+- Use `diagrams` when dependencies, flow, ownership, or rollout are
+  clearer as a visual.
 - Use `docs` when documentation structure or reader workflow is itself a major
   plan artifact.
 
 ## Output
 
 - Implementation-ready plan and selected mode, or a decision-ready draft naming
-  material blockers and alignment questions
+  significant blockers and alignment questions
 - Decisions, assumptions, non-goals, and open blockers
 - Target shape, ownership boundaries, contracts, and data impact
 - Ordered steps or parallel slices with dependencies and validation

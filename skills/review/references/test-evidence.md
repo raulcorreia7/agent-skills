@@ -1,6 +1,6 @@
 # Test Evidence Review
 
-Review tests as executable specifications. Trace each material change through
+Review tests as executable specifications. Trace each significant change through
 this chain:
 
 ```text

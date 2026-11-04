@@ -65,7 +65,7 @@ references. Add a legend only for introduced notation.
 | Positive/negative change | Two diverging ramps with a quiet midpoint | Name the midpoint and pair color with signs, arrows, or values |
 | Risk, health, or state | Stable semantic roles | Do not use red/green alone. Add text, icons, shapes, or patterns |
 
-Select the visual variable before hex-value selection. Use the same mapping in
+Select the visual variable before the hex values. Use the same mapping in
 related views. Reserve the strongest color for the most important reading task,
 and remove any color that has no explainable job. For labeled categorical tiles,
 multiple saturated hues can improve scanning and visual appeal. This palette
@@ -75,10 +75,9 @@ the neutral base and the one or two roles they actually contain.
 
 ## Visual Tokens And Family Defaults
 
-The bundled `*.DESIGN.md` files are the canonical token sources. **Carbon**
+The bundled `*.DESIGN.md` files are the source of truth for tokens. **Carbon**
 is the default. Material, Tailwind, Nord, Catppuccin, Dracula, Gruvbox,
-Solarized, and Tokyo Night are alternatives. Use
-the light tokens unless the destination requires dark mode. Prefer
+Solarized, and Tokyo Night are alternatives. Use the light tokens unless the destination requires dark mode. Prefer
 renderer-native tokens for editable source and fixed reviewed values for local
 assets. A project DESIGN.md, project notation, and official brand colors take
 precedence.
@@ -95,8 +94,8 @@ Use these family defaults after you select a design system:
 | Family | Default treatment | Use color when |
 |---|---|---|
 | Context or architecture | Neutral boundaries, context, and quiet edges | A structural role or focus is useful |
-| Flow or activity | Process on the main path and decision on branches | An outcome or exception is material |
-| Sequence | Stable actor or service participants and neutral messages | A path, failure branch, or external participant is material |
+| Flow or activity | Process on the main path and decision on branches | An outcome or exception matters |
+| Sequence | Stable actor or service participants and neutral messages | A path, failure branch, or external participant matters |
 | State or lifecycle | Neutral ordinary states and labeled transitions | Active work or a terminal outcome needs emphasis |
 | Class or ER | One data treatment for ordinary entities | Selection or external ownership is in scope |
 | Timeline or Gantt | Neutral tasks and restrained process emphasis | A milestone, blocked task, risk, or completion differs |

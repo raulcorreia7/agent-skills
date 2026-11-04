@@ -1,7 +1,7 @@
 # Guided Intake
 
-Start with repository evidence, then ask only questions that materially change
-the boundary or intended state. Establish:
+Start with repository evidence, then ask only questions that change the
+boundary or intended state. Establish:
 
 - system or project purpose.
 - included and excluded business flows.
@@ -22,8 +22,7 @@ If answers are unavailable, record the missing intent in `gaps.md` and continue
 only with observed-state claims that evidence supports.
 
 During intake, record the smallest likely set of technical-page needs. Revisit
-the selection after discovery. Add a page only when it has evidence-backed
-material to own. Remove a selected page whose evidence does not support it.
+the selection after discovery. Add a page only when it has evidence-backed content to own. Remove a selected page whose evidence does not support it.
 
 ## Example
 

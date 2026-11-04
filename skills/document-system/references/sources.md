@@ -1,7 +1,7 @@
 # Sources
 
-External design provenance for the workflow. These sources inform the compact
-local contract. They are not runtime dependencies.
+The external sources behind the workflow's design. They inform the local
+contract and are not runtime dependencies.
 
 - Murphy, Notkin, and Sullivan, "Software Reflexion Models: Bridging the Gap
   Between Source and High-Level Models":

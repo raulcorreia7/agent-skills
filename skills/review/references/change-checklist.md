@@ -30,7 +30,7 @@
   command/setup, dependency, deployment, operational, or support changes.
 - Verify commands, examples, versions, screenshots/diagrams, links, defaults,
   prerequisites, rollout, rollback, and troubleshooting against the change.
-- Treat missing required documentation and materially stale claims as findings.
+- Treat missing required documentation and clearly stale claims as findings.
   Do not require documentation churn for internal changes with no reader-facing
   or operational impact.
 - A modified README, generated reference, or changelog does not prove freshness.

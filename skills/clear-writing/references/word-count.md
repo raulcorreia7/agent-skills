@@ -47,4 +47,4 @@ proper-name boundaries require review.
 
 NOTE: Three printed example totals on official PDF pages 113–114 appear to be
 one word too high. Use the Rule 8.6 method. Preserve an auditable token trace.
-Identify the discrepancy if one of those examples is material.
+Identify the discrepancy if one of those examples matters.

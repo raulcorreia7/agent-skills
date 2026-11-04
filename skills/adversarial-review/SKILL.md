@@ -23,7 +23,7 @@ not proof.
    evidence locations, permitted checks, and evidence limits. Exclude
    conclusions, suspected findings, fixes, reviewer output, the requester's
    preferred outcome, and irrelevant authorship or ownership. Preserve source,
-   status, corrections, and material counterevidence when history matters.
+   status, corrections, and key counterevidence when history matters.
    Complete when the packet holds every listed input and none of the excluded
    material.
 3. Start exactly two isolated parallel roles from that packet: a breaker for
@@ -37,15 +37,15 @@ not proof.
    report. If a required report is still missing, return an incomplete review
    naming the missing roles and attempts, and stop without adjudicating.
    Complete when both reports are valid or the incomplete review is returned.
-5. Normalize each material claim to its affected criterion, precise locator,
+5. Normalize each key claim to its affected criterion, precise locator,
    evidence, consequence, and falsification attempt. Classify it as `confirmed`
    when local evidence supports claim and criterion, `disputed` when evidence or
-   interpretation is materially inconclusive, or `rejected` when unsupported,
+   interpretation is inconclusive, or `rejected` when unsupported,
    duplicated, outside scope, or disproved. The adjudicator adds no independent
    findings. For a composed specialist report using another priority scale, read
    [adjudication](references/adjudication.md) to normalize it without losing the
-   specialist label. Deduplicate overlap and preserve material disagreement.
-   Complete when every material claim is classified and the reports and
+   specialist label. Deduplicate overlap and preserve substantive disagreement.
+   Complete when every key claim is classified and the reports and
    synthesis meet the output contract.
 
 ## Flow
@@ -67,7 +67,7 @@ isolated roles.
 ## Guardrails
 
 - Keep the review read-only and preserve the supplied artifact.
-- Report preferences only when a stated criterion makes them material.
+- Report preferences only when a stated criterion makes them matter.
 
 ## Output
 

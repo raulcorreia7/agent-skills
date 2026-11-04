@@ -11,7 +11,7 @@ overlay to text that controls a risk.
    - For safety text, read both [procedures](procedures.md) and the [safety
 overlay](safety.md).
 3. Read [word count](word-count.md) or [punctuation](punctuation.md) only when
-that decision is material. Read [directive precedence](directive-precedence.md)
+that decision matters. Read [directive precedence](directive-precedence.md)
 when an applicable directive affects the result.
 4. For every formal compliance or verification claim, read [official source and
 evidence](official-source.md) and inspect an authorized official source. Read

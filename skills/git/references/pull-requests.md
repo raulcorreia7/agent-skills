@@ -17,7 +17,7 @@ The branch name may be less formal but should remain recognizable.
 - Use `Not provided`, `Not stacked`, `Not a release PR`, or `None`. Preserve all
   required sections.
 - Record validation exactly when it ran. Explain an absent check only when it
-  creates a material risk.
+  creates a significant risk.
 - Do not claim generated files or release steps were checked when they were not.
 
 For a process or tooling PR that is not itself a version bump, make the

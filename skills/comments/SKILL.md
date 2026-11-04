@@ -65,7 +65,7 @@ stop: every candidate classified and every edit backed by source evidence
   - [infrastructure-as-code comments](references/automation/infrastructure-as-code.md)
     for IaC configuration and provider directives.
 - Read `references/sources.yml` only to verify an external convention or update
-  provenance.
+  source records.
 
 ## Guardrails
 

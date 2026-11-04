@@ -62,7 +62,7 @@ validation result cites the applicable pinned format rule.
 
 - Record only values, rules, and rationale supported by project evidence or
   user direction.
-- Run lint only on user request or when it controls a material format or export
+- Run lint only on user request or when it controls a significant format or export
   risk.
 
 ## Output

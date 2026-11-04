@@ -19,7 +19,7 @@ timestamp: "{{timestamp}}"
 |---|---|
 | last reconciliation | {{timestamp}} |
 | catalog status | {{partial or complete}} |
-| material gaps | [gaps](gaps.md) |
+| significant gaps | [gaps](gaps.md) |
 
 ## coverage
 

@@ -12,7 +12,7 @@ Load when action bias, speculative work, or excess output could lower quality.
   apart, run it before editing. An evidence-backed "no change needed" is a
   valid result.
 - Tie every changed file, hunk, dependency, abstraction, test, document, and
-  generated artifact to a current requirement or a material risk.
+  generated file to a current requirement or a real risk.
 - Build for today's requirement: optional features, speculative extension
   points, extra defensive layers, compatibility paths, and configuration wait
   until a requirement asks for them.

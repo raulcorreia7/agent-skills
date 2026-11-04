@@ -13,7 +13,7 @@ timestamp: "{{timestamp}}"
 
 # configuration sources
 
-{{configuration ownership and source locations that protect secret values. link unavailable provenance to gaps.md}}
+{{configuration ownership and source locations that protect secret values. link unavailable sources to gaps.md}}
 
 # rollout and recovery
 

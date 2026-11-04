@@ -49,8 +49,7 @@ controls include:
 - `securityLevel`: host-owned in most Markdown integrations. Do not weaken it
   merely to enable links or HTML.
 
-Directives in `%%{init: ...}%%` still appear in older source but are less
-portable. Use them only for a verified legacy renderer.
+Directives in `%%{init: ...}%%` are less portable. Use them only for a verified legacy renderer.
 
 ## Controlled PNG Profile
 
@@ -109,8 +108,8 @@ mmdc -i diagram.mmd -o diagram.png -c mermaid-png.json -b white -s 2
 
 Use the profile as a starting point, not as source-level policy. Remove unused
 semantic accents, keep ordinary edges quiet, and create a separate reviewed
-dark profile when the destination requires one. A hosted Mermaid destination will not
-load this local JSON. Retain portable source or publish the reviewed PNG.
+dark profile when the destination requires one. A hosted Mermaid destination
+will not load this local JSON. Retain portable source or publish the reviewed PNG.
 
 ## Labels, Styling, And Links
 
@@ -130,7 +129,7 @@ final fence after any documentation templating.
 - Use Markdown strings only when ordinary quoted labels are insufficient.
 - Prefer structure, labels, and a small number of semantic classes. Inline
   `style` statements are harder to reuse and audit than `classDef`.
-- Keep fills vivid but purposeful, borders visible, and text contrast robust.
+- Keep fills vivid but purposeful, borders visible, and text contrast strong.
   Avoid fixed colors in native Markdown when the host controls the theme.
 - Use `linkStyle` sparingly and keep edge meaning in labels or line patterns.
 - `click` links, HTML labels, images, and custom CSS depend on the host security

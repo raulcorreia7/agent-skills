@@ -43,4 +43,4 @@ timestamp: "{{timestamp}}"
 
 # open context questions
 
-{{questions requiring human confirmation. link material gaps to gaps.md}}
+{{questions that need human confirmation. link significant gaps to gaps.md}}

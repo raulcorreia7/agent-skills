@@ -20,13 +20,13 @@ is already decided.
 2. Inspect repository, documentation, research, issues, or approved external
    evidence when it can change requirements. Separate observed facts, user
    direction, assumptions, and open questions in the evidence register.
-   Complete when every material claim has a register entry with a status.
+   Complete when every key claim has a register entry with a status.
 3. Define goals, measurable outcomes, non-goals, users, use cases, functional
    requirements, quality attributes, constraints, dependencies, risks, and
-   acceptance measures. Complete when every material requirement cites a
+   acceptance measures. Complete when every significant requirement cites a
    register ID and has an inspectable acceptance measure.
 4. Check consistency, traceability, feasibility, terminology, and missing
-   evidence against the document shape. Complete when no material contract,
+   evidence against the document shape. Complete when no significant contract,
    data, security, ownership, migration, rollout, or acceptance decision is
    hidden: each is decided or listed as open.
 
@@ -36,7 +36,7 @@ is already decided.
 input ← problem, opportunity, or idea + reader and evidence boundary
 inspect evidence → register(fact | direction | assumption | open)
 requirements ← goals, outcomes, non-goals, acceptance; each cites an ID
-check → hidden material decision? yes → surface it as open | no → continue
+check → hidden significant decision? yes → mark it open | no → continue
 stop: decision-ready, every open decision visible
 ```
 
@@ -51,11 +51,11 @@ Use applicable items from step 3 as sections.
   | --- | --- | --- | --- |
   | E1 | source and location | evidence, policy, user direction, or assumption | concise statement |
 
-  Every material requirement cites an ID. Without evidence, label an assumption,
+  Every significant requirement cites an ID. Without evidence, label an assumption,
   policy, or user direction; never imply validation.
 - Keep current facts separate from target decisions. Set a numeric target only
   from evidence or user direction; otherwise mark it open.
-- A PRD is not decision-ready while material contract, data, security,
+- A PRD is not decision-ready while significant contract, data, security,
   ownership, migration, rollout, or acceptance decisions remain hidden.
 
 ## Guardrails

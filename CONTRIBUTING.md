@@ -105,7 +105,7 @@ Review priorities map to severity: `P0` = Critical, `P1` = High, `P2` = Medium,
   for a second decision, and keep it a map.
 - Keep a definition with its rules and caveats. When you move a reference,
   update every pointer in the same edit; add no compatibility files.
-- Preserve pinned source content, licenses, and provenance.
+- Preserve pinned source content, licenses, and source records.
 
 ## Agent contract
 

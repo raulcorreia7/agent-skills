@@ -24,7 +24,7 @@ confidence.
   residual uncertainty before a broad recommendation.
 
 Escalate only when the current depth cannot answer the target without hiding a
-material uncertainty.
+significant uncertainty.
 
 ## Steps
 
@@ -47,7 +47,7 @@ material uncertainty.
    - `references/external-benchmarks.md` for public benchmarks or guidance.
    - `references/live-evidence.md` before a live telemetry or inventory query.
    - `references/pricing-capacity.md` for prices, limits, quotas, or capacity.
-   - `references/sources.yml` only to re-verify the dated provenance of these
+   - `references/sources.yml` only to re-verify the dated sources of these
      references.
 
    Complete when every claim has its evidence collected or its gap named.
@@ -93,4 +93,4 @@ stop: target met | further work lacks value
 - Bottleneck findings and ranked recommendations
 - Expected impact, trade-offs, and measurement plan
 - Mutation risk and cost impact when relevant
-- Stopping point and checks that materially informed it
+- Stopping point and checks that informed it

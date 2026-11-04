@@ -34,7 +34,7 @@ graph TB
 
 # evidence
 
-{{portable evidence citations for every material component and relationship}}
+{{portable evidence citations for every component and relationship}}
 
 # known omissions
 

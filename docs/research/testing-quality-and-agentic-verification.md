@@ -23,7 +23,7 @@ survey, or normative standard that directly studies the mechanism. An
 sources or authoritative practitioner guidance; it is useful but not proven to
 be the uniquely best workflow.
 
-The important distinction is between three questions:
+Three questions matter:
 
 1. **Reach:** Did execution reach the relevant code, state, or boundary?
 2. **Oracle:** Would the assertion distinguish correct from incorrect behavior?
@@ -38,7 +38,7 @@ A passing result supports only the intersection of those three answers.
 | --- | --- | --- |
 | A test needs a meaningful oracle, not only generated inputs or execution. | State the expected behavior independently of the current implementation. Review assertions as carefully as production code. | The oracle problem is a recognized bottleneck in test automation; specifications, contracts, models, metamorphic relations, and human judgment are different oracle sources. [Barr et al., IEEE TSE 2015](https://doi.org/10.1109/TSE.2014.2372785) |
 | Structural coverage is useful for finding unexercised code but is not a sufficient quality or correctness measure. | Use coverage diagnostically; do not prescribe one universal percentage or infer fault detection from it. | After controlling for suite size, coverage had low-to-moderate correlation with mutation effectiveness in 31,000 suites across five Java programs. A separate study of 100 Java projects found insignificant project-level and no file-level correlation with post-release defects. [Inozemtseva and Holmes, ICSE 2014](https://doi.org/10.1145/2568225.2568271), [Kochhar et al., IEEE Transactions on Reliability 2017](https://www.microsoft.com/en-us/research/publication/code-coverage-and-post-release-defects-a-large-scale-study-on-open-source-projects/) |
-| Mutation testing evaluates whether a suite detects selected injected faults and can expose weak assertions that coverage misses. | Use focused mutation analysis for high-risk logic or to audit generated tests. Inspect surviving and equivalent mutants; do not treat the score as correctness. | Mutation testing is a mature fault-based adequacy technique, but cost, operator selection, equivalent mutants, and experimental validity remain material. [Jia and Harman, IEEE TSE 2011](https://doi.org/10.1109/TSE.2010.62), [Papadakis et al., *Advances in Computers* 2019](https://doi.org/10.1016/bs.adcom.2018.03.015) |
+| Mutation testing evaluates whether a suite detects selected injected faults and can expose weak assertions that coverage misses. | Use focused mutation analysis for high-risk logic or to audit generated tests. Inspect surviving and equivalent mutants; do not treat the score as correctness. | Mutation testing is a mature fault-based adequacy technique, but cost, operator selection, equivalent mutants, and experimental validity remain significant. [Jia and Harman, IEEE TSE 2011](https://doi.org/10.1109/TSE.2010.62), [Papadakis et al., *Advances in Computers* 2019](https://doi.org/10.1016/bs.adcom.2018.03.015) |
 | Property-based testing can search a much larger input space than a few examples when a stable invariant and valid generator exist. | Add properties for algebraic rules, state machines, round trips, parsing, and boundary-rich domains; retain minimized counterexamples as regressions. | QuickCheck introduced executable properties, generated inputs, custom generators, and case-study evidence, while also documenting pitfalls. The result is technique evidence, not a guarantee that random samples prove a property. [Claessen and Hughes, ICFP 2000](https://doi.org/10.1145/357766.351266) |
 | Metamorphic testing helps when exact outputs are expensive or unavailable but relations between executions are known. | Test relations such as permutation invariance, monotonicity, round trips, scale transformations, and semantics-preserving rewrites. | The research survey finds broad application and identifies relation discovery and validation as central challenges. A wrong metamorphic relation is a wrong oracle. [Chen et al., ACM Computing Surveys 2018](https://doi.org/10.1145/3143561) |
 | Differential testing can reveal discrepancies without manually specifying every output when independent implementations or modes should agree. | Compare parsers, compilers, protocols, old/new implementations, or optimized/reference paths on defined common inputs. | Csmith's randomized differential testing found more than 325 previously unknown compiler bugs. Results depend on avoiding undefined behavior and on sufficiently independent implementations; shared defects can agree. [Yang et al., PLDI 2011](https://doi.org/10.1145/1993498.1993532) |
@@ -68,8 +68,8 @@ These are conservative inferences, not empirically fixed ratios.
 | Security boundary | Requirement-based positive and negative tests | Static/dynamic analysis, fuzzing, dependency/configuration checks, penetration testing |
 | Agent-generated implementation | Repository tests and static checks | Independent held-out or newly authored oracle; mutation/property/differential probe |
 
-The common safe action is to start narrow for fast diagnostic feedback and
-broaden only where the claim crosses a boundary. A universal mandate such as
+Start narrow for fast diagnostic feedback and broaden only where the claim
+crosses a boundary. A universal mandate such as
 “all tests are unit tests,” “always use end-to-end tests,” or “70/20/10” has no
 support in the reviewed evidence.
 
@@ -112,11 +112,11 @@ one rerun count, duration, or organization-wide policy.
 
 ## Directives for `create-tests`
 
-Retain its current focus on the smallest stable observable-boundary test,
+Keep its current focus on the smallest stable observable-boundary test,
 distinct risks, deterministic isolation, focused execution, and safe
 fail-before-fix validation. Add or clarify:
 
-1. **Name the oracle source.** For every material assertion, identify the
+1. **Name the oracle source.** For every key assertion, identify the
    requirement, public contract, bug reproduction, invariant, reference
    implementation, consumer expectation, or reviewed domain example. Existing
    output is not automatically expected output.
@@ -139,7 +139,7 @@ fail-before-fix validation. Add or clarify:
    timeouts, or normalize reruns without evidence that this addresses the root
    cause. Report quarantine and residual signal loss.
 7. **Report evidence limits.** State what the focused command exercised and the
-   material boundaries, platforms, schedules, data states, or full-suite gates
+   relevant boundaries, platforms, schedules, data states, or full-suite gates
    it did not exercise. Coverage is reach evidence, not proof.
 
 ### Compact risk-and-case example
@@ -160,7 +160,7 @@ Not proved: production lock duration at peak volume; requires a load rehearsal
 Retain the current evidence ordering and its warning that a check supports only
 the behavior and platform it exercises. Add or clarify:
 
-- Before implementation, map each success criterion and material preserved
+- Before implementation, map each success criterion and key preserved
   behavior to an oracle and a verification level. An unavailable oracle is a
   requirements gap, not an invitation to assert the current output.
 - Run the fastest discriminating check after a coherent edit. After focused
@@ -186,7 +186,7 @@ the behavior and platform it exercises. Add or clarify:
 ## Directives for `review`
 
 Review tests as executable specifications, not as an automatic positive signal.
-For each material change:
+For each significant change:
 
 1. Trace requirement or risk -> oracle -> test level -> executed command ->
    result. Missing links are evidence gaps, not necessarily defects.
@@ -194,8 +194,8 @@ For each material change:
    that only assert non-crash, mock calls, snapshots without a reviewed
    contract, self-derived expected values, or tautological round trips.
 3. Inspect whether test doubles omit the boundary being claimed. Require a real
-   integration, provider contract, or system case only when that boundary is
-   material.
+   integration, provider contract, or system case only when that boundary
+   matters.
 4. For generated tests, look for copied implementation logic, hallucinated
    requirements, weak exception assertions, over-mocking, duplicate coverage,
    and repair-loop accommodation. Seek an independent oracle for consequential
@@ -316,7 +316,8 @@ equivalent-mutant handling for mutation, and fresh held-out tasks for agents.
 - **Agent benchmarks:** Measured corpus overlap and performance inflation make
   contamination a demonstrated risk, while fresh time splits reduce but do not
   remove indirect leakage, benchmark-specific tuning, harness defects, or task
-  invalidity. Report benchmark-local results and preserve evaluation provenance.
+  invalidity. Report benchmark-local results and record where the evaluation
+  data came from.
 - **Security and migrations:** The reviewed standards and practitioner guidance
   define strong process expectations, but exact techniques depend on threat
   model, platform, data criticality, rollout, and recovery constraints. These
@@ -329,7 +330,7 @@ Keep `create-tests` as the owner of test design and generated-test validation,
 and `review` as the independent evaluator of oracle quality and missing risk
 boundaries. Do not duplicate the literature or technique catalog into all three
 skills. Put the compact oracle/level/limits contract in `create-tests`, point
-`code` to it when tests are material, and give `review` a concise test-evidence
+`code` to it when tests matter, and give `review` a concise test-evidence
 checklist.
 
 The release criterion for these skill changes is not instruction count. It is

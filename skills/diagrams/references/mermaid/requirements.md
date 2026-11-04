@@ -20,7 +20,7 @@ requirementDiagram
     load_test - verifies -> checkout_latency
 ```
 
-Use stable requirement IDs and real verification artifacts. Do not invent
+Use stable requirement IDs and real verification evidence. Do not invent
 traceability to make the picture complete. Reduce scope and label length before
 increasing the canvas.
 

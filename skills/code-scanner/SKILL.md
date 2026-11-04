@@ -67,8 +67,7 @@ coverage → only after the user confirms the announced command
   the toolbox image (`Dockerfile`, `code-scanner` wrapper), or `fetch-tools`,
   in the catalog's runner order.
 - Treat thresholds as signals, not verdicts.
-- Report tool findings, quantitative and qualitative. Send audit verdicts to
-  `audit`, change verdicts to `review`, fixes to `code`/`refactor`.
+- Report tool findings, quantitative and qualitative.
 
 ## Composition
 

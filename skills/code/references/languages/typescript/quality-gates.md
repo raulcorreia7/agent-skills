@@ -9,7 +9,7 @@ not replace its package manager or add overlapping formatters and linters.
 
 Put stable, high-signal compiler checks in the checked `tsconfig`. Keep module,
 target, JSX, lib, paths, and emit settings owned by the runtime or framework.
-do not copy this fragment over them. Use a no-emit verification config when the
+Do not copy this fragment over them. Use a no-emit verification config when the
 application build emits files.
 
 ```jsonc

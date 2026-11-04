@@ -17,7 +17,7 @@ An `implicit` skill activates when a request matches its description. Ask for a
 | Skill | Invocation | Use |
 |---|---|---|
 | [`research-highquality`](research-highquality/SKILL.md) | `manual` | Research broad or contested questions with traceable evidence |
-| [`ingest-sources`](ingest-sources/SKILL.md) | `implicit` | Acquire and prepare external sources with provenance, safety, and retention controls |
+| [`ingest-sources`](ingest-sources/SKILL.md) | `implicit` | Acquire and prepare external sources with source records, safety, and retention controls |
 | [`ast-grep`](ast-grep/SKILL.md) | `implicit` | Find code structures or author ast-grep rules |
 | [`debug`](debug/SKILL.md) | `implicit` | Isolate an evidence-backed failure cause |
 | [`audit`](audit/SKILL.md) | `manual` | Inspect repository or system state within a read-only boundary |

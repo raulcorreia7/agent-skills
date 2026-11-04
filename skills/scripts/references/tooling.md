@@ -3,7 +3,7 @@
 ## Placement
 
 Use native tool defaults and existing repository conventions. Override a
-default for sandboxing, debugging, reproducibility, or reliable cleanup.
+default for sandboxing, debugging, reproducibility, or cleanup.
 
 Common local-only shapes when the repository has no convention:
 

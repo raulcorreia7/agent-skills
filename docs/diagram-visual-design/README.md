@@ -12,7 +12,7 @@ owns the shared visual behavior. The adjacent `*.DESIGN.md` files own theme
 tokens, identity, and exceptions. The default tokens are in
 [`carbon.DESIGN.md`](../../skills/diagrams/references/design/carbon.DESIGN.md).
 This gallery mirrors the tokens and examples for local review. Update the
-gallery in the same change whenever the canonical style or family guidance
+gallery in the same change whenever the main style or family guidance
 changes.
 
 The renderers are pinned to exact npm versions, and each classic script carries

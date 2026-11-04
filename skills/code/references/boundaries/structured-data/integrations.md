@@ -11,7 +11,7 @@
   unstable upstream details into the public contract.
 - Verify the adapter with a protocol-faithful test boundary and use a real
   sandbox or service check when wire behavior, authentication, or provider
-  drift is material.
+  drift matters.
 
 Example—map provider outcomes once at the adapter:
 

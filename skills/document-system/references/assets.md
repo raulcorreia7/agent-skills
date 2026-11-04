@@ -24,11 +24,10 @@ After diagram selection, load only each chosen diagram template:
 
 ## Filling templates
 
-- A minimal bundle has no empty optional pages.
 - Load a diagram template only when its evidence contract is met. Create the
-  logical diagram only when it materially improves clarity.
-- Replace placeholders and remove inapplicable links. Replace every `{{...}}`
-  token in a selected asset, including Mermaid node and relationship labels, so
-  every published label and relationship comes from the evidence.
+  logical diagram only when it clearly improves clarity.
+- Replace every `{{...}}` token in a selected asset, including Mermaid node and
+  relationship labels, so every published label and relationship comes from the
+  evidence. Remove inapplicable links.
 - Keep portable Markdown links as the default navigation. Add
   destination-specific navigation metadata only for a confirmed destination.

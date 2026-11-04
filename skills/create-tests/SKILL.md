@@ -43,7 +43,7 @@ observable boundary.
    confirm that the test detects the known broken behavior. Then run each
    broader repository gate that the changed boundary requires. Complete when
    each command passes, each regression test fails on the broken behavior, and
-   material evidence limits are recorded.
+   key evidence limits are recorded.
 
 ## Flow
 
@@ -72,5 +72,5 @@ stop: every row protects a distinct risk through an observable boundary
 - A risk-and-case map that states the contract or failure mode each test covers.
 - Commands, results, and relevant environment facts, or the reason no safe
   check ran.
-- Material boundaries, platforms, schedules, and data states that the checks
+- Relevant boundaries, platforms, schedules, and data states that the checks
   did not exercise.

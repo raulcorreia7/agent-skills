@@ -3,14 +3,14 @@
 - Prefer native semantic controls. Preserve the programmatic name, role,
   value, state, and relationships that users need.
 - Support keyboard-only operation. Keep focus visible, ordered, and restored
-  after dialogs, menus, or other temporary surfaces close.
+  after dialogs, menus, or other temporary overlays close.
 - Provide text alternatives and applicable contrast, zoom, reflow, target, and
   pointer alternatives.
 - Connect errors to their fields. Announce important status changes without
   moving focus unexpectedly.
 - Check the complete user process, not only the changed component. Combine
   automated checks with keyboard use and representative assistive technology
-  for material interactions.
+  for significant interactions.
 - Claim WCAG conformance only for the applicable page or process and level.
   Scanner success alone is not conformance evidence.
 

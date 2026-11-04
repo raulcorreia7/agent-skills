@@ -22,7 +22,7 @@ when urgent action is recommended.
    the target and the selected findings are explicit.
 2. Verify each selected finding against the input, local and supplied evidence,
    and current authoritative external sources when a version, vulnerability,
-   standard, or infrastructure behavior is material and network research is
+   standard, or infrastructure behavior matters and network research is
    authorized. Separate fact, source-reported result, inference, unknown, and
    coverage limit. Normalize each verified finding to the severity scale below,
    preserving its source label; map `P0`, `P1`, `P2`, and `P3` to `Critical`,
@@ -80,7 +80,7 @@ stop: every finding verified or rejected, horizons proven, one dependency order
 ## Practices
 
 Read [remediation practices](references/practices.md) only when source rationale
-or a detailed example is material.
+or a detailed example matters.
 
 ## Guardrails
 

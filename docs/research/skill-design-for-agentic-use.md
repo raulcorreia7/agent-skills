@@ -2,7 +2,7 @@
 
 **Decision:** Design skills as small executable contracts. Make invocation
 discriminative, keep the common path in the main file, disclose branch-specific
-reference only when needed, end each material step with a checkable condition,
+reference only when needed, end each key step with a checkable condition,
 define the output, and verify against external evidence. Measure changes by
 task success and recurring cost, not by instruction count or document length.
 
@@ -14,7 +14,7 @@ universal prompt format.
 
 The review prioritizes controlled studies, peer-reviewed papers, and current
 official specifications. It uses first-party preprints where peer-reviewed
-evidence does not cover a material question and labels them. Search results and
+evidence does not cover a key question and labels them. Search results and
 secondary summaries were discovery inputs only.
 
 The evidence comes from instruction following, in-context learning,
@@ -32,9 +32,9 @@ of harmful overcorrection.
 
 | Rank | Directive | Evidence and boundary |
 | --- | --- | --- |
-| 1 | **Make success observable.** Give every material step a checkable completion condition and give the skill an explicit output contract. Prefer executable checks for syntax, schemas, tests, links, and changed-file coverage. | **Direct:** output information was the part of task definitions whose removal most damaged performance; compressed, structured definitions improved results. IFEval shows that objectively verifiable constraints support reproducible instruction-following measurement. **Inference:** applying the same idea to every step reduces premature completion. [Yin et al., ACL 2023](https://aclanthology.org/2023.acl-long.172/), [IFEval, 2023 first-party preprint](https://arxiv.org/abs/2311.07911) |
+| 1 | **Make success observable.** Give every key step a checkable completion condition and give the skill an explicit output contract. Prefer executable checks for syntax, schemas, tests, links, and changed-file coverage. | **Direct:** output information was the part of task definitions whose removal most damaged performance; compressed, structured definitions improved results. IFEval shows that objectively verifiable constraints support reproducible instruction-following measurement. **Inference:** applying the same idea to every step reduces premature completion. [Yin et al., ACL 2023](https://aclanthology.org/2023.acl-long.172/), [IFEval, 2023 first-party preprint](https://arxiv.org/abs/2311.07911) |
 | 2 | **Close the evidence loop.** After action, inspect the effect with the environment, a validator, a test, or a source that can falsify success. Use reflection only to interpret new evidence. | **Direct:** tool-interactive critique improves correction, and a purpose-built coding interface with concise action feedback substantially outperformed a shell-only interface. Broad review evidence does not support unaided self-correction as a universal improvement. [CRITIC, ICLR 2024](https://proceedings.iclr.cc/paper_files/paper/2024/hash/fef126561bbf9d4467dbb8d27334b8fe-Abstract-Conference.html), [SWE-agent, NeurIPS 2024](https://proceedings.neurips.cc/paper_files/paper/2024/hash/5a7c947568c1b1328ccc5230172e1e7c-Abstract-Conference.html), [Kamoi et al., TACL 2024](https://aclanthology.org/2024.tacl-1.78/) |
-| 3 | **Spend context on the current branch.** Keep the goal, common steps, decisive constraints, and output contract in the main file. Put branch-only facts and long examples behind explicit pointers located where that branch begins. | **Direct:** one task-definition study removed 60% of tokens without reducing performance; long-context retrieval varies materially with evidence position and often degrades in the middle. **Inference:** progressive disclosure is useful when its pointer reliably selects the needed material; it is harmful when it hides a rule needed on every run. [Yin et al., ACL 2023](https://aclanthology.org/2023.acl-long.172/), [Liu et al., TACL 2024](https://aclanthology.org/2024.tacl-1.9/) |
+| 3 | **Spend context on the current branch.** Keep the goal, common steps, decisive constraints, and output contract in the main file. Put branch-only facts and long examples behind explicit pointers located where that branch begins. | **Direct:** one task-definition study removed 60% of tokens without reducing performance; long-context retrieval varies with evidence position and often degrades in the middle. **Inference:** progressive disclosure is useful when its pointer reliably selects the needed material; it is harmful when it hides a rule needed on every run. [Yin et al., ACL 2023](https://aclanthology.org/2023.acl-long.172/), [Liu et al., TACL 2024](https://aclanthology.org/2024.tacl-1.9/) |
 | 4 | **Design narrow action interfaces.** Expose a small coherent action set, typed inputs, explicit required fields, bounded side effects, actionable errors, and structured results when a consumer needs them. | **Direct:** SWE-agent attributes a large gain to interface design and concise feedback. **Normative:** MCP defines tool names, descriptions, JSON Schema inputs, optional output schemas, error signaling, and validation expectations. The exact interface must still be tested with the target model and task. [SWE-agent, NeurIPS 2024](https://proceedings.neurips.cc/paper_files/paper/2024/hash/5a7c947568c1b1328ccc5230172e1e7c-Abstract-Conference.html), [MCP tools specification](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) |
 | 5 | **Make invocation discriminative.** Start the description with the job, name each distinct trigger branch once, and state a boundary only where a neighboring skill could plausibly capture the same request. Test positive and near-miss prompts. | **Direct for tool routing:** semantic alignment between a query and tool metadata was the strongest predictor of selection, while description perturbations shifted choices; many models still struggle to choose among similar tools. Models also show large performance changes under small lexical variations, which supports regression tests instead of trust in one phrasing. **Inference for skills:** skill descriptions act as routing metadata, but no reviewed paper establishes one universally optimal description template. [BiasBusters, ICLR 2026](https://www.microsoft.com/en-us/research/publication/biasbusters-uncovering-and-mitigating-tool-selection-bias-in-large-language-models/), [MetaTool, ICLR 2024](https://proceedings.iclr.cc/paper_files/paper/2024/hash/bc12914d66b41b6bfc2d3a5decdb498b-Abstract-Conference.html), [Zhan et al., EMNLP 2024](https://aclanthology.org/2024.emnlp-main.295/) |
 | 6 | **Order only real dependencies.** Write the shortest sequence that exposes prerequisites, action, observation, and correction. Put conditional work in branches. End each step before introducing the next obligation. | **Direct:** ReAct improved agent performance by interleaving task reasoning with actions and observations. **Inference:** numbered skill steps help when the task has dependencies; a flat reference skill does not become better merely by being forced into a sequence. [ReAct, ICLR 2023](https://iclr.cc/virtual/2023/poster/11003) |
@@ -88,7 +88,7 @@ description: Leading job and distinct trigger branches.
 
 - Required result or artifact.
 - Evidence and checks.
-- Material gaps or residual risk.
+- Significant gaps or residual risk.
 ```
 
 Apply these variations:
@@ -116,12 +116,12 @@ with evidence; do not award points for polish alone.
 | --- | --- | --- | --- | --- |
 | Invocation | No usable trigger | Broad or overlapping | Distinct job and main triggers | Positive and near-miss routing tests pass |
 | Process | Contradictory or unusable | Vague activities | Executable steps or coherent reference | Dependencies, branches, and stop conditions are complete |
-| Completion | No success condition | Subjective completion | Material steps are checkable | Checks cover every modified or required surface |
+| Completion | No success condition | Subjective completion | Key steps are checkable | Checks cover every modified or required surface |
 | Context economy | Stale or duplicate content | Most branches load everything | Common path is concise | Conditional reference loads reliably and no meaning is duplicated |
 | Interface | Inputs or authority are unclear | Prose-only implicit contract | Inputs, effects, and failures are explicit | Representative valid and invalid calls pass |
 | Output | Output is unspecified | Shape is implied | Required artifacts and evidence are explicit | Output is mechanically validatable where useful |
 | Feedback | No verification | Unaided re-reading only | Relevant checks or sources are named | Failure feedback drives a bounded correction and re-check |
-| Safety and scope | Unsafe authority or mutation | Generic warnings | Exact material boundaries | Boundaries have safe alternatives and adversarial tests |
+| Safety and scope | Unsafe authority or mutation | Generic warnings | Exact relevant boundaries | Boundaries have safe alternatives and adversarial tests |
 
 The maximum is 24. Treat any zero in invocation, completion, output, or safety
 as a release blocker when that dimension applies. Use the total only to compare

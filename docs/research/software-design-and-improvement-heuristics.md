@@ -19,7 +19,6 @@ agent code-writing skill.
   overengineering?
 - **Audience:** Maintainers who need useful defaults without turning an agent
   into a pattern applier, style enforcer, or speculative framework builder.
-- **As-of date:** 2026-08-07.
 - **Source boundary:** Peer-reviewed systematic reviews, controlled experiments,
   repository and industrial studies, foundational papers and original authors,
   plus first-party operational guidance from Google, Microsoft, Rust, and
@@ -156,7 +155,7 @@ GoF patterns provide a maintenance framework, but also qualitative evidence
 that they did not necessarily help novices learn design. A later review of 50
 primary studies found contradictory, difficult-to-compare results across
 patterns and quality attributes; pattern documentation, class size, and
-scattering materially affected the observations. [Zhang and Budgen, IEEE TSE
+scattering clearly affected the observations. [Zhang and Budgen, IEEE TSE
 2012](https://doi.org/10.1109/TSE.2011.79), [Wedyan and Abufakher, IET Software
 2020](https://doi.org/10.1049/iet-sen.2018.5446)
 
@@ -382,7 +381,7 @@ validation, or compatibility semantics, not merely because the pattern exists.
 
 Fowler defines refactoring as restructuring through small transformations that
 preserve observable behavior; the second edition of his book is dated 2018.
-Google's canonical code-review policy favors approval once a change definitely
+Google's official code-review policy favors approval once a change definitely
 improves overall code health, even if it is not perfect, and says technical
 facts and data outrank personal preference. Google also advises separating a
 major style-only change from a functional change because combination obscures
@@ -421,8 +420,8 @@ design is almost never merely a style question.
 
 **Inference:** Follow checked-in formatters, analyzers, language conventions,
 public API idioms, and nearby code unless a correctness, compatibility, or
-maintainability reason justifies divergence. Keep repository conventions
-authoritative for style; do not use “consistency” to preserve a demonstrably
+maintainability reason justifies divergence. Repository conventions
+own style; do not use “consistency” to preserve a demonstrably
 harmful design.
 
 ### Public interfaces turn cleanup into compatibility work
@@ -482,7 +481,7 @@ it as an internal refactor.
 - **Patterns versus language facilities:** The GoF source captures
   object-oriented experience from its period. Modern type systems, standard
   libraries, frameworks, and functional constructs can make a named pattern
-  unnecessary or materially change its implementation.
+  unnecessary or change its implementation a lot.
 - **Semantic guarantees versus application defaults:** Effect systems,
   immutability checkers, exhaustive matches, and total languages establish
   different guarantees under different assumptions. None shows that an entire

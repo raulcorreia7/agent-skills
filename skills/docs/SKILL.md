@@ -21,8 +21,8 @@ Create source-backed documentation that lets the reader complete the next task.
 | `cleanup` | Duplicate or stale-content cleanup | `references/content-deduplication.md` |
 | `agent surface` | Agent-readable documentation surfaces such as `llms.txt` | `references/llms-txt.md` |
 
-`full audit`, `page audit`, and `link sweep` are read-only: return findings and edit
-only when the user separately requests an edit. `reorganize` and `cleanup`
+`full audit`, `page audit`, and `link sweep` are read-only: return findings
+and edit only when the user separately requests an edit. `reorganize` and `cleanup`
 start read-only; their reference states when to apply changes.
 
 ## Steps
@@ -32,8 +32,8 @@ start read-only; their reference states when to apply changes.
    page casing, navigation metadata, link syntax, or renderer constraints.
    Complete when the mode, reader, destination, and write boundary are set.
 2. Inspect nearby navigation, links, generated ownership, terminology, and
-   canonical sources, and load the mode's references. Complete when each
-   material claim has an evidence route.
+   primary sources, and load the mode's references. Complete when each
+   key claim has an evidence route.
 3. Write or assess. When writing, put the outcome or first action before
    supporting explanation, and remove stale or duplicate local copies when the
    write boundary permits it. Add examples, tables, troubleshooting, or a
@@ -47,7 +47,7 @@ start read-only; their reference states when to apply changes.
 ## Flow
 
 ```text
-input ← request, target docs, canonical sources
+input ← request, target docs, primary sources
 scope → gather evidence → write | assess → validate
 read-only mode? yes → findings, no edits | no → edit within the write boundary
 loop: validate → fix → until the selected checks pass

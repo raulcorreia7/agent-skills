@@ -1,9 +1,9 @@
 # Python Quality Gates
 
 Copy these settings into `pyproject.toml` and CI. Do not treat this leaf as
-agent memory. Repository configuration and locked development tools take precedence. In a
-new production package, make `pyproject.toml` the single project-level source
-of truth. Set `project.requires-python` to the lowest supported runtime. Make
+agent memory. Repository configuration and locked development tools take
+precedence. In a new production package, make `pyproject.toml` the single
+project-level source of truth. Set `project.requires-python` to the lowest supported runtime. Make
 Ruff and the selected type checker target that version. Do not add Black, isort,
 Flake8, Pylint, Bandit, or a second required type checker when Ruff, Pyright,
 and the existing test runner already own those concerns.

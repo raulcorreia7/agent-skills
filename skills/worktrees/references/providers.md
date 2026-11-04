@@ -20,7 +20,7 @@ operations.
 Use `wt remove --no-delete-branch --foreground` by default. Get approval before
 you use `--clobber`, `--force`, `-D`, or `--reap`.
 
-Inspect Worktrunk's path configuration before creation. Ensure its destination
+Inspect Worktrunk's path configuration before creation. Make sure its destination
 is outside the source repository, report the actual path after creation, and do
 not change the template unless the user requests that configuration.
 

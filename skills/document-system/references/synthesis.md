@@ -1,7 +1,7 @@
 # Synthesis
 
 Generate reader pages from the evidence ledger. Do not copy discovery output.
-Put each material claim in the page that owns the reader question:
+Put each key claim in the page that owns the reader question:
 
 - code responsibilities, seams, dependencies, entry points, and tests go to
   `modules.md`.

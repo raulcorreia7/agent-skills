@@ -9,7 +9,7 @@ timestamp: "{{timestamp}}"
 
 | module or component | responsibility | entry points | dependencies or seams | evidence |
 |---|---|---|---|---|
-| {{name}} | {{owned responsibility}} | {{command, handler, route, or job}} | {{material dependency or boundary}} | {{portable evidence citations}} |
+| {{name}} | {{owned responsibility}} | {{command, handler, route, or job}} | {{relevant dependency or boundary}} | {{portable evidence citations}} |
 
 # dependency boundaries
 

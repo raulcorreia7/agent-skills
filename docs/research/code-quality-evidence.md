@@ -15,12 +15,12 @@ It is not a runtime rules file or a systematic literature review.
 The review prioritizes original peer-reviewed studies and systematic reviews,
 formal and industry standards, official specifications and documentation, OWASP
 guidance, and first-party engineering accounts. Search results and secondary
-summaries were discovery inputs only. Each material claim below links to the
+summaries were discovery inputs only. Each key claim below links to the
 source that owns it.
 
 The security pass reviewed the user-supplied
 [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/) on 2026-08-06
-and cross-checked the rendered guidance against the canonical working sources at
+and cross-checked the rendered guidance against the main working sources at
 [`OWASP/CheatSheetSeries` commit
 `da4c967e9de854727f72bb2748dd98f76c888b06`](https://github.com/OWASP/CheatSheetSeries/tree/da4c967e9de854727f72bb2748dd98f76c888b06).
 The series is a living consensus resource. The pinned revision makes this
@@ -50,7 +50,7 @@ Evidence labels mean:
 | Quality model | Product quality is multidimensional; requirements and evaluation should select the characteristics that matter to the product and stakeholders. | **Standard:** [ISO/IEC 25010:2023](https://www.iso.org/standard/78176.html) defines a nine-characteristic product quality model. It is a reference model, not a single score or proof of quality. |
 | Correctness contracts | Preconditions, postconditions, invariants, and compositional reasoning can specify and prove program properties; machine-checked refinement can provide unusually strong assurance for a bounded critical component. | **Formal:** [Hoare, 1969](https://doi.org/10.1145/363235.363259) establishes an axiomatic basis. The [seL4 kernel verification](https://sel4.org/Research/pdfs/sel4-formal-verification-os-kernel.pdf) proves that its C implementation refines its abstract specification while explicitly assuming correct hardware, compiler, assembly, boot code, and specification. Neither source shows that full verification is cost-effective for every program. |
 | Verification | Broadly applicable developer verification includes automated functional and structural tests, historical regression cases, static analysis, secret detection, fuzzing, and dependency review, selected by risk. | **Standard/consensus:** [NISTIR 8397](https://doi.org/10.6028/NIST.IR.8397) gives minimum verification guidance and explicitly says it does not cover the totality of verification. |
-| Test-first development | TDD often reports quality benefits, but productivity and effect sizes vary materially by context and study. | **Synthesis:** a [2016 systematic review](https://doi.org/10.1016/j.infsof.2016.02.004) found predominantly positive quality results but lower productivity in industrial settings; a [2025 tertiary study](https://doi.org/10.1016/j.infsof.2025.107762) found limited overlap among TDD reviews and warns that their conclusions depend on study selection. This supports verification, not a universal TDD mandate. |
+| Test-first development | TDD often reports quality benefits, but productivity and effect sizes vary by context and study. | **Synthesis:** a [2016 systematic review](https://doi.org/10.1016/j.infsof.2016.02.004) found predominantly positive quality results but lower productivity in industrial settings; a [2025 tertiary study](https://doi.org/10.1016/j.infsof.2025.107762) found limited overlap among TDD reviews and warns that their conclusions depend on study selection. This supports verification, not a universal TDD mandate. |
 | Coverage | Structural coverage can locate unexecuted code, but high coverage is not strong evidence of fault detection or fewer production defects. | **Empirical-association:** Inozemtseva and Holmes generated 31,000 suites for five Java systems and found only low-to-moderate correlation after controlling for suite size; stronger criteria did not add insight ([ICSE 2014](https://doi.org/10.1145/2568225.2568271)). A later study of 100 open-source Java projects found insignificant project-level and no file-level correlation with post-release bugs ([Kochhar et al., 2017](https://www.microsoft.com/en-us/research/publication/code-coverage-and-post-release-defects-a-large-scale-study-on-open-source-projects/)). Both are context-bound associations, not causal trials. |
 | Mutation testing | Selective mutation testing can expose concrete test-suite holes and is more behavior-sensitive than raw coverage, but its score is still a proxy. | **Empirical-association:** a Google study of 15 million mutants found that developers added tests in response and that surviving mutants were coupled with historical real faults. [Petrović et al., ICSE 2021](https://research.google/pubs/long-term-effects-of-mutation-testing/) The retrospective, Google-specific study does not prove a transferable reduction in production defects. |
 | Modularity | Decompose around design decisions likely to change and hide each decision behind an interface; decomposition by processing steps can spread change knowledge. | **Expert/canonical comparative design:** [Parnas, 1972](https://doi.org/10.1145/361598.361623) compares two designs and argues for information hiding to improve flexibility and comprehensibility. It also notes possible efficiency tradeoffs under a conventional implementation. |
@@ -61,7 +61,7 @@ Evidence labels mean:
 | Trust and input boundaries | Model data flows and trust boundaries. Validate untrusted input for syntactic and domain correctness at an authoritative boundary; keep commands and data structurally separate. | **Consensus:** [OWASP threat modeling](https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html), [input validation](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html), and [SQL injection prevention](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html). Validation is not a substitute for context-appropriate encoding, parameterization, or authorization. |
 | Authorization | Enforce authorization on every request, least privilege, and deny by default. | **Consensus:** the [OWASP Authorization Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) states these controls and calls for unit and integration tests. It does not select the application's policy model. |
 | Concurrency | Concurrent behavior needs an explicit correctness condition. Linearizability makes each completed operation appear to take effect atomically between invocation and response, preserving real-time ordering. | **Formal:** [Herlihy and Wing, 1990](https://doi.org/10.1145/78969.78972) defines linearizability and proof methods. Linearizability is deliberately strong and is not required by every concurrent or distributed system. |
-| Persistent data | Put durable invariants in the authoritative store where possible, and choose transaction isolation from the anomalies the contract must exclude. | **Specification/first-party:** PostgreSQL documents enforced [constraints](https://www.postgresql.org/docs/current/ddl-constraints.html) and how [isolation levels](https://www.postgresql.org/docs/current/transaction-iso.html) admit different anomalies. Gray and Reuter provide the canonical transaction, concurrency-control, and recovery treatment in [*Transaction Processing*](https://books.google.com/books?id=VFKbCgAAQBAJ). Product-specific semantics still govern. |
+| Persistent data | Put durable invariants in the authoritative store where possible, and choose transaction isolation from the anomalies the contract must exclude. | **Specification/first-party:** PostgreSQL documents enforced [constraints](https://www.postgresql.org/docs/current/ddl-constraints.html) and how [isolation levels](https://www.postgresql.org/docs/current/transaction-iso.html) admit different anomalies. Gray and Reuter provide the standard transaction, concurrency-control, and recovery treatment in [*Transaction Processing*](https://books.google.com/books?id=VFKbCgAAQBAJ). Product-specific semantics still govern. |
 | Retries and partial failure | Retry only failures expected to be transient; bound attempts, use timeouts and backoff with jitter, and make side-effecting operations idempotent or deduplicated. | **Empirical-causal within a simulation:** Amazon's [backoff-and-jitter simulator](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) shows reduced contention and client work under its model. **Expert/first-party:** [Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) and [Making retries safe with idempotent APIs](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/) describe production failure modes. Exact policy remains workload-specific. |
 | Performance | Measure representative end-to-end workloads and distributions before optimizing. Speedup is limited by the fraction actually improved, and fan-out makes tail latency increasingly important. | **Formal/analytical:** [Amdahl, 1967](https://doi.org/10.1145/1465482.1465560). **Expert/peer-reviewed systems account:** [Dean and Barroso, 2013](https://doi.org/10.1145/2408776.2408794). Neither supplies a transferable latency target. |
 | Dependencies and supply chain | Add a dependency only for a justified capability; evaluate authenticity, maintenance, security response, API compatibility, license, transitive impact, and update path. Preserve inventory and verifiable build provenance. | **Consensus:** [OpenSSF dependency evaluation](https://best.openssf.org/Concise-Guide-for-Evaluating-Open-Source-Software.html), [NIST SSDF](https://doi.org/10.6028/NIST.SP.800-218), [CISA 2025 SBOM minimum elements](https://www.cisa.gov/sites/default/files/2025-08/2025_CISA_SBOM_Minimum_Elements.pdf), and [SLSA 1.2](https://slsa.dev/spec/v1.2/). An SBOM, score, signature, or attestation improves visibility or integrity evidence; none proves absence of vulnerable or malicious behavior. |
@@ -72,11 +72,11 @@ Evidence labels mean:
 
 ## OWASP Cheat Sheet Series synthesis
 
-These are the cross-cutting controls that belong in a general code-quality
-workflow. Product-, framework-, and language-specific details remain in the
-linked sheet; this report does not reproduce their full checklists.
+These cross-cutting controls belong in a general code-quality workflow.
+Product-, framework-, and language-specific details stay in the linked sheet;
+this report does not reproduce the full checklists.
 
-| Boundary | High-yield directive | Pinned canonical source |
+| Boundary | High-yield directive | Pinned primary source |
 | --- | --- | --- |
 | Input and injection | Validate untrusted data on the server for expected syntax, length, range, and domain meaning. Prefer positive validation for constrained fields, then use context-specific structured APIs or encoding. For SQL, bind values with parameterized queries; validation alone does not separate code from data. | [Input validation](https://github.com/OWASP/CheatSheetSeries/blob/da4c967e9de854727f72bb2748dd98f76c888b06/cheatsheets/Input_Validation_Cheat_Sheet.md), [SQL injection prevention](https://github.com/OWASP/CheatSheetSeries/blob/da4c967e9de854727f72bb2748dd98f76c888b06/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.md) |
 | Authentication and sessions | Use a maintained identity/session implementation instead of custom cryptography or token formats. Protect credential comparison and recovery, require stronger or repeated authentication for sensitive actions, renew the session identifier after privilege changes, use restrictive cookie attributes, enforce server-side idle/absolute expiry, and invalidate on logout or compromise. | [Authentication](https://github.com/OWASP/CheatSheetSeries/blob/da4c967e9de854727f72bb2748dd98f76c888b06/cheatsheets/Authentication_Cheat_Sheet.md), [session management](https://github.com/OWASP/CheatSheetSeries/blob/da4c967e9de854727f72bb2748dd98f76c888b06/cheatsheets/Session_Management_Cheat_Sheet.md) |
@@ -89,13 +89,12 @@ linked sheet; this report does not reproduce their full checklists.
 
 ## High-yield directives for an agent skill
 
-The following are conservative design inferences from the evidence above. They
-are intentionally conditional on the repository, language, risk, and requested
-behavior.
+These are conservative design inferences from the evidence above. They depend
+on the repository, language, risk, and requested behavior.
 
 1. **Define observable success before editing.** State required behavior,
    compatibility, invariants, failure behavior, and relevant non-functional
-   constraints. Resolve material ambiguity before choosing an implementation.
+   constraints. Resolve significant ambiguity before choosing an implementation.
 2. **Inspect the behavior owner and its contracts.** Read the smallest relevant
    call path, data model, tests, interfaces, and local conventions. Preserve
    public behavior and data shape unless change is approved.
@@ -130,9 +129,9 @@ behavior.
    native deserialization of untrusted objects. Give every accepted format,
    scheme, size, destination, and resource use an explicit business reason.
 10. **Specify concurrent and durable state transitions.** Identify ownership,
-   atomicity, ordering, consistency, and cancellation requirements. Use native
-   synchronization, transactions, uniqueness, referential integrity, and
-   idempotency mechanisms instead of check-then-act conventions that race.
+    atomicity, ordering, consistency, and cancellation requirements. Use native
+    synchronization, transactions, uniqueness, referential integrity, and
+    idempotency mechanisms instead of check-then-act conventions that race.
 11. **Bound failure handling.** Give remote and blocking work deadlines. Retry
     only classified transient failures, with a budget and jittered backoff; make
     repeated side effects safe. Preserve the primary error, release resources,
@@ -154,12 +153,12 @@ behavior.
     programmatic names and state, errors and status messages, text alternatives,
     contrast, zoom/reflow, and pointer alternatives that apply to the change.
     Combine automated checks with keyboard and representative assistive-technology
-    checks for material interactions.
+    checks for relevant interactions.
 15. **Build actionable observability into the behavior.** Emit structured,
     stable events around user-visible outcomes and important state transitions;
     include correlation, result, latency, and reason where useful. Bound
     cardinality and volume, sanitize untrusted fields, exclude sensitive data,
-    and ensure telemetry failure cannot break the main operation.
+    and make sure telemetry failure cannot break the main operation.
 16. **Review the final diff against the contract and risk.** Check correctness,
     data migration and compatibility, trust boundaries, concurrency, failure
     paths, accessibility, observability, and relevant tests. Remove abandoned
@@ -190,11 +189,11 @@ causal validation of any metric.
 | Latency/throughput averages | Trend a stable workload and detect gross shifts. | Ignoring workload changes, error responses, resource cost, or the distribution and tail. |
 | Delivery frequency or lead time | Understand system-level flow for a stable product context alongside stability and reliability outcomes, as in [DORA's paired throughput/stability model](https://cloud.google.com/resources/state-of-devops). | Individual/team quotas, universal benchmark classes, causal claims from survey associations, or a substitute for value, security, and change risk. |
 
-Practical safeguards follow Campbell, Strathern, and Austin: keep measures
+Safeguards, following Campbell, Strathern, and Austin: keep measures
 informational where possible; never rank individuals from code proxies; pair a
-leading proxy with outcome and harm measures; publish definitions and known blind
-spots; audit samples manually; rotate or retire measures that are being gamed;
-and revisit a threshold when the technology, workload, or incentive changes.
+leading proxy with outcome and harm measures; publish definitions and known
+blind spots; audit samples manually; rotate or retire gamed measures; and
+revisit a threshold when the technology, workload, or incentive changes.
 Compliance thresholds are legitimate when the governing standard and risk call
 for them, but the threshold is then a contract boundary, not a complete quality
 model.
@@ -239,12 +238,12 @@ model.
 
 ## Evidence limits
 
-Software engineering evidence is unusually context-sensitive: language,
-toolchain, team, system age, criticality, workload, and measurement choices all
-affect results. Much of the field evidence is observational, and several famous
-practices rest on formal reasoning or expert consensus rather than controlled
-field trials. Standards define defensible requirements but do not show that a
-team implemented them correctly. No reviewed source supports universal limits on
+Software engineering evidence is context-sensitive: language, toolchain, team,
+system age, criticality, workload, and measurement choices all affect results.
+Much of the field evidence is observational, and several well-known practices
+rest on formal reasoning or expert consensus rather than controlled field
+trials. Standards define defensible requirements but do not show that a team
+implemented them correctly. No reviewed source supports universal limits on
 function length, file size, complexity, coverage, dependency count, reviewer
 count, or change size.
 

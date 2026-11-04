@@ -5,7 +5,7 @@
 Write the target as a measurable comparison with a boundary and constraint.
 Prefer user- or system-visible measures over internal counters. Record workload,
 environment, versions, sample size, warm-up, cache state, variance, and known
-noise when they materially affect the result.
+noise when they affect the result.
 
 ## Baselines And Proxies
 
@@ -28,14 +28,14 @@ Prefer evidence closest to the decision:
 6. Independent benchmarks or research with a comparable workload and setup.
 7. Explicit estimates or engineering models with sensitivity ranges.
 
-Treat this as a confidence ladder, not an automatic ranking. Record provenance,
+Treat this as a confidence ladder, not an automatic ranking. Record the source,
 collection time, scope, dimensions, aggregation, workload, environment,
 versions, and known confounders. Keep correlation separate from causation.
 
 ## Rank And Verify
 
 Rank candidates by expected impact, effort, risk, confidence, reversibility,
-maintenance cost, and validation plan. Change one material variable at a time
+maintenance cost, and validation plan. Change one relevant variable at a time
 when practical, re-measure, and keep correctness and safety checks intact.
 
 Stop when the target is met or the bottleneck moves outside scope. Also stop

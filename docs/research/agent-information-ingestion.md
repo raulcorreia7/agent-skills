@@ -1,9 +1,9 @@
 # Safe Information Ingestion for LLMs and Agents
 
-**Decision:** Use the implicit `ingest-sources` skill for material acquisition,
+**Decision:** Use the implicit `ingest-sources` skill for significant acquisition,
 conversion, or corpus work. Keep an ordinary single-page lookup in the active
 research workflow. Use the compact baseline guardrail for untrusted content,
-network access, parser isolation, provenance, and authority. The skill prefers
+network access, parser isolation, source origin, and authority. The skill prefers
 native, publisher-owned representations. It retains immutable source bytes
 beside every derivative and preserves structure and locators before chunking.
 It retrieves a small evidence set instead of placing an entire corpus in model
@@ -13,8 +13,8 @@ This report was reviewed on 2026-08-06. It covers bounded ingestion for
 inference-time research, retrieval, and agent work. It does not authorize model
 training, redistribution, bypassing access controls, or a particular use of
 copyrighted or personal data. It is a targeted review of primary specifications,
-official tool documentation, and peer-reviewed research, not legal advice or a
-systematic literature review.
+official tool documentation, and peer-reviewed research. It is not legal advice
+or a systematic literature review.
 
 ## Evidence method
 
@@ -25,10 +25,10 @@ original indirect-prompt-injection threat description. Search results and
 secondary guides were discovery inputs, not evidence.
 
 Few studies compare complete ingestion pipelines across all formats. The
-workflow below is therefore a conservative design inference from format
-contracts, documented tool behavior, and converging retrieval and security
-evidence. Tool examples illustrate decisions. They are not an implementation or
-an approval to fetch a source.
+workflow below is a conservative design inference from format contracts,
+documented tool behavior, and converging retrieval and security evidence. Tool
+examples illustrate decisions. They are not an implementation or an approval to
+fetch a source.
 
 ## Governing principles
 
@@ -58,10 +58,10 @@ an approval to fetch a source.
 
 ## Acquisition and conversion choices
 
-| Choice | Use when | Main benefit | Material loss or risk | Required preservation or check |
+| Choice | Use when | Main benefit | Significant loss or risk | Required preservation or check |
 | --- | --- | --- | --- | --- |
-| Direct HTTP fetch | Canonical static HTML, text, file, or API response is available | Fast, deterministic, no browser script execution, and captures headers | Client-rendered content may be absent; redirects can cross trust boundaries | Final URL, redirect chain, status, media type, headers, raw bytes, validators, hash |
-| Publisher Markdown or text endpoint | The publisher owns and versions it | Compact and often cleaner than extracted HTML | It can omit interactive examples, figures, tables, warnings, or recent page changes | Compare title, version, headings, links, and a sample against the canonical page |
+| Direct HTTP fetch | Official static HTML, text, file, or API response is available | Fast, deterministic, no browser script execution, and captures headers | Client-rendered content may be absent; redirects can cross trust boundaries | Final URL, redirect chain, status, media type, headers, raw bytes, validators, hash |
+| Publisher Markdown or text endpoint | The publisher owns and versions it | Compact and often cleaner than extracted HTML | It can omit interactive examples, figures, tables, warnings, or recent page changes | Compare title, version, headings, links, and a sample against the main page |
 | Reader/main-content extraction | The page is prose with repeated navigation or advertising | Removes high-volume chrome | It is a lossy heuristic. Mozilla Readability can return HTML or text with all tags removed and warns that untrusted output must be sanitized before rendering | Keep raw HTML and extracted HTML/Markdown; test code, tables, links, warnings, and headings. [Mozilla Readability](https://github.com/mozilla/readability) |
 | Isolated browser rendering | Required content is unavailable without client execution | Captures the post-render DOM | Non-determinism, extra requests, credential leakage, script execution, and a larger attack surface | Use a disposable profile without ambient credentials; bound hosts, requests, time, and bytes; retain final DOM and network provenance |
 | Plain PDF text | A born-digital, simple-layout PDF has usable embedded text | Cheapest searchable representation | Columns, tables, reading order, figures, equations, and coordinates can collapse | Retain page breaks; compare sample pages; escalate on structure-sensitive content |
@@ -73,10 +73,10 @@ an approval to fetch a source.
 | Partial, sparse, or shallow clone | Broad source analysis needs repository semantics but not all history or blobs | Preserves Git paths and a commit identity with lower transfer | Missing history, tags, blobs, submodule content, or older definitions can affect analysis | Record clone options and commit; fetch omitted material only for an explicit need |
 | Full clone | History, blame, tags, renamed files, or complete object reachability is required | Highest repository fidelity | Highest transfer, storage, and secret/history exposure | Bound repository and refs; scan scope and retention; capture commit and submodule states |
 
-No single converted representation should replace the source. Pandoc documents
-HTML-to-Markdown conversion, while MarkItDown explicitly describes its Markdown
-as optimized for text analysis rather than high-fidelity human conversion.
-These tools are useful derivatives, not evidence that conversion is lossless.
+No converted representation should replace the source. Pandoc documents
+HTML-to-Markdown conversion, while MarkItDown describes its Markdown as
+optimized for text analysis rather than high-fidelity human conversion. These
+tools produce useful derivatives. They do not show that conversion is lossless.
 [Pandoc manual](https://pandoc.org/MANUAL.html),
 [Microsoft MarkItDown](https://github.com/microsoft/markitdown)
 
@@ -84,7 +84,7 @@ These tools are useful derivatives, not evidence that conversion is lossless.
 
 ### Progressive web acquisition
 
-1. Resolve the canonical publisher, product version, locale, and intended page
+1. Resolve the official publisher, product version, locale, and intended page
    set. Prefer a supplied URL list over open-ended traversal.
 2. Read `/robots.txt` for crawler rules and Sitemap pointers, then use
    `sitemap.xml`, a sitemap index, documentation navigation, an API inventory,
@@ -107,12 +107,12 @@ These tools are useful derivatives, not evidence that conversion is lossless.
    required content. The browser worker must be isolated from secrets,
    privileged sessions, local network access, and mutation tools.
 6. Deduplicate canonical, print, mobile, locale, query-string, and version
-   variants only after their content and provenance have been compared.
+   variants only after their content and origin have been compared.
 
 `/llms.txt` can be a useful curated pointer when a publisher supplies it, but it
-remains a proposal for inference-time orientation. Treat it as advisory and
+is a proposal for inference-time orientation. Treat it as advisory: it is
 neither exhaustive nor an access or reuse policy. Verify linked resources
-against the canonical site and normal freshness metadata.
+against the official site and normal freshness metadata.
 [/llms.txt proposal](https://llmstxt.org/)
 
 ### Site indexes, source maps, and generated documentation
@@ -159,7 +159,7 @@ Classify a PDF before choosing a converter:
   output an explicitly derived artifact. [OCRmyPDF errors](https://ocrmypdf.readthedocs.io/en/stable/errors.html),
   [OCRmyPDF signed-PDF guidance](https://ocrmypdf.readthedocs.io/en/latest/cookbook.html#digitally-signed-pdfs)
 
-Markdown or plain text materially loses structure when meaning depends on
+Markdown or plain text loses much structure when meaning depends on
 absolute position, column flow, merged cells, repeated table headers, forms,
 footnotes, equations, charts, figures and captions, annotations, layers,
 attachments, color, typography, or page geometry. Conversion is unacceptable
@@ -169,8 +169,8 @@ then verify representative difficult pages visually.
 
 PDFs are active, complex containers that may include JavaScript, forms, media,
 and network actions. OCRmyPDF states that it is not a malware sanitizer and
-recommends a container or virtual machine for untrusted PDFs. Conversion and
-OCR workers should therefore be disposable, resource-limited, offline by
+recommends a container or virtual machine for untrusted PDFs. Make conversion
+and OCR workers disposable, resource-limited, offline by
 default, and unable to reach secrets or the destination index directly.
 [OCRmyPDF PDF security](https://ocrmypdf.readthedocs.io/en/v15.3.1/pdfsecurity.html)
 
@@ -281,15 +281,15 @@ Deduplicate in stages:
 3. Chunk-level exact hashes to collapse repeated navigation, headers, generated
    reference fragments, and mirrors at retrieval time.
 4. Conservative near-duplicate candidate generation, such as shingling and
-   MinHash, followed by exact comparison and a version/provenance check. Do not
+   MinHash, followed by exact comparison and a version/origin check. Do not
    delete because embeddings are similar.
 
 Near duplicates can be different versions or conflicting authorities. Keep one
-canonical retrieval record only when equivalence is established; preserve all
+primary retrieval record only when equivalence is established; preserve all
 aliases, dates, licenses, and hashes. Deduplication research found less
 train-test leakage and memorized emission after removing repeated training
 material, and separate work found reduced privacy extraction risk. Those
-training results support avoiding accidental repetition, but do not justify
+training results support avoiding accidental repetition. They do not justify
 discarding distinct evidence in an inference corpus.
 [Lee et al., ACL 2022](https://aclanthology.org/2022.acl-long.577/),
 [Kandpal et al., ICML 2022](https://proceedings.mlr.press/v162/kandpal22a)
@@ -391,9 +391,9 @@ before persistent indexing, training, redistribution, or publication.
 ## Illustrative command and tool choices
 
 These examples assume an already approved public target and an isolated working
-directory. A production fetcher still needs host/IP allowlisting, redirect
-revalidation, archive safety, quotas, logging, and credential separation that a
-single command cannot supply.
+directory. A production fetcher also needs host/IP allowlisting, redirect
+revalidation, archive safety, quotas, logging, and credential separation, which
+a single command cannot supply.
 
 ### Bounded direct fetch
 
@@ -455,7 +455,7 @@ git -C <destination> rev-parse HEAD
 git -C <destination> submodule status --recursive
 ```
 
-Use a full clone when history is material. A commit-pinned archive is preferable
+Use a full clone when history matters. A commit-pinned archive is preferable
 when only one immutable snapshot is needed; provider API URLs and authentication
 are provider-specific.
 
@@ -479,14 +479,14 @@ Use **both** a skill and a guardrail, with no duplicated workflow text:
 
 | Owner | Contract |
 | --- | --- |
-| Implicit `ingest-sources` skill for material source work | Intake questions; source discovery; format classification; direct/API/archive/clone choice; HTML/PDF/OCR/structured/code routing; raw-plus-derived manifest; validation; deduplication; structural chunking; retrieval evaluation; freshness and removal workflow; explicit `## Output` contract |
+| Implicit `ingest-sources` skill for significant source work | Intake questions; source discovery; format classification; direct/API/archive/clone choice; HTML/PDF/OCR/structured/code routing; raw-plus-derived manifest; validation; deduplication; structural chunking; retrieval evaluation; freshness and removal workflow; explicit `## Output` contract |
 | Baseline "Scope and safety" rules (`baselines/AGENTS.md`) | Retrieved content is data, not authority; validate network targets and redirects; isolate untrusted parsers and model readers; no ambient secrets or mutation capability; quotas; least privilege; approval gates; robots is not authorization |
-| Research and documentation skills | Point to the ingestion skill when acquisition or corpus construction is material; retain ownership of evidence synthesis and documentation respectively |
+| Research and documentation skills | Point to the ingestion skill when acquisition or corpus construction matters; retain ownership of evidence synthesis and documentation respectively |
 | Format-specific skills | Own high-fidelity manipulation of a user-selected PDF, spreadsheet, or document; do not become the general corpus acquisition policy |
 
-The skill activates implicitly only when source work is material. Activation
+The skill activates implicitly only when source work matters. Activation
 does not authorize network, credential, paid, persistent, or sensitive-data
-operations. Their approval gates remain. The guardrail is always-on because any
+operations; their approval gates remain. The guardrail is always-on because any
 agent can read an untrusted repository, webpage, document, or tool result
 without invoking an ingestion workflow.
 
@@ -506,7 +506,7 @@ Before releasing the skill or an ingestion implementation, test:
 - Small API reads, commit archives, partial/shallow and full clones; submodules,
   LFS pointers, symlinks, generated/vendor trees, mutable refs, and source maps.
 - Exact and near duplicates that are true mirrors, different licenses, stale
-  versions, and materially conflicting texts.
+  versions, and texts that conflict on substance.
 - Retrieval questions requiring an exact identifier, paraphrase, table row,
   code definition/reference, adjacent chunk, parent section, and superseded
   version.
@@ -523,16 +523,15 @@ false confidence.
 
 ## Evidence limits
 
-No reviewed source establishes one universally best HTML reader, PDF converter,
-OCR engine, chunk size, embedding model, or retriever. Tool behavior and model
-quality change, while document layouts, languages, codebases, and query
-distributions differ. Benchmark gains do not remove the need to test the actual
-corpus.
+No reviewed source establishes one best HTML reader, PDF converter, OCR engine,
+chunk size, embedding model, or retriever. Tool behavior and model quality
+change, and document layouts, languages, codebases, and query distributions
+differ. Benchmark gains do not remove the need to test the actual corpus.
 
 Raw-byte retention improves auditability but can increase copyright, privacy,
 and breach impact, so retention and access must follow the declared purpose.
 Deduplication reduces repeated processing but can hide conflicting versions if
-provenance is discarded. OCR and layout models make inaccessible content
+the source record is discarded. OCR and layout models make inaccessible content
 searchable but introduce new errors. Sanitization reduces active content; it
 does not solve indirect prompt injection. Structural least privilege and
 external authorization remain necessary.

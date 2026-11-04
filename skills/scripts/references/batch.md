@@ -1,6 +1,6 @@
 # Batch Scripts
 
-Prefer PowerShell for robust Windows automation.
+Prefer PowerShell for reliable Windows automation.
 
 ## Fragile Behavior
 

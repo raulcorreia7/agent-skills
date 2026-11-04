@@ -13,9 +13,9 @@ branch, banning all conditional expressions, or mechanically expanding every
 one-line expression. These choices depend on semantics, local conventions, and
 the amount of behavior a reader must hold at once.
 
-C# switch sections were the motivating case. Their language and tooling
-evidence remains below as a bounded case study, not as a C#-specific runtime
-rule or a basis for generalizing C# syntax to other languages.
+C# switch sections were the motivating case. Their evidence appears below as a
+bounded case study. It is not a C#-specific runtime rule and does not
+generalize C# syntax to other languages.
 
 This research synthesis was completed on 2026-08-07 for maintainers of the
 repository's agent code-writing skill.
@@ -28,13 +28,12 @@ repository's agent code-writing skill.
   complexity, and debuggability?
 - **Audience:** Maintainers who need portable defaults without overriding a
   language's semantics or a repository's established style.
-- **As-of date:** 2026-08-07.
 - **Source boundary:** Peer-reviewed human-comprehension experiments and
   systematic reviews across C, C++, Java, JavaScript, and Python; foundational
   and empirical complexity research; and selected language specifications,
   analyzers, debugger documentation, and first-party style guides used to bound
   syntax- and tool-specific claims.
-- **Material exclusions:** The review is not an exhaustive systematic review.
+- **Exclusions:** The review is not an exhaustive systematic review.
   It excludes opinion posts as effectiveness evidence, generated-code
   aesthetics, runtime-performance claims, and language constructs for which no
   directly relevant study was found. It does not assume that tracing accuracy,
@@ -445,8 +444,7 @@ always creates additional debugger stops or improves bug finding.
 - **“Obvious,” “non-trivial,” and “easy to debug” remain review judgments.** A
   reusable contract should give concrete signals and examples, then defer to
   repository style and the smallest readable form. A numeric expression-length
-  or nesting threshold is not supported by this source set. These limits are
-  why the recommendation is a soft rule.
+  or nesting threshold is not supported by this source set.
 
 ## Recommendation strength
 

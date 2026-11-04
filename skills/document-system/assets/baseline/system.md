@@ -19,10 +19,10 @@ timestamp: "{{timestamp}}"
 
 # operational posture
 
-{{short statement of observed environments, delivery maturity, and material limits. link to delivery, infrastructure, and gaps when present}}
+{{short statement of observed environments, delivery maturity, and relevant limits. link to delivery, infrastructure, and gaps when present}}
 
 # evidence basis
 
-See [evidence](evidence.md) and [gaps](gaps.md). Keep detailed code,
-schema, interface, integration, infrastructure, and delivery material in its
-own selected page. Do not duplicate it here.
+See [evidence](evidence.md) and [gaps](gaps.md). Keep code, schema,
+interface, integration, infrastructure, and delivery detail in its own selected
+page. Do not repeat it here.

@@ -1,6 +1,6 @@
 # Graphviz DOT Core
 
-Use DOT when graph topology and automatic layout are central. Keep canonical
+Use DOT when graph topology and automatic layout are central. Keep the
 source in `.dot` or `.gv`, choose the layout engine deliberately, and render to
 PNG for broad delivery.
 

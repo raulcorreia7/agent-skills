@@ -10,7 +10,7 @@
   compiler, and build that ship. Keep proof and model checks reproducible.
 - Test the interfaces and assumptions that remain outside the proof. Use
   independent review for a high-impact assurance claim.
-- State the verified property and every material assumption. Do not extend a
+- State the verified property and every significant assumption. Do not extend a
   component proof into a system-wide correctness claim.
 
 Example—specify a bounded transfer operation:

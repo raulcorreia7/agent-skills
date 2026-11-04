@@ -1,6 +1,6 @@
 # Curate And Retrieve
 
-Preserve source aliases and provenance through every reduction step.
+Keep source aliases and each source's origin through every reduction step.
 
 ## Minimize And Deduplicate
 
@@ -37,7 +37,7 @@ recurring boundary loss.
 
 1. Start with repository-native or lexical search for identifiers, paths,
    error text, citations, and rare terms.
-2. Add dense retrieval only when paraphrase tests show a material gain.
+2. Add dense retrieval only when paraphrase tests show a significant gain.
 3. Add hybrid candidates, metadata filters, or reranking only when simpler
    retrieval misses the target quality.
 4. Return a small evidence set. Expand a parent, neighbor, table, definition,
@@ -52,8 +52,8 @@ recall, ranking quality, answer support, duplicates, stale results, unresolved
 locators, latency, and token cost. Separate exact, paraphrase, table, code,
 cross-section, and version-sensitive cases.
 
-Use HTTP validators or repository refs to detect change. Hash acquired bytes to
-identify the processed representation. Reprocess changed sources and mark old
+Use HTTP validators or repository refs to detect change. Hash the acquired
+bytes to identify the processed version. Reprocess changed sources and mark old
 derivatives as superseded. Propagate access revocation and source deletion
 through raw artifacts, derivatives, chunks, indexes, and caches.
 

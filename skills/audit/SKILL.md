@@ -34,7 +34,7 @@ unspecified.
 
 | Depth | Contract |
 | --- | --- |
-| `quick` | Triage the highest-value evidence and material unknowns |
+| `quick` | Triage the highest-value evidence and significant unknowns |
 | `focused` | Examine selected domains with representative evidence and proportionate checks |
 | `deep` | Build a coverage matrix and document stronger evidence limits and residual uncertainty |
 

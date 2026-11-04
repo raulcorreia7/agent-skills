@@ -16,23 +16,23 @@ Improve code structure. Preserve observable behavior and public contracts.
    [structural targets](references/structural-targets.md) when the target
    involves abstraction, modules, duplication, a named pattern or principle,
    inheritance, a smell, a metric, or change history. Complete when each of
-   these is stated, or you have stopped for alignment on the one that is
-   materially unclear.
+   these is stated, or you have stopped for alignment on the
+   one that is unclear.
 2. Inspect callers, tests, types, configuration, data shape, side effects, and
-   failure behavior. Before editing, map each material preservation claim to
+   failure behavior. Before editing, map each key preservation claim to
    existing evidence. When a claim has none, propose the characterization tests
    that would cover it; adding them is approval-gated. Complete when every
-   material claim maps to existing evidence or to approved characterization
+   key claim maps to existing evidence or to approved characterization
    tests.
 3. Make one coherent structural change at a time, keeping compatibility logic at
    the boundary that owns the contract. Assess each preservation claim with
    existing evidence, and run a small existing check when it efficiently
-   addresses a material risk. Revert the local change when evidence shows a
+   addresses a significant risk. Revert the local change when evidence shows a
    behavior difference. Complete when the change is in place and no claim shows
    a behavior difference.
 4. Remove obsolete paths only after callers and evidence show no use.
    Complete when the target structure exists, all callers use the intended
-   path, and evidence supports every material preservation claim.
+   path, and evidence supports every key preservation claim.
 
 ## Flow
 
@@ -51,5 +51,5 @@ stop: target exists + every claim has evidence
 
 ## Output
 
-- Refactored code and a preservation map that links each material claim to
+- Refactored code and a preservation map that links each key claim to
   supporting evidence.

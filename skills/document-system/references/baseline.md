@@ -15,7 +15,7 @@ docs/
 
 Add a technical page only when the selection criteria below are met. Add a
 diagram page only when its diagram contract is met. A minimal bundle contains
-only the five root pages and has no empty optional pages.
+only the five root pages.
 
 ```text
 docs/
@@ -37,13 +37,13 @@ Keep new bundle paths, filenames, stable IDs, frontmatter keys, `type` values,
 and tags lowercase. Preserve existing destination-specific path and filename
 casing unless an approved migration explicitly changes it. Human-facing titles
 can use normal casing. Use portable Markdown links for navigation. Use
-`home.md` as the concise entry point. Link from `system.md` to selected
-technical pages. Cross-link detail pages only when the link helps answer a
-reader question. Navigation links target existing pages only.
+`home.md` as the entry point and link from `system.md` to selected technical
+pages. Cross-link detail pages only when the link helps answer a reader
+question. Link only to pages that exist.
 
 If the destination is ambiguous and changes paths, navigation metadata, link
-syntax, or renderer constraints, ask before adding destination-specific
-artifacts. Otherwise, keep the portable baseline and add none.
+syntax, or renderer constraints, ask before adding destination-specific files.
+Otherwise keep the portable baseline.
 
 ## Frontmatter
 
@@ -59,16 +59,16 @@ timestamp: "2026-01-01T00:00:00Z"
 ---
 ```
 
-Use `resource` only for a canonical underlying asset and `tags` only when they
+Use `resource` only for the underlying asset the page describes and `tags` only when they
 improve retrieval.
 
 ## Mandatory page responsibilities
 
-- `home.md`: concise entry point, scope, freshness, provider coverage, current
-  catalog status, material gaps, and navigation.
+- `home.md`: entry point, scope, freshness, provider coverage, current catalog
+  status, significant gaps, and navigation.
 - `system.md`: short reconciled current-state overview, boundary, operational
-  posture, and links to the selected detailed pages. It does not duplicate
-  detailed technical reference material.
+  posture, and links to the selected detail pages. It does not repeat detail
+  from those pages.
 - `context.md`: human-maintained knowledge, purpose, scope, exclusions, flows,
   expectations, constraints, terminology, starting points, and open questions.
   AI changes remain proposals until confirmed.
@@ -80,19 +80,19 @@ improve retrieval.
 ## Technical page selection and contracts
 
 Use the smallest set of pages that provides a durable answer to reader
-questions. Do not create a page solely because a heading or template exists.
-Material statements on every selected page use the portable evidence citations
+questions. Do not create a page only because a heading or template exists.
+Key statements on every selected page use the portable evidence citations
 defined in [the evidence contract](evidence.md). Do not expose raw provider
 output, credentials, secret-bearing configuration, customer data, or
 unnecessary exploitable detail.
 
 | Page | Select when evidence supports | Owns the reader question |
 |---|---|---|
-| `modules.md` | Code, components, entry points, dependencies, or tests are material to system operation or change. | What does each code component own, how does it connect, and where is it tested? |
+| `modules.md` | Code, components, entry points, dependencies, or tests matter to system operation or change. | What does each code component own, how does it connect, and where is it tested? |
 | `schema.md` | Observed schemas, migrations, interface contracts, or live metadata establish data structures or lifecycle. | What data is owned, how is it identified and related, and how does it evolve? |
 | `interfaces.md` | Owned HTTP/API endpoints, events, queues, or CLI contracts are observed. | What contracts does this system expose or own? |
-| `integrations.md` | External systems and their exchanged data or operating constraints are material. | Which external systems are involved and how are failures, authentication, limits, and validation handled? |
-| `infrastructure.md` | Environments, resources, topology, operational boundaries, or reliable cost information are material. | Where does the system run and what operational or cost boundaries apply? |
+| `integrations.md` | External systems and their exchanged data or operating constraints matter. | Which external systems are involved and how are failures, authentication, limits, and validation handled? |
+| `infrastructure.md` | Environments, resources, topology, operational boundaries, or reliable cost information matter. | Where does the system run and what operational or cost boundaries apply? |
 | `delivery.md` | Build, release, configuration, rollout, rollback, recovery, or verification evidence is available. | How does a change reach an environment and how is it verified or recovered? |
 
 Use `modules.md` for responsibilities, seams, dependencies, entry points, and
@@ -108,21 +108,20 @@ require a reliable source and check date. Otherwise record the missing basis in
 `gaps.md`. Use `delivery.md` for build/release path, configuration sources,
 rollout, rollback or recovery, and verification.
 
-Keep each page focused. A page may link to related pages, but it must not become
-a second catch-all overview. Do not prescribe a cloud, architecture style,
+Keep each page focused. A page may link to related pages but must not become a
+second overview. Do not prescribe a cloud, architecture style,
 language, delivery model, or documentation hierarchy.
 
 ## Diagram contract
 
 Create `context.md` and `deployment.md` only when evidence supports their
 relationships. Create `architecture.md` when confirmed context, deployment
-evidence, or both support one overview that answers a reader need not already
-met by either focused view. Keep it at one abstraction level. Do not combine
+evidence, or both support one overview that answers a reader need neither
+focused view meets. Keep it at one abstraction level. Do not combine
 context relationships with deployment topology in the same diagram. Create
 `logical.md` when multiple components or interfaces make a separate logical
-view materially clearer. Create `schema.md` only when observed schemas,
-migrations, interface contracts, or live metadata support its structures and
-relationships. Do not infer fields, keys, or cardinality from architecture
+view clearer. Create `schema.md` only when observed schemas, migrations, interface
+contracts, or live metadata support its structures and relationships. Do not infer fields, keys, or cardinality from architecture
 evidence alone.
 
 Each diagram page contains purpose, scope, diagram, legend, evidence, and
@@ -137,13 +136,13 @@ destination-specific navigation.
 
 - The five mandatory pages and lowercase paths exist.
 - Selected technical and diagram pages meet their selection and content
-  contracts. No empty optional pages exist.
+  contracts. No optional page is empty.
 - Frontmatter parses and every concept has a non-empty `type`.
 - Evidence headings, columns, IDs, relationships, and results follow the
   evidence contract.
 - Internal Markdown links resolve and navigation links only target existing
   pages.
-- Material claims link to evidence IDs.
-- `home.md` reports freshness, coverage, and unresolved material gaps.
-- `system.md` remains short, uses links, and does not duplicate detailed content.
+- Key claims link to evidence IDs.
+- `home.md` reports freshness, coverage, and unresolved significant gaps.
+- `system.md` stays short, uses links, and does not repeat page detail.
 - No raw discovery output or sensitive values are committed.

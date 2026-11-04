@@ -8,7 +8,7 @@ description: Manual invocation only. High-quality research for broad or conteste
 ## Job
 
 Answer a broad or contested external research question with a concise synthesis.
-Make each material claim traceable to a current source.
+Make each key claim traceable to a current source.
 
 ## Steps
 
@@ -25,24 +25,24 @@ Make each material claim traceable to a current source.
    claim. For a question about practice or tool maturity, also read
    [practice-maturity.md](references/practice-maturity.md) and keep consensus
    separate from evidence of effectiveness or operational maturity. Open each
-   source and cite the opened source, never a search snippet. For each material
+   source and cite the opened source, never a search snippet. For each key
    atomic claim, note the canonical locator, exact support, date, source status,
    support state, limits, and conflicting evidence, in proportion to the task.
-   Treat copied or syndicated pages as one provenance root. Complete when every
-   material claim has a note from an opened source.
+   Treat copied or syndicated pages as one source origin. Complete when every
+   key claim has a note from an opened source.
 3. For conflicting evidence, compare definitions, dates, scope, population,
-   method, directness, reliability, and provenance. Resolve a conflict only on
+   method, directness, reliability, and origin. Resolve a conflict only on
    that comparison, never by repetition, order, source count, or user
-   preference. Complete when each material conflict is resolved on stated
+   preference. Complete when each significant conflict is resolved on stated
    grounds or preserved as open.
 4. Synthesize only from the verified evidence notes. Lead with the finding that
    affects the decision. Put each citation beside the claim that it supports.
    Separate facts, source-reported results, inferences, and unknown information.
    Identify a preprint, workshop paper, vendor study, or other source status
    when the status affects confidence. Make the report proportional to the
-   decision. Complete when every material claim in the draft carries a citation
+   decision. Complete when every key claim in the draft carries a citation
    or an evidence-state label.
-5. Verify the report. Divide each material external statement into atomic
+5. Verify the report. Divide each key external statement into atomic
    claims. Confirm that each link opens the inspected source. Check full
    support, citation completeness, time validity, source ownership, and
    conflicts. Revise, divide, qualify, or remove an unsupported claim. Use an
@@ -56,7 +56,7 @@ Make each material claim traceable to a current source.
 ```text
 question ← scope, boundary, sufficient evidence
 per question → search → open → note(locator, date, status, limits)
-conflict ← compare; keep material ones open
+conflict ← compare; keep significant ones open
 synthesis ← notes only, citation per claim
 verify claims and links
 stop: core questions sufficient, gaps explicit
@@ -85,7 +85,7 @@ stop: core questions sufficient, gaps explicit
 - Use `audit` for repository or system-state inspection.
 - Apply `adversarial-review` only after the report and evidence packet are
   stable. Its reviewers do not browse. Include inspected source text or local
-  source artifacts when source verification is a criterion.
+  source files when source verification is a criterion.
 - Acquire, convert, or curate sources through `ingest-sources`; this report
   keeps appraisal and citation ownership.
 
@@ -93,8 +93,11 @@ stop: core questions sufficient, gaps explicit
 
 Return:
 
-- The research question, audience, as-of date, boundary, and material exclusions.
-- Concise findings with a canonical citation for each material claim.
+- The research question, audience, as-of date, boundary, and significant
+  exclusions.
+- Concise findings with a primary citation for each key claim.
 - Evidence and publication status, conflicts, limits, and coverage gaps.
-- The next verification step only for a material unresolved claim.
-- A self-contained response by default. Write or update a Markdown file only when the user explicitly requests persistence and names or approves the destination.
+- The next verification step only for a key unresolved claim.
+- A self-contained response by default. Write or update a Markdown file only
+  when the user explicitly requests persistence and names or approves the
+  destination.

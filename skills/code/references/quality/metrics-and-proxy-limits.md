@@ -7,8 +7,8 @@
 - Use smells, clone counts, coupling, cohesion, churn, co-change, and
   maintainability scores to locate a concrete question. Do not refactor only to
   remove a smell or lower a score.
-- Use change history when divergence, change spread, or recurring defects are
-  material. Treat it as a predictive signal, not evidence that change caused
+- Use change history when divergence, change spread, or recurring defects matter.
+  Treat it as a predictive signal, not evidence that change caused
   poor quality or that an author performed poorly.
 - Use counts for inventory and triage. Do not rank people or teams by lines,
   commits, defects, findings, tests, comments, reviews, or dependencies.
@@ -22,7 +22,7 @@
 Example—use coverage to direct inspection:
 
 ```text
-Question: Did the parser change leave a material branch unexercised?
+Question: Did the parser change leave a significant branch unexercised?
 Proxy: changed-line branch coverage from the repository tool
 Action: inspect the uncovered branch and its contract
 Limit: execution does not prove that assertions detect incorrect behavior

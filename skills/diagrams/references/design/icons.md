@@ -49,15 +49,14 @@ mermaid.registerIconPacks([
 ]);
 ```
 
-Use icon syntax only after registration confirmation, for example
+Use icon syntax only after confirming registration, for example
 `logos:github-icon` or `mdi:database`. When the target cannot register the pack,
 render locally or replace the icon with a labeled built-in shape.
 
 ## Review
 
 - Verify the pack, icon name, license, and target registration.
-- Keep icon size and visual weight consistent. Do not mix unrelated icon styles
-  casually.
+- Keep icon size and visual weight consistent. Do not mix unrelated icon styles.
 - Confirm light, dark, high-contrast, and print legibility.
 - Preserve a text label and accessible description.
 - Avoid remote runtime loading for private, offline, or reproducible builds.

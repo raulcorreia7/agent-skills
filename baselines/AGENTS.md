@@ -77,12 +77,12 @@ minimalism when it lowers risk.
 
 - Lead with the result: what changed or what you found. Match depth to the task,
   risk, and reader.
-- Include what completes the task: affected files, material evidence, residual
+- Include what completes the task: affected files, key evidence, residual
   risk, decisions, and the next action. Mention checks when their absence would
   limit confidence.
 - Write short, direct, active sentences with consistent terms.
 - Durable docs and comments describe the current contract for the next reader,
-  near the source of truth, and link canonical sources rather than copying
-  them. History belongs only in decision records.
+  near the source of truth, and link the original source rather than copying
+  it. History belongs only in decision records.
 - Use the narrowest skill that owns the job; a supporting skill never takes
   over the primary deliverable.

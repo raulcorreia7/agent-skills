@@ -16,8 +16,8 @@ Inspect a representative sample. Then use the applicable path:
 ## Process
 
 1. Hash and retain the original PDF before processing.
-2. Run the selected parser or OCR engine in an offline, disposable, resource-limited
-   worker. PDF files can contain active content.
+2. Run the selected parser or OCR engine in an offline, disposable,
+   resource-limited worker. PDF files can contain active content.
 3. Preserve page numbers and coordinates when layout can affect meaning.
 4. Keep structured JSON or another document model beside the text projection
    when tables, forms, equations, figures, or columns matter.

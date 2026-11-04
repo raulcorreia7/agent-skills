@@ -1,13 +1,13 @@
 # Rendering And Delivery
 
-Canonical source is the reviewable artifact. A rendered image is a delivery
-artifact, never the only editable copy.
+The source is the reviewable file. A rendered image is a delivery
+copy, never the only editable one.
 
 ## Delivery Order
 
 1. Native source rendered by the destination.
 2. Source rendered by a verified project plugin or build.
-3. Locally rendered PNG with canonical source retained.
+3. Locally rendered PNG with the source retained.
 4. Text description, plus a data table for quantitative charts.
 
 Use PNG when native rendering changes meaning, labels, hierarchy,
@@ -21,7 +21,7 @@ validation output.
 2. Validate changed source and edited runnable examples.
 3. If appearance changed, render one representative PNG.
 4. Inspect it at destination size using `../design/visual.md`.
-5. Retain and link canonical source and add accessible text.
+5. Retain and link the source and add accessible text.
 
 Do not run format, engine, theme, platform, or size matrices unless the target
 requires them. Parser success is not visual validation. File existence is not

@@ -16,7 +16,7 @@ Every brief contains:
 | Mutation | Whether source or external state may change |
 | Boundaries | Actions, paths, systems, and decisions outside the slice |
 | Validation | Slice-owned commands or observable checks |
-| Return | Changes, evidence, material checks, risks, and handoff data |
+| Return | Changes, evidence, significant checks, risks, and handoff data |
 
 ## Mode Boundaries
 
@@ -77,4 +77,4 @@ Return:
 
 Before completion, reconcile assumptions and overlapping diffs, remove duplicate
 findings, and record unowned residual risk. Run integration only on user request
-or when it efficiently addresses material risk.
+or when it efficiently addresses significant risk.

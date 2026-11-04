@@ -23,7 +23,7 @@ when it contains the required evidence.
    tables, warnings, links, and headings.
 
 Do not deduplicate canonical, print, mobile, locale, query, or version variants
-until their content and provenance establish equivalence.
+until their content and source record establish equivalence.
 
 ## Example
 

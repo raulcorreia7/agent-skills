@@ -3,11 +3,11 @@
 Select a maintained tool that preserves the evidence needed for the approved
 questions. Keep the original source and write each conversion as a derivative.
 
-Use the tool for the mechanical transformation. Use the agent to select the
-tool, set limits, inspect warnings, compare difficult sections, and decide
-whether another representation is necessary. Do not ask the model to recreate
-Markdown from raw HTML, PDF extraction noise, XML, JSON, or an office document
-when an approved parser or converter can perform that step.
+Use the tool for the mechanical conversion. Use the agent to select the tool,
+set limits, inspect warnings, compare difficult sections, and decide whether
+another representation is needed. Do not ask the model to recreate Markdown
+from raw HTML, PDF extraction noise, XML, JSON, or an office document when an
+approved parser or converter can do it.
 
 | Need | Prefer | Main limit |
 | --- | --- | --- |

@@ -17,8 +17,8 @@ your own messages to the user.
 | --- | --- | --- |
 | `author` | Writing new prose | Account for all supplied facts, limits, audience, and directives. |
 | `rewrite` | Revising existing prose | Preserve each source assertion or identify an unresolved question. |
-| `review` | Assessing prose | Identify material clarity or meaning risks and give a correction. |
-| `formal audit` | An explicit ASD-STE100 audit | Mark each in-scope sentence pass or fail, cite the material rule, and give a correction for each failure. |
+| `review` | Assessing prose | Identify significant clarity or meaning risks and give a correction. |
+| `formal audit` | An explicit ASD-STE100 audit | Mark each in-scope sentence pass or fail, cite the relevant rule, and give a correction for each failure. |
 
 ## Steps
 
@@ -37,10 +37,10 @@ your own messages to the user.
 
 Use this level for ordinary writing, rewriting, or review.
 
-- State the main point plainly. Remove stale imagery, inflated wording, vague
-  abstractions, and words that do not carry meaning.
+- State the main point plainly. Cut stale imagery, inflated wording, vague
+  abstractions, and words that carry no meaning.
 - Prefer a short, familiar word when it is equally exact, and active voice when
-  it identifies a material actor or makes the sentence easier to follow.
+  it identifies the actor that matters or makes the sentence easier to follow.
 - Keep one main point in each sentence where practical and group related facts.
 
 Finish when every source claim remains, each sentence has one intended reading
@@ -64,7 +64,7 @@ compliance or verification claim to authoritative evidence.
 ### Sources
 
 Read [clear-writing sources](references/clear-writing-sources.md) only when
-source scope, attribution, or a disputed clear-writing principle is material.
+source scope, attribution, or a disputed clear-writing principle matters.
 
 ## Guardrails
 
@@ -72,14 +72,14 @@ source scope, attribution, or a disputed clear-writing principle is material.
   legal meaning, safety meaning, and risk level.
 - Request domain confirmation when a language change can alter technical or
   safety meaning.
-- Complete ordinary and technical work offline from the supplied text, without
-  external tools or a source document. Leave heading, link, and STE mechanics
+- Complete ordinary and technical work offline from the supplied text, with no
+  external tools or source document. Leave heading, link, and STE mechanics
   to Vale, rumdl, or the owning docs pipeline when they exist.
 
 ## Output
 
-- Authored or revised text, or a review that identifies material clarity risks.
-- Material exceptions, exclusions, assumptions, and unresolved technical or
+- Authored or revised text, or a review that names significant clarity risks.
+- Exceptions, exclusions, assumptions, and unresolved technical or
   safety questions.
-- For formal ASD-STE100 work, the compliance result, material rule IDs and
+- For formal ASD-STE100 work, the compliance result, the rule IDs and
   official PDF page locators, and every unresolved word.

@@ -24,7 +24,7 @@ Select every mode that applies.
 
 ## Steps
 
-1. Establish the artifact, purpose, scope, material exclusions, contracts, and
+1. Establish the artifact, purpose, scope, relevant exclusions, contracts, and
    available validation evidence. Load each selected mode's references, plus:
    - `references/change-checklist.md` for a non-trivial, security-sensitive,
      public-contract, migration, or large implementation;
@@ -36,12 +36,12 @@ Select every mode that applies.
    Complete when the review boundary is stated and every applicable reference
    is loaded.
 2. Assess the artifact. Run a small safe existing check only when it resolves a
-   material review question, and classify each failure as change-caused,
-   pre-existing, environmental, or inconclusive. Separate defects, material
+   key review question, and classify each failure as change-caused,
+   pre-existing, environmental, or inconclusive. Separate defects, significant
    risks, questions, and optional suggestions. For each suspected finding,
    identify the violated criterion or contract, precise locator, observable
    consequence, and confirming or disconfirming evidence. Complete when each
-   material part of the artifact is accounted for and every check that ran is
+   significant part of the artifact is accounted for and every check that ran is
    classified.
 3. Falsify each suspected finding and reject the ones that do not survive.
    Verify each remaining finding or label it uncertain, and assign it a
@@ -62,13 +62,13 @@ stop: verdict ← pass | findings | not reviewable, with coverage and residual r
 ## Priorities
 
 Use these priorities in every mode, and state each with its severity, such as
-`P1 (High)`. Rate a material defect at the priority its evidence supports.
+`P1 (High)`. Rate a significant defect at the priority its evidence supports.
 
 | Priority | Severity | Meaning |
 | --- | --- | --- |
 | `P0` | Critical | Immediate risk of data loss, security compromise, outage, or a broken public contract |
-| `P1` | High | Material correctness or safety defect that blocks acceptance |
-| `P2` | Medium | Material risk that should be addressed soon but does not block acceptance |
+| `P1` | High | Significant correctness or safety defect that blocks acceptance |
+| `P2` | Medium | Significant risk that should be addressed soon but does not block acceptance |
 | `P3` | Low | Localized, non-blocking improvement; keep optional suggestions separate when they are not defects |
 
 ## Guardrails
@@ -81,5 +81,5 @@ Use these priorities in every mode, and state each with its severity, such as
 
 - A `pass`, `findings`, or `not reviewable` verdict and priority-ordered,
   evidence-backed findings, in the selected mode's output order
-- Material questions, reviewed coverage, and residual risk
+- Key questions, reviewed coverage, and residual risk
 - Copy-pasteable review text only when the user requests it for a PR/MR

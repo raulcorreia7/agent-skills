@@ -5,7 +5,7 @@ Use comments for non-obvious contracts, constraints, risk, and rationale.
 ## Classify The Comment
 
 - **Keep:** durable contract, invariant, rationale, risk, or external quirk.
-- **Rewrite:** useful intent that is vague, wordy, stale, or inconsistent with
+- **Revise:** useful intent that is vague, wordy, stale, or inconsistent with
   local language conventions.
 - **Remove:** narration of visible mechanics, obsolete behavior, or history
   better owned by Git, an ADR, an issue, or documentation.

@@ -26,7 +26,7 @@ Use this order and omit empty sections:
    approves the post.
 2. **Findings:** `P0`-through-`P3` ordered findings with precise locations,
    evidence, impact, and smallest fixes.
-3. **Questions:** Material intent or acceptance decisions and the recommended
+3. **Questions:** Key intent or acceptance decisions and the recommended
    default for each.
 4. **Coverage:** Requested outcome, acceptance coverage, documentation
    freshness, and unverified scope.

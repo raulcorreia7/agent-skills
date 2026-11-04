@@ -36,7 +36,7 @@ graph LR
 
 # evidence
 
-{{portable evidence citations for every material structure and relationship}}
+{{portable evidence citations for every structure and relationship}}
 
 # known omissions
 

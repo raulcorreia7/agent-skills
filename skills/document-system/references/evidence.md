@@ -2,7 +2,7 @@
 
 `docs/evidence.md` is the agent-maintained, normalized working ledger for
 inventory, reverse engineering, iteration, and comparison. It is separate from
-the human-maintained `context.md` and the clean synthesized `system.md`. Keep
+the human-maintained `context.md` and the synthesized `system.md`. Keep
 exactly these top-level sections in this order: `coverage`, `sources`,
 `elements`, `relationships`, and `reconciliation`.
 
@@ -36,8 +36,8 @@ environments, regions, or timestamps when a stable canonical identifier exists.
 ## Portable citations
 
 Use the stable ID as the link text and link it to the owning section in
-`evidence.md`. This keeps citations valid in Markdown renderers without custom
-HTML anchors:
+`evidence.md`. This keeps citations valid in Markdown renderers without custom HTML
+anchors:
 
 - source ID: `[src-repository](evidence.md#sources)`
 - element ID: `[cmp-api](evidence.md#elements)`
@@ -120,9 +120,9 @@ Allowed results:
 | `unresolved` | Evidence is insufficient |
 | `out-of-scope` | Deliberately excluded |
 
-A reconciliation row must cover each material element and relationship or use
+A reconciliation row must cover each relevant element and relationship or use
 it as direct support. `gaps.md` is a reader-facing view of non-match rows.
-`evidence.md` remains canonical.
+`evidence.md` stays the source of truth.
 
 ## Sensitive data
 

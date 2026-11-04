@@ -34,8 +34,8 @@ Not for commits, pushes, or branch, PR, release, or work-item text; use `git`.
      worktree configuration.
    - For a provider review checkout, read `references/provider-checkout.md` and
      exactly one of `references/github.md` or `references/gitlab.md`.
-   - Read `references/sources.yml` only to audit or re-verify worktree
-     provenance.
+   - Read `references/sources.yml` only to audit or re-verify this
+     skill's sources.
 
    Complete when one provider is selected and its fallback state is known.
 3. Run only the selected operation and its necessary preflight. Complete when

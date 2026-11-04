@@ -5,11 +5,11 @@ Validate links within the selected documentation scope.
 ## Sweep
 
 - Inventory relative and absolute links, anchors, embedded assets, navigation
-  files, and canonical source targets in scope.
+  files, and primary source targets in scope.
 - Check relative paths from each owning page, including case-sensitive paths.
 - Check moved-page links, renamed anchors, missing assets, and descriptive link
   text.
-- Prefer canonical source targets over local copies of facts that can drift.
+- Prefer primary source targets over local copies of facts that can drift.
 - Update inbound links and generated navigation in the same approved change as
   a move.
 

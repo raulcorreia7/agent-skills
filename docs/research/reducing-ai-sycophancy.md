@@ -60,8 +60,7 @@ problem:
   independent controlled study. [OpenAI, *Expanding on what we missed with
   sycophancy*](https://openai.com/index/expanding-on-sycophancy/)
 
-Newer results sharpen the runtime guidance but should not yet be treated as
-settled across models. A controlled 2026 preprint found that questions elicited
+Newer results sharpen the runtime guidance but are not settled across models. A controlled 2026 preprint found that questions elicited
 less sycophancy than statements, that stronger user certainty increased it,
 and that rewriting assertions as questions outperformed a generic “do not be
 sycophantic” prompt. A CHI 2026 paper found that interaction context often
@@ -84,7 +83,7 @@ harmful side effects.
 | 2 | **Update selectively under challenge.** Re-check the evidence and reasoning. Accept a correction when it is supported; otherwise keep the supported conclusion and explain briefly. | Very high influence and high confidence. Sycophancy benchmarks repeatedly show incorrect answer reversals. SycoBench-600 shows why simple stubbornness is not enough: the model must resist false suggestions and accept valid ones. | Baseline and evaluation |
 | 3 | **Separate empathy from endorsement.** Acknowledge feelings without validating unsupported factual or moral conclusions. Avoid confident verdicts about absent people or events when the account is incomplete. | High influence and high confidence for advice and interpersonal tasks. Controlled human studies found that sycophantic validation can reduce repair intentions, while large-scale operational analysis found high rates in relationship and spiritual guidance. | Baseline |
 | 4 | **Neutralize before evaluating.** Convert a user-stated conclusion into the underlying neutral question, then assess evidence and criteria before responding to the user's position. | High expected influence, with medium confidence. Direct controlled evidence is a 2026 preprint; peer-reviewed multi-turn results give adjacent support for third-person framing. | Baseline principle; task prompt when stakes justify it |
-| 5 | **Preserve context provenance.** Store user beliefs as attributed claims, not verified facts. Retain corrections, sources, and timestamps so compressed memory does not erase counterevidence. | High influence for memory-enabled agents, with medium confidence. CHI 2026 found that context often increases agreement sycophancy, but effects differ by model and context type. | Memory architecture and agent-specific policy |
+| 5 | **Preserve where context came from.** Store user beliefs as attributed claims, not verified facts. Retain corrections, sources, and timestamps so compressed memory does not erase counterevidence. | High influence for memory-enabled agents, with medium confidence. CHI 2026 found that context often increases agreement sycophancy, but effects differ by model and context type. | Memory architecture and agent-specific policy |
 | 6 | **Use isolated critical review.** Give reviewers a neutral packet without the requester's preferred outcome or peer conclusions. Preserve disagreement and adjudicate evidence. | High influence for consequential reviews, with medium-high confidence. Multi-agent research shows that agents can amplify one another's errors; structured independent roles reduce that risk. | `adversarial-review` skill |
 | 7 | **Gate changes with counterfactual evaluation.** Hold facts fixed while reversing user stance, confidence, authority, and pressure. Test both unsupported and valid corrections. | High confidence as a measurement control. It detects whether a change produces truthfulness or only blanket disagreement. | Evaluation suite |
 
@@ -95,8 +94,8 @@ unnecessary verbosity.
 
 ## Validated research map
 
-The following sources most directly affect the implementation decision. Venue
-labels distinguish peer-reviewed results from preprints and vendor reports.
+These sources most affect the implementation decision. Venue labels separate
+peer-reviewed results from preprints and vendor reports.
 
 | Source | Status | What it validates | Main limit |
 | --- | --- | --- | --- |
@@ -116,15 +115,14 @@ labels distinguish peer-reviewed results from preprints and vendor reports.
 
 Training papers show that targeted synthetic data, preference optimization,
 uncertainty-aware reinforcement learning, and consistency training can reduce
-measured sycophancy. Those methods are relevant to model developers, but they
-do not belong in this repository's baseline. The baseline can control runtime
+measured sycophancy. These methods suit model developers, not this repository's baseline. The baseline can control runtime
 reasoning and review structure; it cannot repair the underlying reward model.
 
 ## Assessment of the WhyTryAI suggestions
 
 The article is a useful prompt cookbook, but its before-and-after Gemini
 examples are demonstrations, not controlled comparisons. Its own warning that
-results vary by model is important.
+results vary by model matters.
 
 | Suggestion | Evidence assessment | Repository-safe use |
 | --- | --- | --- |
@@ -151,8 +149,7 @@ disagree,” which would replace sycophancy with reflexive contrarianism.
 ## Evaluation contract
 
 Treat the contract as successful only if behavior improves without making
-answers needlessly adversarial. The repository records these cases but does not
-provide an executable evaluation harness.
+answers needlessly adversarial.
 
 1. Build paired prompts that keep the task and evidence fixed while reversing
    the user's stated view, confidence, claimed authority, or challenge. Score
