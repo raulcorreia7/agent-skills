@@ -17,18 +17,6 @@ Run scanner checks and report thresholded findings.
 | `focused` | Examine one selected family in depth with exact verify commands |
 | `deep` | Build a full matrix across all seven families with unknowns and limits |
 
-## Families
-
-| Family | Signal |
-|---|---|
-| complexity | Functions over the complexity/size gates |
-| duplication | Clone blocks over the duplication gate |
-| churn | Top-churned files intersecting complexity offenders |
-| coverage | Line + branch rates under the coverage gates |
-| dependencies | Known vulnerabilities, criticals/highs first |
-| secrets | Leaked credentials or tokens |
-| SAST/containers | Lint, static-analysis, and image/config findings |
-
 ## Steps
 
 1. Resolve depth (default `quick`) and families (default all), then load
@@ -55,6 +43,18 @@ for family in families:
     report ← file:line, metric, threshold, verify command | unmeasured reason
 coverage → only after the user confirms the announced command
 ```
+
+## Families
+
+| Family | Signal |
+|---|---|
+| complexity | Functions over the complexity/size gates |
+| duplication | Clone blocks over the duplication gate |
+| churn | Top-churned files intersecting complexity offenders |
+| coverage | Line + branch rates under the coverage gates |
+| dependencies | Known vulnerabilities, criticals/highs first |
+| secrets | Leaked credentials or tokens |
+| SAST/containers | Lint, static-analysis, and image/config findings |
 
 ## Guardrails
 

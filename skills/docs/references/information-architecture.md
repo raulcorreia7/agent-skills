@@ -1,6 +1,5 @@
 # Documentation Information Architecture
 
-Start navigation changes and documentation-tree reorganizations read-only.
 Propose disruptive moves and apply them only after approval of the structure
 change.
 

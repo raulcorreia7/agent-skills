@@ -9,23 +9,17 @@ Review material risk and return evidence-backed findings.
    verify impact.
 2. Check behavior, failure paths, data safety, authorization, compatibility,
    rollout, maintainability, and meaningful missing confidence. Treat style as
-   a finding only when it creates material risk. Treat pattern, principle,
-   smell, or metric conformance as neither proof nor a defect without a concrete
-   consequence.
-3. Inspect repository-native validation and CI commands only when they can
-   resolve a material review question. Run a small safe existing check when it
-   is useful. Do not expand test scope.
-4. Classify failures as change-caused, pre-existing, environmental, or
-   inconclusive. Verify suspected findings and distinguish defects,
-   suggestions, questions, and uncertainty.
-5. Stop when evidence is proportionate to risk or further validation needs new
+   a finding only when it creates material risk.
+3. Use repository-native validation and CI commands as the checks, and leave
+   test scope unchanged.
+4. Stop when evidence is proportionate to risk or further validation needs new
    authority, infrastructure, live access, or test creation.
 
 ## Output
 
 Use this order and omit empty sections:
 
-1. **Verdict:** Pass, findings present, or not reviewable.
+1. **Verdict:** `pass`, `findings`, or `not reviewable`.
 2. **Findings:** Severity-ordered (`P0` through `P3`), each with a concise
    title, precise location, impact, evidence, and smallest safe fix.
 3. **Questions:** Only questions whose answers materially change correctness or

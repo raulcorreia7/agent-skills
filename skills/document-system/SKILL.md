@@ -11,85 +11,61 @@ Turn confirmed context and observed evidence into a source-backed system bundle.
 
 ## Steps
 
-1. Inspect repository guidance and existing documentation. Establish the
-   boundary, exclusions, outcomes, seeds, documentation destination, and
-   authorized live discovery. Ask for the destination when ambiguity changes
-   paths, navigation metadata, link syntax, or renderer constraints.
-2. Load only the workflow leaf needed for the current phase:
-   - Read `references/intake.md` before bootstrap intake or when scope,
-     intended state, seeds, discovery authorization, or destination is
-     unsettled.
-   - Read `references/discovery.md` before repository or authorized live
-     discovery.
-   - Read `references/reconciliation.md` before substantial reconciliation.
-   - Read `references/synthesis.md` before generating or materially revising
-     reader pages.
-   - Read `references/migration.md` only when existing documentation will move,
-     merge, or be retired.
-3. Propose human-owned intended state in `docs/context.md`. Never overwrite it
-   from observed evidence or use it as scratch space.
-4. Before you create or change `docs/evidence.md`, its IDs, element kinds,
-   relationships, or reconciliation records, read `references/evidence.md`.
-   Trace approved material dependencies within the boundary. Keep normalized
-   observations and their minimum non-sensitive review locators in
+1. Intake. Inspect repository guidance and existing documentation. Establish
+   the boundary, exclusions, outcomes, seeds, documentation destination, and
+   authorized live discovery. Read `references/intake.md` before bootstrap
+   intake or while any of these is unsettled. Ask for the destination when
+   ambiguity changes paths, navigation metadata, link syntax, or renderer
+   constraints. Propose human-owned intended state in `docs/context.md`; never
+   overwrite it from observed evidence or use it as scratch space. Complete when
+   the boundary, destination, and discovery authorization are confirmed
+   and `docs/context.md` holds the proposed intended state.
+2. Discovery. Read `references/discovery.md` before repository or authorized
+   live discovery, and `references/evidence.md` before you create or change
+   `docs/evidence.md`, its IDs, element kinds, relationships, or reconciliation
+   records. Trace approved material dependencies within the boundary. Keep
+   normalized observations and their minimum non-sensitive review locators in
    `docs/evidence.md`. Discard raw responses only after this evidence is
-   captured. Never commit raw responses.
-5. Reconcile each material context claim as `match`, `mismatch`,
-   `context-only`, `evidence-only`, `unresolved`, or `out-of-scope`.
-6. Before selecting, creating, materially revising, migrating, or validating
-   bundle pages, read `references/baseline.md`. Select optional technical pages
-   from the evidence.
-   Generate the reader-first `docs/system.md`,
-   selected detail pages, `docs/gaps.md`, and evidence-backed diagrams. Migrate
-   useful existing documentation into the page that owns the reader question.
-7. Before handoff, validate mandatory and selected-page contracts, navigation,
+   captured; never commit raw responses. Complete when every material
+   dependency within the boundary has a normalized observation with a locator
+   or a recorded gap.
+3. Reconciliation. Read `references/reconciliation.md` before substantial
+   reconciliation. Complete when every material context claim is recorded as
+   `match`, `mismatch`, `context-only`, `evidence-only`, `unresolved`, or
+   `out-of-scope`.
+4. Synthesis. Read `references/baseline.md` before selecting, creating,
+   materially revising, migrating, or validating bundle pages, and
+   `references/synthesis.md` before generating or materially revising reader
+   pages. Select optional technical pages from the evidence, then read
+   `references/assets.md` for the mandatory and selected templates. Generate
+   the reader-first `docs/system.md`, selected detail pages, `docs/gaps.md`,
+   and evidence-backed diagrams. Read `references/migration.md` only when
+   existing documentation will move, merge, or be retired; migrate useful
+   content into the page that owns the reader question. Complete when every
+   selected page exists with no `{{...}}` token left and each reader question
+   has one owning page.
+5. Validation. Validate mandatory and selected-page contracts, navigation,
    destination ordering, renderer constraints, coverage, unresolved material
-   gaps, sensitive-data exclusion, and dated cost provenance. Report whether
-   the result is a partial baseline or complete catalog. Stop at IaC candidates
-   in `gaps.md`; require separate approval for IaC work and for staging,
-   pushing, PR creation, or Wiki publication.
+   gaps, sensitive-data exclusion, and dated cost provenance. Stop at IaC
+   candidates in `gaps.md`; IaC work is approval-gated. Complete when every
+   check has a result and the report states whether the result is a partial
+   baseline or a complete catalog.
 
 ## Flow
 
 ```text
+input ← repository guidance, existing docs, confirmed intent, authorized discovery scope
 intake → discovery → reconciliation → synthesis → validation
-per phase → its leaf
-context.md ← human-owned; evidence.md ← normalized observations
-stop at IaC candidates; publish | migrate need approval
+each phase → read its leaf first
+context.md ← human-owned intent; evidence.md ← normalized observations
+material gaps remain? yes → partial baseline with visible gaps | no → complete catalog
+stop: validation reported; IaC candidates wait in gaps.md
 ```
 
-## Assets
+## Provenance
 
-Use the mandatory [home](assets/baseline/home.md),
-[system](assets/baseline/system.md), [context](assets/baseline/context.md),
-[evidence](assets/baseline/evidence.md), and
-[gaps](assets/baseline/gaps.md) templates.
-
-After page selection, load only each chosen technical template:
-
-- `modules.md`: [modules](assets/technical-pages/modules.md)
-- `schema.md`: [schema](assets/technical-pages/schema.md)
-- `interfaces.md`: [interfaces](assets/technical-pages/interfaces.md)
-- `integrations.md`: [integrations](assets/technical-pages/integrations.md)
-- `infrastructure.md`:
-  [infrastructure](assets/technical-pages/infrastructure.md)
-- `delivery.md`: [delivery](assets/technical-pages/delivery.md)
-
-After diagram selection, load only each chosen diagram template:
-
-- `architecture.md`: [architecture](assets/diagram-pages/architecture.md)
-- `context.md`: [context](assets/diagram-pages/context.md)
-- `deployment.md`: [deployment](assets/diagram-pages/deployment.md)
-- `logical.md`: [logical](assets/diagram-pages/logical.md)
-- `schema.md`: [schema](assets/diagram-pages/schema.md)
-
-A minimal bundle has no empty optional pages. Load a diagram template only when
-its evidence contract is met. Replace placeholders and remove inapplicable
-links. Keep portable Markdown links as the default navigation. Add
-destination-specific navigation metadata only for a confirmed destination.
-Replace every `{{...}}` token in a selected asset, including Mermaid node and
-relationship labels. Do not publish generic sample labels or relationships.
-Create the logical diagram only when it materially improves clarity.
+Read `references/sources.md` only to explain, review, or refresh the
+workflow's external design provenance.
 
 ## Guardrails
 
@@ -108,10 +84,6 @@ Create the logical diagram only when it materially improves clarity.
 - Use `audit` for a deeper read-only inspection when explicitly requested.
 - Use `docs` for documentation judgment not owned by this workflow.
 - Use `diagrams` for substantive diagram selection or renderer validation.
-- Remain usable without optional skills.
-
-Read `references/sources.md` only to explain, review, or refresh the
-workflow's external design provenance.
 
 ## Output
 

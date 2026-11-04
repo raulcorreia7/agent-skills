@@ -14,50 +14,46 @@ observable boundary.
 
 1. State each behavior claim and risk. Name an independent oracle such as a
    requirement, public contract, reproduced bug, invariant, reference
-   implementation, consumer expectation, or reviewed domain example. Do not
-   derive the expected result from the code under test; treat a missing oracle
-   as a requirement gap.
+   implementation, consumer expectation, or reviewed domain example. Take
+   expected results from the oracle, never from the code under test.
+   Complete when every claim names its oracle or is reported as a requirement
+   gap.
 2. Select the smallest level that observes the real risk: unit for an isolated
    deterministic rule, integration for a real boundary, contract for
    consumer-provider compatibility, or system for a deployed journey. A test
-   double cannot prove the boundary it replaces. Give every case an observable
-   pass condition.
-3. Read [the branch index](references/index.md) only when the task needs an
-   extended evidence example, case shape or row count guidance, or involves
-   broad input spaces, fault-based testing, flakiness, concurrency, migrations,
-   security, agent-generated tests, or test metrics; then load each
-   matching leaf.
-4. Inspect the test style, fixtures, helpers, commands, and continuous
-   integration contract. Reuse a suitable local pattern.
-5. Select rows that distinguish separate paths. Each row must protect a
-   contract, regression, boundary, or failure mode that cheaper evidence does
-   not prove.
-6. Control applicable instability in time, randomness, paths, networks,
-   dependencies, shared state, and cleanup.
-7. Add only the selected cases and necessary support code. Prefer stable public
-   boundaries to private mechanics.
-8. Run the narrowest command that proves the cases. For a regression, safely
-   confirm that the test detects the known broken behavior.
-9. Run each broader repository gate that the changed boundary requires. Record
-   material evidence limits.
-10. Finish when each row protects a distinct risk and no assertion depends on
-    an incidental implementation detail.
+   double cannot prove the boundary it replaces. Inspect the test style,
+   fixtures, helpers, commands, and continuous integration contract, and reuse
+   a suitable local pattern. Read [the branch index](references/index.md) when
+   the task needs an extended evidence example or involves broad input spaces,
+   fault-based testing, flakiness, concurrency, migrations, security,
+   agent-generated tests, or test metrics; then load each matching leaf.
+   Complete when each claim has a level and the local pattern to reuse is
+   named.
+3. Select rows that distinguish separate paths, using
+   [case tables](references/cases.md) for case shape, row names, and row count.
+   Each row protects a contract, regression, boundary, or failure mode that
+   cheaper evidence does not prove. Complete when every row has an observable
+   pass condition and protects a distinct risk.
+4. Add only the selected cases and necessary support code. Control applicable
+   instability in time, randomness, paths, networks, dependencies, shared
+   state, and cleanup. Prefer stable public boundaries to private mechanics.
+   Complete when every selected row is implemented and no assertion depends on
+   an incidental implementation detail.
+5. Run the narrowest command that proves the cases. For a regression, safely
+   confirm that the test detects the known broken behavior. Then run each
+   broader repository gate that the changed boundary requires. Complete when
+   each command passes, each regression test fails on the broken behavior, and
+   material evidence limits are recorded.
 
-## Cases
+## Flow
 
-Express one behavior as rows grouped by path, with one test body per group.
-
-- Group rows as `happy` first, then `edge` (boundaries and ambiguous input),
-  then `unhappy` (named failures). Three groups at most.
-- Each row: a friendly name for what the behavior does, the inputs, the
-  expected result, and the risk it protects. The group carries the path, so the
-  name does not repeat it, and a failing row still shows its class.
-- One body per group: arrange, act, assert once. A row that needs its own
-  branch is a different behavior; give it its own group.
-- Usually 3 to 8 rows across all groups; split a behavior before a group grows
-  past about ten.
-- Take expected results from the oracle, never from recomputing with the code
-  under test.
+```text
+input ← behavior claims, oracles, local test conventions
+claims → level → rows → implement → run
+oracle missing? yes → report the requirement gap | no → continue
+loop: run → fix the test → until each case passes and each regression test catches its bug
+stop: every row protects a distinct risk through an observable boundary
+```
 
 ## Guardrails
 
@@ -66,9 +62,8 @@ Express one behavior as rows grouped by path, with one test body per group.
 - Use live services or production data only with an existing explicit test gate.
 - Use snapshots or interaction assertions only when that representation is the
   reviewed contract.
-- Do not use a fixed test ratio, coverage target, or rerun count as proof of
-  adequacy. Coverage numbers and lint live in CI; this skill owns oracle
-  selection.
+- Judge adequacy by the risk-and-case map; a fixed test ratio, coverage target,
+  or rerun count is not proof of adequacy.
 
 ## Output
 

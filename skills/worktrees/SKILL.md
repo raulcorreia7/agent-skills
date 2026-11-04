@@ -8,23 +8,24 @@ description: Manual invocation only. Safe Git worktree management and provider r
 ## Job
 
 Run predictable Git worktree workflows with explicit paths, provider selection,
-preflight checks, and cleanup guardrails.
+preflight checks, and cleanup guardrails. This skill resolves existing refs
+directly.
+Not for commits, pushes, or branch, PR, release, or work-item text; use `git`.
 
 ## Steps
 
 1. Resolve the requested action, repository root, branch or ref, base ref,
-   target path, provider, and approval boundary.
-2. Run the common preflight: resolve the repository root, inspect
-   `git status --short --branch` and `git worktree list --porcelain`, and check
-   whether the requested branch, ref, or path already exists.
-3. Select the provider. Use Worktrunk unless the request explicitly requires
-   copy-on-write. For that branch, use simgit after its pilot passes. Use native
-   Git only when the selected provider is unsuitable. Read
-   `references/providers.md` for provider selection or a copy-on-write request.
-4. Load only the references for the selected operation:
-   - For Worktrunk or simgit, use the provider commands in
-     `references/providers.md`. Read the native operation references for their
-     guardrails and verification only.
+   target path, provider, and approval boundary. Run the common preflight:
+   inspect `git status --short --branch` and `git worktree list --porcelain`,
+   and check whether the requested branch, ref, or path already exists.
+   Complete when each of those inputs is known or stated as an assumption.
+2. Select the provider: Worktrunk unless the request explicitly requires
+   copy-on-write; simgit for copy-on-write after its pilot passes; native Git
+   only when the selected provider is unsuitable. Then load only the references
+   for the selected operation:
+   - Read `references/providers.md` for Worktrunk, simgit, or a copy-on-write
+     request, and use its provider commands. Read the native operation
+     references for their guardrails and verification only.
    - Read `references/add.md` to create, adopt, track, or detach a worktree.
    - Read `references/maintain.md` to inspect, move, repair, lock, or unlock one.
    - Read `references/remove.md` to remove a worktree.
@@ -35,39 +36,35 @@ preflight checks, and cleanup guardrails.
      exactly one of `references/github.md` or `references/gitlab.md`.
    - Read `references/sources.yml` only to audit or re-verify worktree
      provenance.
-5. Run only the selected operation and its necessary preflight. Finish when the
-   final path, branch or detached state, tracking state, and cleanup state are
-   known.
+
+   Complete when one provider is selected and its fallback state is known.
+3. Run only the selected operation and its necessary preflight. Complete when
+   the final path, branch or detached state, tracking state, and cleanup state
+   are known.
+
+## Flow
+
+```text
+input ← action, repository, ref, path, provider, approval boundary
+preflight → select provider → load operation references
+gated flag or action? yes → ask | no → continue
+run operation → verify
+stop: final path, ref state, tracking, and cleanup state are known
+```
 
 ## Guardrails
 
-- Use Worktrunk unless the request requires copy-on-write. Use simgit only with
-  `--require-cow`. Use native Git as the compatibility fallback.
-- Do not silently downgrade a requested copy-on-write workflow.
-- Do not assume that Worktrunk's ignored-file copies use copy-on-write.
+- Report a fallback from a requested copy-on-write workflow before you create
+  the worktree, and treat Worktrunk's ignored-file copies as full copies unless
+  the filesystem is verified to share blocks.
 - Do not use broad ignored-file cleanup such as `git clean -ffdx` while managed
   worktrees exist. Remove the selected worktree through Git instead.
-- Default native Git and simgit paths to
-  `../<repo-name>-worktrees/<branch-slug>`.
-- Inspect Worktrunk's path configuration and ensure its destination is outside
-  the source repository.
-- Lowercase branch slugs, replace separators and unsafe path characters with
-  `-`, collapse repeated `-`, and trim edges. Reject an empty slug, `.`, or
-  `..`.
-- Treat branch deletion as a separate explicit action.
-- Preserve Git configuration unless the user explicitly requests a change.
 - Keep worktrees outside `/tmp`, `.tmp`, and the source repository.
+- Preserve Git configuration unless the user explicitly requests a change.
 - Obtain explicit approval for `--clobber`, `--force`, `-B`, `-D`, real prune,
-  branch deletion, process reaping, and network fetches.
+  branch deletion, process reaping, and network fetches. Branch deletion is
+  always a separate action.
 - Prefer porcelain output for machine parsing.
-
-## Composition
-
-- Drafting branch, PR, release, or work-item text is an independent
-  deliverable. This skill retains ownership of worktree operations and resolves
-  existing refs directly.
-- Remain usable standalone. Use local repository naming conventions and do not
-  read another skill's files.
 
 ## Output
 

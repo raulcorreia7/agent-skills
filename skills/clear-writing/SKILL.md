@@ -1,6 +1,6 @@
 ---
 name: clear-writing
-description: Writes, rewrites, or reviews prose. Use when prose clarity is the primary deliverable, not standalone documentation or source comments. Use ASD-STE100 only for explicit controlled-technical-English compliance, audit, vocabulary verification, or binding publication.
+description: "Writes, rewrites, or reviews prose for clarity. Use when clear prose is the primary deliverable. Not for standalone documentation or source comments; use docs or comments. Use ASD-STE100 only for explicit controlled-technical-English compliance, audit, vocabulary verification, or binding publication."
 ---
 
 # Clear Writing
@@ -8,9 +8,30 @@ description: Writes, rewrites, or reviews prose. Use when prose clarity is the p
 ## Job
 
 Make prose clear without changing its meaning. Use the least rigorous level
-that satisfies the request.
+that satisfies the request. These rules govern the deliverable's prose, not
+your own messages to the user.
 
-## Levels
+## Modes
+
+| Mode | Use when | Requirement |
+| --- | --- | --- |
+| `author` | Writing new prose | Account for all supplied facts, limits, audience, and directives. |
+| `rewrite` | Revising existing prose | Preserve each source assertion or identify an unresolved question. |
+| `review` | Assessing prose | Identify material clarity or meaning risks and give a correction. |
+| `formal audit` | An explicit ASD-STE100 audit | Mark each in-scope sentence pass or fail, cite the material rule, and give a correction for each failure. |
+
+## Steps
+
+1. Select the mode and the level (see Levels of rigor). Mark code, commands,
+   identifiers, legal text, interface text, and immutable quotations as
+   exclusions; prose in comments and docstrings remains in scope unless its
+   exact wording is immutable. Complete when the mode, level, target reader,
+   and exclusions are named.
+2. Apply the level's rules under the mode's requirement. Complete when the
+   level's finish condition holds and the mode's requirement is met for every
+   in-scope sentence.
+
+## Levels of rigor
 
 ### Default
 
@@ -21,29 +42,17 @@ Use this level for ordinary writing, rewriting, or review.
 - Prefer a short, familiar word when it is equally exact, and active voice when
   it identifies a material actor or makes the sentence easier to follow.
 - Keep one main point in each sentence where practical and group related facts.
-  These checks guide rather than mechanize style: preserve a natural voice and
-  break a rule when following it would make the prose worse.
 
-Finish when every source claim remains, each sentence has one intended reading for the target reader, and every unresolved ambiguity is named.
+Finish when every source claim remains, each sentence has one intended reading
+for the target reader, and every unresolved ambiguity is named.
 
-### Technical Clarity
+### Technical clarity
 
 Use this level for the prose of procedures, descriptions, runbooks, API
-documentation, safety text, and technical comments. When those artifacts are
+documentation, safety text, and technical comments; read
+[technical clarity](references/technical-clarity.md). When those artifacts are
 the deliverable, the docs or comments workflow owns them and this level serves
-as its prose pass. This level does not claim ASD-STE100 compliance.
-
-1. Classify each block as a `procedure` or `description`. Apply supplied safety
-   and publication requirements.
-2. Name the material actor, action, condition, sequence, and limit. Use the
-   same term for the same item or concept.
-3. Preserve established technical and domain terminology. Explain an unfamiliar
-   term when the intended reader needs it. Do not replace an exact term with a
-   less precise everyday word.
-4. Use procedural structure only for instructions. Keep related conditions and
-   actions together.
-
-Finish when each block states its actor, action, conditions, sequence, limits, and required terminology without changing technical or safety meaning.
+as its prose pass.
 
 ### Formal ASD-STE100
 
@@ -52,20 +61,7 @@ vocabulary verification, or binding publication requirement. Read the [formal
 ASD-STE100 workflow](references/formal-asd-ste100.md), which routes every
 compliance or verification claim to authoritative evidence.
 
-## Operations
-
-Select the requested operation:
-
-- **Author:** Account for all supplied facts, limits, audience, and directives.
-- **Rewrite:** Preserve each source assertion or identify an unresolved
-  question.
-- **Review:** Identify material clarity or meaning risks and give a correction.
-- **Formal audit:** Mark each in-scope sentence pass or fail, cite the material
-  rule, and give a correction for each failure.
-
-Mark code, commands, identifiers, legal text, interface text, and immutable
-quotations as exclusions. Prose in comments and docstrings remains in scope
-unless its exact wording is immutable.
+### Sources
 
 Read [clear-writing sources](references/clear-writing-sources.md) only when
 source scope, attribution, or a disputed clear-writing principle is material.
@@ -76,10 +72,9 @@ source scope, attribution, or a disputed clear-writing principle is material.
   legal meaning, safety meaning, and risk level.
 - Request domain confirmation when a language change can alter technical or
   safety meaning.
-- Keep ordinary and technical work offline. Do not require external tools or a
-  source document. Heading, link, and STE mechanics belong in Vale, rumdl, or
-  the owning docs pipeline when they exist; this skill owns audience and
-  structure judgment.
+- Complete ordinary and technical work offline from the supplied text, without
+  external tools or a source document. Leave heading, link, and STE mechanics
+  to Vale, rumdl, or the owning docs pipeline when they exist.
 
 ## Output
 

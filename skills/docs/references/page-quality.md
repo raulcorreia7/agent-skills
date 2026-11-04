@@ -1,7 +1,5 @@
 # Documentation Page Quality
 
-Start page-level quality and correctness audits read-only.
-
 ## Page shape
 
 - Check the title, one-line purpose, first useful action, heading outline,

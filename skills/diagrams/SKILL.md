@@ -1,6 +1,6 @@
 ---
 name: diagrams
-description: Designs, refactors, renders, and validates Mermaid, Graphviz DOT, and D2 diagrams. Use when a diagram is the primary artifact.
+description: Designs, refactors, renders, and validates Mermaid, Graphviz DOT, and D2 diagrams. Use when a diagram is the primary deliverable.
 ---
 
 # Diagrams
@@ -10,29 +10,44 @@ description: Designs, refactors, renders, and validates Mermaid, Graphviz DOT, a
 Create the smallest source-backed diagram that answers one reader question on
 its target platform.
 
-Resolve `<skill-root>` as the directory that contains this `SKILL.md`.
-
 ## Steps
 
 1. Define the reader question, evidence, scope, destination, target renderer,
-   and editability requirement.
-2. Confirm that a diagram is better than prose or a table. Select Mermaid or
-   Graphviz DOT. Use D2 only when the user explicitly requests it.
-3. Select one diagram family and one abstraction level. Include only elements
-   that support the reader question.
-4. Draft canonical source with explicit labels, direction, boundaries, and
-   relationships. Apply visual style after the structure is accurate.
-5. Add a title and accessible description. Give each meaning a text or shape
-   route that does not depend only on color or position.
-6. Syntax and theme belong to the renderer and any project schema. If the user
-   requests validation, run the applicable syntax or render check and record
-   its result. For a standard local render, use the bundled
-   `<skill-root>/scripts/render.py` and read
-   `references/delivery/render-helper.md`. Otherwise, run a small existing
-   check only when it addresses a material risk. This skill owns when to
-   diagram and which family to use.
-7. Stop when the source answers the reader question, the selected checks have
-   results, and target-specific uncertainty is explicit.
+   and editability requirement. Confirm that a diagram is better than prose or
+   a table. Complete when the reader question and destination are named and a
+   diagram is confirmed as the better form, or the stop reason is stated.
+2. Select Mermaid or Graphviz DOT; use D2 only when the user explicitly
+   requests it. Select one diagram family and one abstraction level, then load
+   their references. Complete when the language, family, and abstraction level
+   are chosen and their references are read.
+3. Draft canonical source with explicit labels, direction, boundaries, and
+   relationships. Include only elements that support the reader question.
+   Apply visual style after the structure is accurate. Complete when every
+   element and relationship traces to evidence and supports the reader
+   question.
+4. Add a title and accessible description. Give each meaning a text or shape
+   route that does not depend only on color or position. Complete when the
+   title and description exist and no meaning relies on color or position
+   alone.
+5. Validate. Syntax and theme belong to the renderer and any project schema.
+   If the user requests validation, run the applicable syntax or render check.
+   Otherwise, run a small existing check only when it addresses a material
+   risk. Complete when every selected check has a recorded result.
+6. Render when the output needs an image. For a standard local render, use
+   `<skill-root>/scripts/render.py`, where `<skill-root>` is the directory that
+   contains this `SKILL.md`, and read `references/delivery/render-helper.md`.
+   Complete when the SVG or PNG exists at its destination, or no render is
+   needed.
+
+## Flow
+
+```text
+input ← reader question, evidence, destination, target renderer
+frame → select → draft → describe → validate → render
+diagram beats prose or a table? yes → continue | no → stop and recommend prose or a table
+loop: draft → check against evidence → until every element is evidenced
+stop: source answers the reader question, selected checks have results, target-specific uncertainty is explicit
+```
 
 ## References
 
@@ -68,8 +83,8 @@ Resolve `<skill-root>` as the directory that contains this `SKILL.md`.
 
 ## Composition
 
-- Author or validate a project `DESIGN.md` through `design-md`; this skill
-  consumes it as the project design input.
+- Use `design-md` when authoring or validating a project `DESIGN.md` is the
+  primary deliverable; this skill consumes it as the project design input.
 
 ## Output
 

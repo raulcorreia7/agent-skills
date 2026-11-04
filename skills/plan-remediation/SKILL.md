@@ -8,54 +8,49 @@ description: Manual invocation only. Plans evidence-backed remediation for code,
 ## Job
 
 Produce a read-only remediation plan for code, a plan, a codebase, or
-infrastructure. Accept an artifact, stable locator, finding set, or evidence
-packet. Do not edit, deploy, publish, or change a live system.
-
-## Inputs
-
-Establish the evidence boundary, desired state, supplied findings, access
-authority, and coverage limits.
+infrastructure from an artifact, stable locator, finding set, or evidence
+packet. Leave code, deployments, publications, and live systems unchanged, even
+when urgent action is recommended.
 
 ## Steps
 
-1. Resolve the input, evidence boundary, desired state, and supplied findings.
-   Without a problem statement or target, inspect the supplied input read-only;
-   identify two to four evidence-backed candidates with preliminary severity and
-   evidence; ask one selection question; recommend the highest-severity,
-   highest-confidence candidate; and continue only after the target is explicit.
+1. Resolve the input, evidence boundary, desired state, access authority,
+   coverage limits, and supplied findings. Without a problem statement or
+   target, inspect the supplied input read-only, identify two to four
+   evidence-backed candidates with preliminary severity and evidence, and
+   recommend the highest-severity, highest-confidence candidate. Complete when
+   the target and the selected findings are explicit.
 2. Verify each selected finding against the input, local and supplied evidence,
    and current authoritative external sources when a version, vulnerability,
    standard, or infrastructure behavior is material and network research is
    authorized. Separate fact, source-reported result, inference, unknown, and
-   coverage limit. Reject unsupported candidates.
-3. Normalize verified findings to `Critical`, `High`, `Medium`, or `Low`.
-   Preserve source labels. Map `P0`, `P1`, `P2`, and `P3` to `Critical`, `High`,
-   `Medium`, and `Low`.
-4. Give each finding only evidence-supported `Stabilize`, `Correct`, and
+   coverage limit. Normalize each verified finding to the severity scale below,
+   preserving its source label; map `P0`, `P1`, `P2`, and `P3` to `Critical`,
+   `High`, `Medium`, and `Low`. Complete when every selected finding is
+   verified with a severity and source label, or rejected with a reason.
+3. Give each finding only evidence-supported `Stabilize`, `Correct`, and
    `Prevent` actions. Name the outcome, owner or owning location, dependencies,
    authority gate, acceptance evidence, and rollback or recovery condition.
-   Mark a horizon `Not required` with evidence rather than inventing work.
-5. Build one portfolio order: ongoing harm or active exposure, severity,
+   Read [security response](references/security-response.md) when a finding
+   involves a vulnerability, exploitation, unauthorized access, data or secret
+   leakage, or suspected persistence. Complete when each retained finding has
+   each horizon planned with proof or marked `Not required` with evidence.
+4. Build one portfolio order: ongoing harm or active exposure, severity,
    dependency gates, blast radius or exploitability, confidence, then the
    smallest reversible action that unlocks later proof. A low-severity easy fix
-   never displaces unresolved Critical work.
-6. Finish when every selected finding is verified or rejected, each retained
-   finding has applicable horizons and proof, and the portfolio has one
-   executable dependency order.
+   never displaces unresolved Critical work. Complete when the portfolio has
+   one executable dependency order.
 
 ## Flow
 
 ```text
-findings ← verify(selected); reject unsupported
-severity ← map(source labels)
-per finding → Stabilize, Correct, Prevent (evidence-supported)
-portfolio ← order by harm → severity → gates → blast radius → confidence
+input ← artifact, locator, finding set, or evidence packet
+target explicit? yes → continue | no → 2–4 candidates, recommend one, ask
+verify → reject unsupported → severity ← map(source labels)
+per finding: Stabilize, Correct, Prevent (evidence-supported or Not required)
+portfolio ← harm → severity → gates → blast radius → confidence → reversible unlock
+stop: every finding verified or rejected, horizons proven, one dependency order
 ```
-
-## References
-
-Read [remediation practices](references/practices.md) only when source rationale
-or a detailed example is material.
 
 ## Severity
 
@@ -82,23 +77,20 @@ or a detailed example is material.
   documentation, dependency policy, observability, least privilege,
   policy-as-code, or temporary-control retirement.
 
+## Practices
+
+Read [remediation practices](references/practices.md) only when source rationale
+or a detailed example is material.
+
 ## Guardrails
 
-- Treat exploitation, unauthorized access, data or secret leakage, and suspected
-  persistence as an incident requiring immediate escalation, evidence
-  preservation, containment, eradication, trusted recovery, and monitoring. A
-  vulnerability ticket alone is insufficient.
-- When no compromise is known, remediate vulnerabilities by identifying,
-  prioritizing, acquiring or designing, applying through the approved change
-  path, and verifying the affected population.
 - Use complexity, coupling, coverage, churn, scanner counts, and documentation
   age as triage evidence, never universal targets.
 - Make temporary controls explicit with an owner, review point, and removal
   condition. A workaround is not permanent closure.
 - Protect credentials and sensitive values. Cite locations and credential
   types, never values.
-- Keep external search and live evidence within the user's authority. Keep the
-  plan read-only, even when urgent action is recommended.
+- Keep external search and live evidence within the user's authority.
 
 ## Output
 

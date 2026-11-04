@@ -1,6 +1,5 @@
 # Documentation Deduplication And Freshness
 
-Start duplicate-content cleanup and stale-documentation review read-only.
 Apply removals or moves only within the approved write boundary.
 
 Look for repeated setup steps, commands, configuration tables, architecture

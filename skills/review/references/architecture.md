@@ -35,7 +35,7 @@ outside the default review.
 
 Use this order and omit empty sections:
 
-1. **Verdict:** fit, findings present, or not reviewable.
+1. **Verdict:** `pass`, `findings`, or `not reviewable`.
 2. **Findings:** `P0`-through-`P3` ordered, with affected quality attribute,
    evidence, consequence, and smallest safe direction.
 3. **Questions:** Only decisions or questions that materially change the

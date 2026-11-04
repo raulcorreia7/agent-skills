@@ -4,11 +4,15 @@ Resolve the repository name, base ref, branch, and destination explicitly.
 Inspect remotes when `origin/HEAD` is missing. Use the current `HEAD` only after
 you state that assumption.
 
-Default destination:
+Default native Git and simgit destination:
 
 ```text
 ../<repo-name>-worktrees/<branch-slug>
 ```
+
+Build the branch slug: lowercase the branch, replace separators and unsafe path
+characters with `-`, collapse repeated `-`, and trim edges. Reject an empty
+slug, `.`, or `..`.
 
 Create a branch from an explicit base:
 

@@ -10,7 +10,7 @@ governing constraint or criterion.
 
 Return:
 
-1. **Verdict:** pass, findings present, or not reviewable.
+1. **Verdict:** `pass`, `findings`, or `not reviewable`.
 2. **Findings:** Use a composed specialist's priority vocabulary; otherwise
    order `Critical`, `High`, `Medium`, or `Low`. Give each a precise locator,
    affected criterion, evidence, consequence, verification or falsification

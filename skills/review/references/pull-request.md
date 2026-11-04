@@ -20,9 +20,10 @@ Assess the PR/MR or story-backed change against its stated intent.
 
 Use this order and omit empty sections:
 
-1. **Verdict:** `approve`, `comment`, `request changes`, or `not reviewable`,
-   with a one-sentence rationale. Treat the verdict as a recommendation unless
-   the user separately approves the post.
+1. **Verdict:** `pass`, `findings`, or `not reviewable`, with a one-sentence
+   rationale. A provider review maps them to approve / request changes /
+   comment. Treat the verdict as a recommendation unless the user separately
+   approves the post.
 2. **Findings:** `P0`-through-`P3` ordered findings with precise locations,
    evidence, impact, and smallest fixes.
 3. **Questions:** Material intent or acceptance decisions and the recommended

@@ -13,23 +13,35 @@ plans in their owning workflows.
 ## Steps
 
 1. Frame the decision, desired outcome, constraints, stakeholders, and material
-   unknowns.
-2. Inspect repository evidence when current boundaries, contracts, data,
-   deployment, or ownership can change the answer.
-3. Ask one material alignment question at a time when the answer changes
-   direction, public contracts, risk, cost, or ownership. Use progressive discovery.
-4. Compare viable options by consequences: coupling, data ownership,
+   unknowns. Inspect repository evidence when current boundaries, contracts,
+   data, deployment, or ownership can change the answer. Complete when the
+   decision is stated and each material unknown is labeled.
+2. Align on the questions whose answers change direction, public contracts,
+   risk, cost, or ownership. Complete when each such question is answered or
+   recorded as open.
+3. Compare viable options by consequences: coupling, data ownership,
    operability, security and privacy, migration, cost, and testability.
-5. Recommend a default and explain the decisive trade-offs. Keep the decision
-   human-owned and distinguish evidence from assumptions.
-6. Return a concise decision snapshot when alignment emerges: distinguish the
-   recommendation, decision owner, and `proposed` or explicitly confirmed
-   `accepted` state. Finish when the snapshot records the chosen direction,
-   decisive trade-offs, evidence, assumptions, owner, and acceptance state.
+   Recommend a default, explain the decisive trade-offs, keep the decision
+   human-owned, and distinguish evidence from assumptions. Complete when every
+   viable option has its consequences stated and the recommendation names its
+   decisive trade-offs.
+4. When alignment emerges, return a decision snapshot: the chosen direction,
+   decisive trade-offs, evidence, assumptions, decision owner, and `proposed`
+   or `accepted` state. Complete when the snapshot records each of these.
+
+## Flow
+
+```text
+input ← decision, constraints, repository evidence
+frame → align on material questions → compare options → recommend
+aligned? yes → snapshot | no → return the comparison with open questions
+stop: snapshot records direction, trade-offs, owner, acceptance state
+```
 
 ## Guardrails
 
-- Record `accepted` only after the decision owner explicitly confirms it.
+- Record `accepted` only after the decision owner explicitly confirms it;
+  otherwise the state is `proposed`.
 - Label unknown architecture, ownership, API, deployment, and data facts.
 
 ## Composition

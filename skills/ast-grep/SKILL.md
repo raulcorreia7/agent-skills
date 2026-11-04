@@ -1,6 +1,6 @@
 ---
 name: ast-grep
-description: Finds syntax-aware code structures and authors ast-grep rules. Use when text search cannot reliably express the required syntax or AST relationship.
+description: "Finds syntax-aware code structures and authors ast-grep rules. Use when a structural search or ast-grep rule is the primary deliverable and text search cannot reliably express the syntax or AST relationship."
 ---
 
 # ast-grep
@@ -16,15 +16,17 @@ is requested.
 ## Steps
 
 1. Identify the language, target structure, required and excluded cases, search
-   paths, and desired output.
-2. Use text search when it expresses the request reliably. Otherwise, confirm
-   the executable with `ast-grep --version`. If it is unavailable, report the
-   blocked structural search and ask whether installation is in scope.
-3. Use supplied or repository code when it contains at least one expected
+   paths, and desired output. Use text search when it expresses the request
+   reliably. Otherwise, confirm the executable with `ast-grep --version`; if it
+   is unavailable, report the blocked structural search and ask whether
+   installation is in scope. Complete when text search is chosen, ast-grep
+   answers `--version`, or the blocked search is reported.
+2. Use supplied or repository code when it contains at least one expected
    match and one near miss. Otherwise, build a small fixture in the operating
-   system temporary directory with those examples, then remove it. Prefer an
-   inline rule for an ad hoc scan; retain a rule file only when it is needed.
-4. Start with a direct pattern:
+   system temporary directory with those examples, then remove it after the
+   test. Complete when at least one expected match and one near miss exist on
+   disk.
+3. Start with a direct pattern:
    `ast-grep run --lang <language> --pattern '<pattern>' <path>`. When a direct
    pattern is insufficient and a YAML scan rule is necessary, read
    [scan rules](references/scan-rules.md). Then read each additional rule
@@ -35,39 +37,42 @@ is requested.
      alternatives, exclusions, or utility-rule reuse;
    - [metavariables](references/metavariables.md) for capture equality,
      unnamed nodes, or multi-node captures.
-   Use `ast-grep scan --inline-rules '<rule-yaml>' <path>` for an ad hoc rule or
-   `ast-grep scan --rule <rule.yml> <path>` for a retained rule file.
-5. Inspect the parsed syntax tree when node kinds or pattern context are
-   uncertain. Read [troubleshooting](references/troubleshooting.md) only after
-   a pattern or rule produces an unexpected match or miss.
-6. Test the rule against the examples. For relational `inside` and `has` rules,
-   use `stopBy: end` unless a narrower traversal is intentional.
-7. Scan only the intended paths. Finish when the tested rule accounts for the
+
+   Prefer `ast-grep scan --inline-rules '<rule-yaml>' <path>` for an ad hoc
+   rule; use `ast-grep scan --rule <rule.yml> <path>` only for a rule file the
+   task needs to retain. For relational `inside` and `has` rules, use
+   `stopBy: end` unless a narrower traversal is intentional. Inspect the parsed
+   syntax tree when node kinds or pattern context are uncertain, and read
+   [troubleshooting](references/troubleshooting.md) only after a pattern or rule
+   produces an unexpected match or miss. Complete when the pattern or rule
+   matches every expected example and no near miss.
+4. Scan only the intended paths. Complete when the tested rule accounts for the
    expected match, the near miss, the scoped results, and known limitations.
 
 ## Flow
 
 ```text
 target ← language, structure, include/exclude, paths
-text search reliable → use it, stop
-pattern ← direct → test(match, near miss) → refine
+text search reliable? yes → use it, stop | no → check ast-grep, or report blocked
+examples ← repository code or temp fixture (match + near miss)
+loop: pattern or rule → test on examples → refine → until match and no near miss
 scan intended paths → report matches + limits
+stop: scoped results and limitations are accounted for
 ```
 
 ## Guardrails
 
 - Infer absence only from a tested rule with positive and negative examples.
 - Keep the result read-only unless the user explicitly requests a codemod or
-  edit.
+  edit; fixtures in the operating system temporary directory are allowed.
 - Read `references/sources.yml` only to audit or update the curated upstream
   material. Read `references/LICENSE.txt` only for maintenance,
   redistribution, or a license audit.
 
 ## Composition
 
-When a validated search leads to requested code changes, compose with `code` or
-`refactor` when available. Keep structural search useful on its own when those
-skills are absent.
+- Use `code` or `refactor` when a validated search leads to requested code
+  changes.
 
 ## Output
 
