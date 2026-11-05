@@ -1,0 +1,6 @@
+interface:
+  display_name: "Babysit PR"
+  short_description: "Watch a PR overnight, fix or review, then summarize"
+  default_prompt: "Use $babysit-pr to watch my PR overnight and post a summary in the morning."
+policy:
+  allow_implicit_invocation: true

@@ -62,4 +62,5 @@ An `implicit` skill activates when a request matches its description. Ask for a
 |---|---|---|
 | [`git`](git/SKILL.md) | `implicit` | Inspect Git, draft commits, branches, and releases, or run an approved Git workflow |
 | [`pull-request`](pull-request/SKILL.md) | `implicit` | Prepare, describe, open, and iterate on your own PR or MR |
+| [`babysit-pr`](babysit-pr/SKILL.md) | `implicit` | Watch a PR overnight as its author or reviewer and post one summary |
 | [`worktrees`](worktrees/SKILL.md) | `implicit` | Manage Git worktrees and provider review checkouts |

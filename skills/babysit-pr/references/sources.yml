@@ -1,0 +1,17 @@
+reviewed_on: "2026-11-05"
+limitations:
+  - "author.yaml and reviewer.yaml passed to-graph check, render, and run --dry-run; neither ran against a live PR, so the agent prompts, the default agent CLI tool allowlists, and gh pr comment and gh pr review --comment posting are unexercised."
+  - "The graphs use gh, so they cover GitHub only; GitLab passes go through the composed skills' provider notes."
+sources:
+  gh_pr:
+    title: "GitHub CLI gh pr view, diff, checks, comment, and review --comment (local --help and --json field lists, gh 2.102.1)"
+    url: "https://cli.github.com/manual/gh_pr"
+    reviewed_on: "2026-11-05"
+  gh_run_view:
+    title: "GitHub CLI gh run view --log-failed, named in the author graph's read-only tool list (local --help, gh 2.102.1)"
+    url: "https://cli.github.com/manual/gh_run_view"
+    reviewed_on: "2026-11-05"
+  to_graph:
+    title: "to-graph skill: graph schema, authoring rules, and check, render, and run --dry-run (scripts/to_graph.py in this repository)"
+    url: "https://github.com/raulcorreia7/agent-skills/tree/main/skills/to-graph"
+    reviewed_on: "2026-11-05"

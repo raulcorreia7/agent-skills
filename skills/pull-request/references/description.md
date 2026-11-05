@@ -20,17 +20,16 @@ commit conventions in `git`.
 Write for a reviewer who has not seen the work. Give each part only when it
 applies, in this order:
 
-| Part | What it says |
+| Section | What it says |
 | --- | --- |
-| Why | The problem or goal, and the linked work item. |
-| What | The change in a few sentences, by behaviour rather than by file. |
-| How tested | The exact commands that ran and their result; manual steps with what you saw. |
-| Risk | What could break, for whom, and how a reviewer can check it. |
-| Rollout and rollback | Flags, migrations, ordering, and how to undo the change. |
-| Screenshots | Before and after for a visible UI change. |
-| Breaking changes | What consumers must change, matching the commit's breaking marker. |
-| Improvements | Adjacent improvements committed separately, one line each, or suggested ones not made. |
-| Follow-ups | Larger opportunities and known gaps left for later work. |
+| Summary | The problem and the outcome in 1–3 sentences, then the work item on its own line. |
+| Changes | One fact per bullet, by behaviour rather than by file, with deliberate omissions and known limits. |
+| Test plan | The exact commands that ran and their result, manual steps with what you saw, and what wasn't tested. |
+| Risk and rollback | What could break, for whom, breaking changes, migrations, and how to undo the change; `None: <reason>` when low. |
+| Screenshots | Before and after for a visible UI change; omit otherwise. |
+| Review notes | Where you want scrutiny or a decision, or `None`. |
+| Follow-ups | Adjacent improvements committed separately (one line each), suggested ones not made, and larger work left for later. |
+| AI disclosure | `None`, or the tool and what it did, and what a person verified. |
 
 - Record a check only when it ran, with the command as you ran it. Explain a
   missing check only when its absence leaves a real risk.
@@ -41,16 +40,30 @@ applies, in this order:
 
 ## Templates
 
-When the repository has a PR template:
+When the repository has a PR template (on GitHub, `.github/pull_request_template.md`
+or a file under `.github/PULL_REQUEST_TEMPLATE/`), use it:
 
 - Keep its headings and fill every section that applies.
 - Mark a section that does not apply with `Not provided`, `Not stacked`,
   `Not a release PR`, or `None`. Keep every required section, even when empty.
-- Put the parts above under the template's closest headings, and add an
-  `Improvements` heading when the template has none and there is something to
+- Put the sections above under the template's closest headings, and add a
+  `Follow-ups` heading when the template has none and there is something to
   list.
 - For a template's release section, follow the release PR conventions in
   `git`.
+
+## Disclosure footer
+
+End everything an agent posts to the PR (the body, comments, and thread
+replies) with one footer line, after a blank line:
+
+```text
+🤖 Agent (pull-request) · <model> effort: <effort>
+```
+
+Use the model's display name and the reasoning effort as the harness reports
+them, and `unknown` for either one it does not report; never guess. Replace an
+older footer line when editing the body. Commit messages carry no footer.
 
 ## Check before posting
 
@@ -66,37 +79,40 @@ When the repository has a PR template:
 ```markdown
 fix(auth): reject expired refresh tokens
 
-## Why
+## Summary
 
 Expired refresh tokens still returned new access tokens, so a leaked token
-stayed useful after expiry. Refs: #482
+stayed useful after expiry. They now get a 401.
 
-## What
+Refs: #482
 
-The token service now checks `expires_at` before issuing an access token and
-returns 401 with `token_expired`. Clients already handle 401 by sending the
-user to sign in.
+## Changes
 
-## How tested
+- The token service checks `expires_at` before issuing an access token.
+- An expired token gets 401 with `token_expired`; clients already send the
+  user to sign in on 401.
+
+## Test plan
 
 - `uv run pytest tests/auth -q`: 64 passed, including two new expiry cases.
 - Manual: signed in, moved the clock past expiry, refreshed; got 401.
 
-## Risk
+## Risk and rollback
 
-Clients whose clocks run fast could see early sign-outs. The check uses the
-server clock only, so client time does not matter.
+Clients with fast clocks can't sign out early, because only the server clock
+is checked. No migration; revert the commit to roll back.
 
-## Rollout and rollback
+## Review notes
 
-No migration. Revert the commit to roll back.
-
-## Improvements
-
-- `refactor(auth): rename TokenStore.get to find` (separate commit; the old
-  name hid that it returns None).
+The expiry comparison in `token_service.py`: is `>=` the boundary we want?
 
 ## Follow-ups
 
+- `refactor(auth): rename TokenStore.get to find` (separate commit; the old
+  name hid that it returns None).
 - Rotate refresh tokens on use (#490).
+
+## AI disclosure
+
+None.
 ```
