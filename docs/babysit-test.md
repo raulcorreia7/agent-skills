@@ -1,4 +1,4 @@
-# Babysit PR test page
+# Babysit PR test
 
 This page exists only to test the `babysit-pr` skill. Close its PR without
 merging.
