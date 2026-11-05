@@ -1,6 +1,6 @@
 ---
 name: to-prd
-description: "Turns a problem, opportunity, or feature idea into source-backed, decision-ready requirements (a PRD). Use when a requirements document is the primary deliverable. Not for sequencing implementation work; use `to-plan`."
+description: "Turns an idea or problem into source-backed, decision-ready requirements (a PRD). Use when requirements are the primary deliverable. Not for sequencing work; use `to-plan`."
 ---
 
 # To PRD

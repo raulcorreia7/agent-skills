@@ -1,6 +1,6 @@
 ---
 name: discuss-architecture
-description: "Compares architecture options and helps the user reach a decision on system boundaries, data ownership, and trade-offs. Use when an architecture decision is the primary deliverable. Not for assessing an existing design; use `review`."
+description: "Compares architecture options and helps reach a decision on boundaries, ownership, and trade-offs. Use when an architecture decision is the primary deliverable. Not for assessing a design; use `review`."
 ---
 
 # Discuss Architecture

@@ -1,6 +1,6 @@
 ---
 name: optimize
-description: "Measures a bottleneck and ranks evidence-backed improvements to performance, reliability, resource use, cost, or operations against a measurable target. Use when an optimization recommendation or a measured improvement is the primary deliverable. Not for diagnosing a failure; use `debug`."
+description: "Measures a bottleneck and ranks improvements to speed, reliability, resource use, or cost against a target. Use when a measured improvement is the primary deliverable. Not for failures; use `debug`."
 ---
 
 # Optimize

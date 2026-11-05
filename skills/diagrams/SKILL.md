@@ -1,6 +1,6 @@
 ---
 name: diagrams
-description: "Designs, refactors, renders, and validates Mermaid, Graphviz DOT, and D2 diagrams: flowcharts, sequence, state, ER, class, architecture, C4, timelines, and small charts. Use when a diagram is the primary deliverable. Not for authoring a project DESIGN.md; use `design-md`."
+description: "Designs, renders, and validates Mermaid, Graphviz, and D2 diagrams. Use when a diagram is the primary deliverable. Not for DESIGN.md files; use `design-md`."
 ---
 
 # Diagrams

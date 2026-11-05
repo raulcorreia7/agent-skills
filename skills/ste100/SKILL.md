@@ -1,6 +1,6 @@
 ---
 name: ste100
-description: "Manual invocation only. Writes, rewrites, or audits technical text for ASD-STE100 Simplified Technical English compliance, including vocabulary verification against the official Issue 9 standard. Not for general clarity editing; use `clear-writing`."
+description: "Manual invocation only. Writes, rewrites, or audits text for ASD-STE100 Simplified Technical English compliance. Not for general editing; use `clear-writing`."
 ---
 
 # ASD-STE100

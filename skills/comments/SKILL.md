@@ -1,6 +1,6 @@
 ---
 name: comments
-description: "Maintains, audits, or explains source comments, docstrings, in-code API documentation, and tool directives. Use when source comments or in-code API documentation are the primary deliverable. Not for standalone documentation; use `docs`."
+description: "Maintains, audits, or explains source comments, docstrings, and in-code API docs. Use when source comments are the primary deliverable. Not for standalone documentation; use `docs`."
 ---
 
 # Comments

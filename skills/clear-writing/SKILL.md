@@ -1,6 +1,6 @@
 ---
 name: clear-writing
-description: "Writes, rewrites, and reviews prose so it reads as natural human writing: precise, fitted to its reader, and free of LLM noise. Use when prose is the primary deliverable: email, reports, essays, articles, UI copy, posts, or stories. Not for ASD-STE100 compliance; use `ste100`. Not for standalone documentation or source comments; use `docs` or `comments`."
+description: "Writes, edits, and reviews any prose so it reads naturally, fits its reader, and drops LLM noise. Use when prose is the primary deliverable. Not for STE compliance; use `ste100`."
 ---
 
 # Clear Writing

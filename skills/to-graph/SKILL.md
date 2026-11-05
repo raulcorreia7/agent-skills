@@ -1,6 +1,6 @@
 ---
 name: to-graph
-description: "Manual invocation only. Turns a repeatable task, such as a plan, runbook, PR review, CI/CD watch, or cron job, into a checked YAML workflow graph that people, small models, or schedulers can draw and run. Not for changing the task or doing its work; use `to-plan` or `code`."
+description: "Manual invocation only. Turns a repeatable task, such as a runbook, PR review, or cron job, into a checked, runnable YAML workflow graph. Not for doing the task; use `to-plan`."
 ---
 
 # To Graph

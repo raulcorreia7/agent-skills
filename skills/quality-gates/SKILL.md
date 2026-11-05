@@ -1,6 +1,6 @@
 ---
 name: quality-gates
-description: "Sets up or tunes formatters, linters, type checkers, pre-commit and git hooks, and CI quality gates: set up ruff, eslint, or clippy, add pre-commit, add a CI lint or test job, tighten type checking. Use when quality-gate configuration is the primary deliverable. Not for command-contract scripts, running scans and measuring code, or read-only inspection; use `scripts`, `code-scanner`, or `audit`."
+description: "Sets up or tunes linters, formatters, type checkers, pre-commit hooks, and CI quality gates. Use when gate configuration is the primary deliverable. Not for running scans; use `code-scanner`."
 ---
 
 # Quality Gates

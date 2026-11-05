@@ -1,6 +1,6 @@
 ---
 name: review
-description: "Reviews pull requests, diffs, and designs against their intent and evidence: changes, PRs or MRs, system designs, architecture documents, and ADRs. Returns a verdict and priority-ordered findings. Use when a review is the primary deliverable. Not for opening or updating your own PR; use `pull-request`."
+description: "Reviews pull requests, diffs, and designs against their intent and evidence, with a verdict and prioritized findings. Use when a review is the primary deliverable. Not for your own PR; use `pull-request`."
 ---
 
 # Review
