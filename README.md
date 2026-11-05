@@ -83,6 +83,6 @@ for the contracts, then run `uv sync --all-groups` once and
 | The baseline rules                      | [Baseline](baselines/AGENTS.md)                                |
 | Shared agents                           | [Agent catalog](agents/README.md)                              |
 | Research behind the rules               | [Documentation index](docs/README.md)                          |
-| Diagram visual language gallery         | [Diagram visual design](docs/diagram-visual-design/index.html) |
+| Diagram visual language gallery         | [Diagram visual design](docs/diagrams/index.html) |
 
 Released under the [MIT license](LICENSE).

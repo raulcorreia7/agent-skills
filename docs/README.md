@@ -1,12 +1,12 @@
 # Documentation
 
 Research reports and the diagram gallery for this repository. The gallery is
-published at <https://raulcorreia7.github.io/agent-skills/>.
+published at <https://raulcorreia7.github.io/agent-skills/diagrams/>.
 
 | Reader task | Document |
 | --- | --- |
 | Read the user baseline that every user install sets up | [Baseline guidance](../baselines/AGENTS.md) |
-| Review diagram themes, tokens, and renderer examples | [Diagram visual design gallery](diagram-visual-design/README.md) |
+| Review diagram themes, tokens, and renderer examples | [Diagram visual design gallery](diagrams/README.md) |
 | Review the evidence for cross-domain agent guardrails | [Evidence-based agent guardrails](research/evidence-based-agent-guardrails.md) |
 | Review evidence for context-efficient discovery and tool use | [Efficient tool use](research/efficient-tool-use.md) |
 | Review sycophancy evidence and mitigation options | [Reducing AI sycophancy](research/reducing-ai-sycophancy.md) |
