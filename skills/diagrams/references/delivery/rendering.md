@@ -11,7 +11,8 @@ copy, never the only editable one.
 4. Text description, plus a data table for quantitative charts.
 
 Use PNG when native rendering changes meaning, labels, hierarchy,
-accessibility, or readability. Follow the repository convention or use matching
+accessibility, or readability. Use static SVG only on request or for a
+repository docs site. Follow the repository convention or use matching
 basenames such as `checkout.mmd` and `checkout.png`. Do not keep temporary
 validation output.
 

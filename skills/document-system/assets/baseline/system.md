@@ -5,23 +5,23 @@ description: "Short reconciled current-state overview and technical-reference gu
 timestamp: "{{timestamp}}"
 ---
 
-# current state
+## current state
 
 {{current-state summary and business purpose}}
 
-# system boundary
+## system boundary
 
 {{included and external systems, with portable evidence citations}}
 
-# reader guide
+## reader guide
 
 {{links to each selected technical page and diagram that exists}}
 
-# operational posture
+## operational posture
 
 {{short statement of observed environments, delivery maturity, and relevant limits. link to delivery, infrastructure, and gaps when present}}
 
-# evidence basis
+## evidence basis
 
 See [evidence](evidence.md) and [gaps](gaps.md). Keep code, schema,
 interface, integration, infrastructure, and delivery detail in its own selected

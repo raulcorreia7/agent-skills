@@ -36,9 +36,13 @@ end states are rounded and coloured by status, and retries are dashed loops.
 A scheduler starts a run with the same command. For example:
 
 ```text
-crontab:         0 6 * * *  cd ~/src/app && uv run ~/.agents/skills/to-graph/scripts/to_graph.py run ci-health.yaml
+crontab:         0 6 * * *  cd ~/src/app && uv run ~/.agents/skills/to-graph/scripts/to_graph.py run ci-health.yaml --decide approve-issue=approved
 GitHub Actions:  on: { schedule: [{ cron: "0 6 * * *" }] }, then the same command in a step
 ```
+
+Pass `--decide` only for gates named in the graph's recorded approvals
+(`extensions.approvals`); every other gate ends `unavailable` and reports a dry
+run.
 
 To swap the agent harness for one run, pass the input:
 `run ci-health.yaml AGENT="codex exec"`.

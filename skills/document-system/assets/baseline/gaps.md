@@ -5,32 +5,32 @@ description: "Differences, unresolved evidence, risks, and follow-up candidates.
 timestamp: "{{timestamp}}"
 ---
 
-# mismatches
+## mismatches
 
 | claim id | impact | evidence | next check | status |
 |---|---|---|---|---|
 
-# context-only
+## context-only
 
 | claim id | impact | evidence | next check | status |
 |---|---|---|---|---|
 
-# evidence-only
+## evidence-only
 
 | claim id | impact | evidence | next check | status |
 |---|---|---|---|---|
 
-# unresolved
+## unresolved
 
 | claim id | impact | evidence | next check | status |
 |---|---|---|---|---|
 
-# click-ops risks
+## click-ops risks
 
 | gap id | impact | evidence | next action | status |
 |---|---|---|---|---|
 
-# iac candidates
+## iac candidates
 
 | candidate id | current mechanism | evidence | prerequisite | status |
 |---|---|---|---|---|

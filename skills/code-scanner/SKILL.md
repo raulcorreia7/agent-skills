@@ -27,21 +27,21 @@ Run scanner checks and report thresholded findings.
    each family has output or a named unmeasured reason.
 3. Threshold every result with the workflow gates, flaggable per
    invocation. Complete when each result is flagged or clean.
-4. Report rows of file:line, metric value, threshold, and verify command,
-   naming unknowns and coverage limits. Complete when each in-scope family
-   has a row or a stated limit.
-5. Run coverage only after the user confirms the announced command, never
+4. Run coverage only after the user confirms the announced command, never
    as a `quick` or `deep` side effect. Complete when coverage is run or
    listed pending.
+5. Report rows of file:line, metric value, threshold, and verify command,
+   naming unknowns and coverage limits. Complete when each in-scope family
+   has a row or a stated limit, and unconfirmed coverage is marked pending.
 
 ## Flow
 
 ```text
-for family in families:
+for family in families except coverage:
     command ← native | uvx/npx | toolbox
     result ← run → flag against the gate
-    report ← file:line, metric, threshold, verify command | unmeasured reason
-coverage → only after the user confirms the announced command
+coverage → only after the user confirms the announced command | pending
+report ← file:line, metric, threshold, verify command | unmeasured reason | coverage pending
 ```
 
 ## Families
@@ -61,8 +61,10 @@ coverage → only after the user confirms the announced command
 - Keep the scan read-only; coverage executes the test suite, so run it only
   after explicit confirmation.
 - Get approval before network access: `uvx`/`npx` downloads, dependency and
-  CVE lookups, registry rule sets such as `semgrep --config auto`, and image
-  builds that pull layers.
+  CVE lookups, registry rule sets such as `semgrep --config auto`, image
+  builds that pull layers, and trufflehog secret verification, which sends
+  candidate secrets to their providers. Run trufflehog with
+  `--no-verification` otherwise.
 - Install nothing into the system. Fill a missing binary with `uvx`/`npx`,
   the toolbox image (`Dockerfile`, `code-scanner` wrapper), or `fetch-tools`,
   in the catalog's runner order.

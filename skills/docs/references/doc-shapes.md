@@ -47,6 +47,9 @@ notes after the task path.
 | Reference | Stable facts in tables, source links, failure semantics |
 | Explanation | Question, context, model, trade-offs, related decisions |
 | Configuration | Keys, required/default values, source, purpose, security boundary |
+| ADR | Context, decision, status, consequences, alternatives considered |
+| Specification | Scope, terms, normative requirements, conformance, open questions |
+| Tutorial | Outcome, prerequisites, steps with checkpoints, next steps |
 
 Configuration tables should distinguish safe examples from real values:
 

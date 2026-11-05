@@ -14,4 +14,6 @@ When documentation already exists:
 If `Architecture.md` mixes a system overview with deployment steps, move the
 verified overview into `system.md` and the steps into `delivery.md`, then update
 inbound links. Preserve the existing `Architecture` `.order` entry unless the
-approved migration also authorizes its rename or removal.
+approved migration also authorizes its rename or removal. `.order` is the
+page-order file used by the destination wiki (in Azure DevOps wikis, one page
+name per line).

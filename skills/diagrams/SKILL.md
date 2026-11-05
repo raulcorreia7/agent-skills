@@ -36,8 +36,9 @@ its target platform.
 6. Render when the output needs an image. For a standard local render, use
    `<skill-root>/scripts/render.py`, where `<skill-root>` is the directory that
    contains this `SKILL.md`, and read `references/delivery/render-helper.md`.
-   Complete when the SVG or PNG exists at its destination, or no render is
-   needed.
+   Render PNG by default; render static SVG only on request or for a
+   repository docs site. Complete when the image exists at its destination, or
+   no render is needed.
 
 ## Flow
 
@@ -89,7 +90,8 @@ stop: source answers the reader question, selected checks have results, target-s
 ## Output
 
 - Source or targeted edits
-- SVG or PNG when rendered output is necessary
+- PNG when rendered output is necessary, or static SVG on request or for a
+  repository docs site
 - Accessible title and description
 - Evidence, assumptions, and target decisions
 - Validation or inspection results for checks that ran

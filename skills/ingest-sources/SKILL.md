@@ -47,9 +47,12 @@ Read the branch for each source format in scope; load only the matching set.
    representative difficult sections with the source and keep every parser,
    OCR, truncation, and structure-loss warning. Complete when the difficult
    sections match the source on a sample and every loss is recorded.
-4. Curate. Minimize, deduplicate, chunk, retrieve, and evaluate per
-   [curate-and-retrieve.md](references/curate-and-retrieve.md). Complete when
-   every retrieved chunk has a resolvable source locator.
+4. Curate. Drop material that does not serve the approved questions and
+   remove exact duplicates, keeping every source locator. Only for a
+   persistent index or retrieval evaluation, read
+   [curate-and-retrieve.md](references/curate-and-retrieve.md) and chunk,
+   retrieve, and evaluate per it. Complete when every kept item or retrieved
+   chunk has a resolvable source locator.
 5. Retire. Apply the freshness and removal policy; remove raw and derived data
    at the end of the approved retention period. Complete when retention is
    decided and recorded in the manifest.
@@ -61,7 +64,8 @@ input ← approved purpose, sources, limits, retention
 scope → approval-gated step approved? yes → continue | no → stop with the reason
 acquire(raw, immutable) → convert(derived, warnings kept) → validate(sample)
 manifest ← raw + derived + validation + losses
-curate → retrieve → retire at retention end
+curate → persistent index or retrieval evaluation? yes → chunk, retrieve, evaluate | no → continue
+retire at retention end
 stop: manifest links raw + derived, losses recorded, retention set, skips reasoned
 ```
 

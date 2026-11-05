@@ -32,8 +32,13 @@ readiness and dependencies.
 4. Check independent completion, hidden context, duplicate work, collisions,
    cycles, and the critical path. Complete when the dependency graph is acyclic
    and no implementation issue can start before its decision issues finish.
-5. When publication is requested and approved, publish the previewed write
-   set. Complete when read-back matches the approved write set or the failure
+5. When publication is requested, preview the write set: the tracker, each
+   issue to create or update with its title, kind, labels, parent, and links.
+   Query the tracker read-only for existing issues that match each title or
+   source locator, and mark each match as reuse, update, or skip. Complete when
+   the user has the preview and every draft is new or matched.
+6. When the user approves the previewed write set, publish exactly that set.
+   Complete when read-back matches the approved write set or the failure
    report accounts for every attempted mutation.
 
 ## Flow
@@ -43,7 +48,8 @@ input ← approved PRD or plan, tracker, publication intent
 source approved? yes → continue | no → stop and name what is missing
 decisions → resolved | decision issue blocks affected drafts
 slice → draft per issue contract → check graph
-publish? approved → write → read back | otherwise → return drafts
+publish requested? yes → preview write set + read-only match check | no → return drafts
+preview approved? yes → write → read back | no → return drafts and preview
 stop: drafts complete and graph acyclic; read-back matches when published
 ```
 
@@ -62,8 +68,10 @@ B; use that direction in drafts and tracker links.
 
 ## Guardrails
 
-- Keep unresolved requirements visible; a coordination issue records them
+- Keep unresolved requirements visible; a decision issue records them
   rather than hiding them.
+- The tracker match check is read-only; creating, updating, or linking issues
+  waits for approval of the preview.
 
 ## Composition
 
@@ -76,5 +84,6 @@ B; use that direction in drafts and tracker links.
 - Ordered issue drafts and hierarchy
 - Dependency, collision, and critical-path map
 - Decision issues and the implementation drafts that they block
-- For publication: approved preview, created IDs, and read-back result
+- For publication: the preview with existing-issue matches, created IDs, and
+  read-back result
 - Unresolved decisions and residual delivery risk

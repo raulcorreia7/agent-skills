@@ -6,7 +6,8 @@ POSIX:
 
 ```text
 python3 <skill-root>/scripts/render.py architecture.mmd
-python3 <skill-root>/scripts/render.py one.mmd two.dot --format png
+python3 <skill-root>/scripts/render.py one.mmd two.dot --format svg
+python3 <skill-root>/scripts/render.py checkout.mmd --mermaid-config mermaid-png.json
 python3 <skill-root>/scripts/render.py diagrams/ --recursive --output-dir build/diagrams
 ```
 
@@ -18,8 +19,19 @@ py -3 <skill-root>\scripts\render.py diagrams\ --recursive --output-dir build\di
 ```
 
 The helper accepts Mermaid (`.mmd`, `.mermaid`), Graphviz (`.dot`, `.gv`), and
-D2 (`.d2`). It creates SVG by default and selects `mmdc`, `dot`, or `d2` from
-`PATH`. Use `--dry-run` to inspect a batch.
+D2 (`.d2`). It selects `mmdc`, `dot`, or `d2` from `PATH`. Use `--dry-run` to
+inspect a batch.
+
+| Format | Use |
+|---|---|
+| `png` | Default delivery copy |
+| `svg` | Static SVG, only on request or for a repository docs site |
+| `pdf` | Print or Office destinations |
+
+The helper passes `-b white` to `mmdc`. Pass `--mermaid-config <file>` to add
+`-c <file>`, for example the PNG profile in `../mermaid/core.md`; the file must
+exist. Each renderer call stops after `--timeout` seconds (default 120), and
+the job fails without replacing its destination.
 
 A successful render atomically replaces an existing implicit or explicit
 regular output; no `--force` flag is required. The helper refuses symlinks,

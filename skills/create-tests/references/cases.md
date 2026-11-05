@@ -71,7 +71,7 @@ def test_apply_coupon(group, name, payload, expected):
 ## Go
 
 ```go
-groups := map[string][]case{
+groups := map[string][]couponCase{
 	"happy":   {{name: "applies percentage discount", in: Request{Code: "SAVE10", Total: 100}, want: Result{Total: 90}}},
 	"unhappy": {{name: "rejects an expired coupon", in: Request{Code: "OLD", Total: 100}, want: Result{Err: ErrExpired}}},
 }

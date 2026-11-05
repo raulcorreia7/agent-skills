@@ -50,6 +50,13 @@ Put every step that needs a person, credentials, money, production access, or
 an irreversible change behind a `gate`. Name the `authority` and the `evidence`
 nodes the decision rests on.
 
+A scheduled run has nobody to answer a gate. Record a standing approval in
+the graph's top-level `extensions.approvals`, one entry per approved action
+with its `action` scope, `gate`, `approver`, and `recorded_on` date; the
+scheduler passes `--decide <gate>=approved` only for those gates. Map every
+other gate's `unavailable` to a node that prints the planned action as a dry
+run. See the nightly CI health example.
+
 ## YAML traps
 
 - `on`, `off`, `yes`, and `no` read as booleans. Use `when:` for keys, and

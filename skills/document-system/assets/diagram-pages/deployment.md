@@ -5,15 +5,15 @@ description: "Code-to-cloud deployment and environment topology."
 timestamp: "{{timestamp}}"
 ---
 
-# purpose
+## purpose
 
 {{question this view answers}}
 
-# scope
+## scope
 
 {{environment and deployment boundary}}
 
-# diagram
+## diagram
 
 ```mermaid
 graph LR
@@ -21,14 +21,14 @@ graph LR
     delivery -->|{{observed deployment relationship}}| runtime["{{observed runtime resource}}"]
 ```
 
-# legend
+## legend
 
 {{notation and environment explanation}}
 
-# evidence
+## evidence
 
 {{portable evidence citations for every relationship}}
 
-# known omissions
+## known omissions
 
 {{evidence-backed omissions or none}}

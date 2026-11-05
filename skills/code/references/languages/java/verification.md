@@ -9,6 +9,10 @@ Run the existing CI-equivalent lifecycle first. Typical minimal sequences are:
 ./gradlew test                         # focused task/filter as appropriate
 ```
 
+The wrappers download the build tool and dependencies when the cache is
+cold, and SCA tasks fetch vulnerability data; get approval before running
+them. Against a warm cache, `./mvnw -o` or `./gradlew --offline` runs offline.
+
 Run only the applicable wrapper. Verify formatter, analyzer, dependency lock,
 and vulnerability or SCA tasks are attached to `verify` or `check`. `build` is
 not a substitute unless the build declares that lifecycle. Update dependency

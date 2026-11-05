@@ -3,7 +3,7 @@
 `docs/evidence.md` is the agent-maintained, normalized working ledger for
 inventory, reverse engineering, iteration, and comparison. It is separate from
 the human-maintained `context.md` and the synthesized `system.md`. Keep
-exactly these top-level sections in this order: `coverage`, `sources`,
+exactly these H2 sections in this order: `coverage`, `sources`,
 `elements`, `relationships`, and `reconciliation`.
 
 ## Source roles and normalization

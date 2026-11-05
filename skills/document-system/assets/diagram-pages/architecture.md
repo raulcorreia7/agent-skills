@@ -5,19 +5,19 @@ description: "Architecture view sourced from confirmed context and/or observed d
 timestamp: "{{timestamp}}"
 ---
 
-# purpose
+## purpose
 
 {{reader question answered by this architecture overview}}
 
-# scope
+## scope
 
 {{single abstraction-level overview. audience. included boundary. and environment when applicable}}
 
-# source basis
+## source basis
 
 {{human-confirmed context references and/or portable deployment evidence citations used for this view}}
 
-# diagram
+## diagram
 
 ```mermaid
 graph LR
@@ -25,14 +25,14 @@ graph LR
     workload -->|{{observed relationship}}| dependency["{{observed component, data store, or external dependency}}"]
 ```
 
-# legend
+## legend
 
 {{notation, boundary, and environment explanation}}
 
-# evidence
+## evidence
 
 {{portable evidence citations for every relationship}}
 
-# known omissions
+## known omissions
 
 {{evidence-backed omissions or none}}

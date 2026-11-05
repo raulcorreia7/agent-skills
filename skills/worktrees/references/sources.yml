@@ -1,6 +1,7 @@
 reviewed_on: "2026-08-19"
 limitations:
-  - "Git documents linked-worktree behavior and generic paths; the repository-local .worktrees/ layout is this skill's convention, not a Git portability guarantee."
+  - "Git documents linked-worktree behavior and generic paths; the default ../<repo-name>-worktrees/<branch-slug> destination outside the source repository is this skill's convention, not a Git portability guarantee."
+  - "glab was not installed when the CLI sources were reviewed; the glab mr checkout behavior and the absence of a worktree option are unverified."
 sources:
   linked_worktrees:
     title: "Git worktree"
@@ -14,3 +15,17 @@ sources:
   cleanup:
     title: "Git clean"
     url: "https://git-scm.com/docs/git-clean"
+  worktrunk:
+    title: "Worktrunk wt switch, wt remove, and wt step prune (local --help, wt v0.80.0)"
+    url: "https://worktrunk.dev"
+    reviewed_on: "2026-11-05"
+  gh_pr_checkout:
+    title: "GitHub CLI gh pr checkout (local --help)"
+    url: "https://cli.github.com/manual/gh_pr_checkout"
+    reviewed_on: "2026-11-05"
+  simgit:
+    title: "simgit sg (local --help)"
+    reviewed_on: "2026-11-05"
+  glab_mr_checkout:
+    title: "GitLab CLI glab mr checkout"
+    url: "https://docs.gitlab.com/cli/mr/checkout/"

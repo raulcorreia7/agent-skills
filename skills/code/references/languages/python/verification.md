@@ -1,16 +1,24 @@
 # Python Verification
 
 Run repository scripts first. A minimal gate for a Python package
-using the baseline is:
+using the baseline is below.
+
+These run offline:
 
 ```text
 ruff format --check .
 ruff check .
 pyright                 # or: mypy
 pytest
+python -m pip check
+```
+
+These fetch build dependencies or vulnerability data; get approval before
+running them:
+
+```text
 python -m build          # When the project publishes a distribution.
 python -m twine check --strict dist/*
-python -m pip check
 pip-audit --locked .     # Audit the committed lock or pyproject resolution.
 ```
 

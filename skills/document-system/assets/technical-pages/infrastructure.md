@@ -5,17 +5,17 @@ description: "Observed environments, resources, topology, operational boundaries
 timestamp: "{{timestamp}}"
 ---
 
-# environments and topology
+## environments and topology
 
 | environment | resource or service | role | operational boundary | canonical locator | evidence |
 |---|---|---|---|---|---|
 | {{environment}} | {{resource}} | {{role}} | {{support, network, identity, or data boundary}} | {{non-sensitive locator}} | {{portable evidence citations}} |
 
-# operations
+## operations
 
 {{observed health, logging, monitoring, alerting, support, recovery, and retention boundaries}}
 
-# cost basis
+## cost basis
 
 | item | basis | checked-at | source | caveat |
 |---|---|---|---|---|
@@ -23,7 +23,7 @@ timestamp: "{{timestamp}}"
 
 {{omit the table when no reliable cost basis exists and add the missing basis to gaps.md}}
 
-# cleanup candidates
+## cleanup candidates
 
 | candidate | reason | evidence | prerequisite | status |
 |---|---|---|---|---|

@@ -5,42 +5,42 @@ description: "Human-maintained knowledge, intent, scope, and open questions."
 timestamp: "{{timestamp}}"
 ---
 
-# purpose
+## purpose
 
 {{business purpose and desired outcome}}
 
-# scope
+## scope
 
 {{included systems, flows, environments, and boundaries}}
 
-## exclusions
+### exclusions
 
 {{explicit exclusions}}
 
-# business flows
+## business flows
 
 {{important users and flows}}
 
-# expected behavior
+## expected behavior
 
 {{human-confirmed intended state}}
 
-# constraints
+## constraints
 
 {{business, regulatory, technical, operational, and data constraints}}
 
-# terminology
+## terminology
 
 | term | meaning |
 |---|---|
 | {{term}} | {{meaning}} |
 
-# starting points
+## starting points
 
 | kind | locator | relevance |
 |---|---|---|
 | {{repository or resource}} | {{canonical locator}} | {{reason}} |
 
-# open context questions
+## open context questions
 
 {{questions that need human confirmation. link significant gaps to gaps.md}}
