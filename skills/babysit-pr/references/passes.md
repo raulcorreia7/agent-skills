@@ -69,15 +69,21 @@ The PR is someone else's. Nothing is posted until the end.
 ### Lens to skill or tool
 
 Use a row's skill only when it is installed and the user's `skills` list
-allows it; otherwise apply the lens by reading the diff.
+allows it. Otherwise use the tool, or read the diff.
 
 | Lens | Skill, when available | Tool |
 | --- | --- | --- |
-| `intent`, `correctness`, `contracts` | `review` in `pr` mode | `gh pr view`, `gh pr diff` (or `glab mr`) |
-| `evidence` | `worktrees` for a separate review checkout | the repository's own check command there; `gh pr checks` |
-| `correctness` (structural patterns) | `ast-grep` | `ast-grep run` on changed files |
-| `safety` (dependencies, secrets) | `code-scanner`, only when the user names it | its scanners on changed files, verification off |
+| `intent`, `bugs`, `design`, `contracts` | `review` in `pr` mode | `gh pr view`, `gh pr diff` (or `glab mr`) |
+| `bugs` (structural patterns) | `ast-grep` | `ast-grep run` on changed files |
+| `tests`, `checks` | `worktrees`, for a separate review checkout | the repository's own commands in that checkout (format check, lint, type check, tests); `gh pr checks` |
+| `duplication` | `code-scanner`, only when the user names it | `jscpd` on changed files; otherwise search the repository for the changed functions |
+| `security` | `code-scanner`, only when the user names it | its secret and SAST scanners with verification off; the lockfile diff |
+| `performance` | `review` in `pr` mode | read the diff around loops, queries, and I/O |
+| `docs` | `docs`, or `comments`, in review mode | the docs and changelog files touched |
 | `follow-through` | none | the pass log's earlier findings |
+
+Run checks in check mode only, such as `--check` or `--diff`. A formatter or
+linter that writes fixes changes the reviewer's checkout, not the PR.
 
 At the end, the summary carries the findings as one review summary comment,
 not an approval or a change request.

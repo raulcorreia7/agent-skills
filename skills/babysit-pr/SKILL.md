@@ -30,7 +30,7 @@ eye on the PR overnight or until a time.
 1. Identify the PR, its provider, and the role: `author` when the user wrote
    it, `reviewer` otherwise. Ask when the role is unclear. For the reviewer
    role, take two optional lists from the user: `analysis` (which lenses to
-   apply; default all six in Reviewer analysis) and `skills` (which skills or
+   apply; default all in Reviewer analysis) and `skills` (which skills or
    tools to use; default whatever is available from the mapping in
    `references/passes.md`). Complete when the PR number, repository, role, end
    time, and, for a reviewer, the lenses and skills are known.
@@ -63,20 +63,26 @@ stop: summary posted, grant and open items reported to the user
 
 ## Reviewer analysis
 
-Each reviewer pass applies the chosen lenses to the new push only:
+Each reviewer pass applies the chosen lenses to the new push only. Every
+finding names its lens, file and line, evidence, and priority.
 
-| Lens | Asks |
+| Lens | Do |
 | --- | --- |
-| `intent` | Does the push serve the PR's stated goal? Anything out of scope? |
-| `correctness` | Logic, failure paths, and edge cases in the changed code. |
-| `evidence` | Tests for new or changed behavior; the repository's checks on the new head. |
-| `contracts` | Public API, config, data shapes, migrations, and compatibility. |
-| `safety` | Auth, secrets, input handling, and dependency changes. |
-| `follow-through` | Earlier findings fixed, moved, or still open. |
+| `intent` | Check that each change serves the PR's stated goal. Flag changes outside it. |
+| `bugs` | Find defects: wrong logic, off-by-one, unhandled null or error paths, races, and resource leaks. |
+| `tests` | Check that new or changed behavior has tests. Flag deleted, skipped, or weakened tests. |
+| `checks` | Run the repository's format check, linter, type checker, and tests on the new head. Report each failure with its command. |
+| `duplication` | Flag code that repeats logic already in the repository or elsewhere in the PR, and name the original. |
+| `design` | Flag needless complexity, code in the wrong layer, dead code, misleading names, and broken local conventions. |
+| `contracts` | Flag changes to public APIs, config, data shapes, migrations, or compatibility that the PR doesn't declare. |
+| `security` | Flag secrets, missing authorization, injection, unsafe input handling, and new or upgraded dependencies. |
+| `performance` | Flag added work on hot paths: queries in loops, unbounded memory or iteration, and blocking I/O. |
+| `docs` | Check that docs, comments, and the changelog match the change. |
+| `follow-through` | Mark each earlier finding as fixed, moved, or open. |
 
-A lens with no matching skill or tool still runs, by reading the diff. A
-named skill that isn't installed is reported in the summary, not replaced
-silently.
+When no skill or tool matches a lens, apply it by reading the diff. When
+the user names a skill that isn't installed, report it in the summary and
+use no substitute.
 
 ## Stop conditions
 
@@ -127,8 +133,9 @@ silently.
 - Use `pull-request` in `iterate` mode for the author role's fixes, replies,
   resolutions, pushes, and description sync.
 - Use `review` in `pr` mode for the reviewer role's review of each new push.
-- Use `worktrees`, `ast-grep`, and `code-scanner` for the reviewer lenses
-  they serve, when installed and chosen (see `references/passes.md`).
+- Use `worktrees`, `ast-grep`, `code-scanner`, `docs`, and `comments` for the
+  reviewer lenses they serve, when installed and chosen (see
+  `references/passes.md`).
 - Use `to-graph` to check and render `references/author.yaml` and
   `references/reviewer.yaml` after changing them.
 
