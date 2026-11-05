@@ -45,13 +45,13 @@ stop: <completion condition>
 
 <!-- Optional: non-obvious failure modes, one line each. -->
 
-- <A trap and the safe move.>
+- <One trap and the safe move.>
 
 ## Guardrails
 
 - <An approval-gated action this skill can take.>
 - <Untrusted inputs this skill reads, named as data.>
-- <A limit this domain adds; the baseline owns generic rules.>
+- <One limit this domain adds; the baseline owns generic rules.>
 
 ## Composition
 

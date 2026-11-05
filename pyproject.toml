@@ -19,7 +19,11 @@ validate = { cmd = "python tools/validate.py", help = "Run repository validation
 format = { cmd = "ruff format skills.py wizard.py tools skills", help = "Format Python sources." }
 format-check = { cmd = "ruff format --check skills.py wizard.py tools skills", help = "Check Python source formatting." }
 _ruff = { cmd = "ruff check skills.py wizard.py tools skills", help = "Run Ruff." }
-_rumdl = { cmd = "rumdl check --disable MD013,MD024,MD034 --quiet README.md AGENTS.md CONTRIBUTING.md agents baselines docs skills templates", help = "Run Rumdl." }
+# rumdl skips directories when files and directories share one call, so lint them separately.
+# Excluded: pinned upstream text (DESIGN.md spec, STE word list) and agent prompt files, which start with frontmatter.
+_rumdl_files = { cmd = "rumdl check --disable MD013,MD024,MD034 --quiet README.md AGENTS.md CONTRIBUTING.md", help = "Run Rumdl on root files." }
+_rumdl_dirs = { cmd = "rumdl check --disable MD013,MD024,MD034 --quiet --exclude skills/design-md/references/spec.md,skills/ste100/references/word-count.md,agents/*/claude.md,agents/*/omp.md agents baselines docs skills templates", help = "Run Rumdl on directories." }
+_rumdl = { sequence = ["_rumdl_files", "_rumdl_dirs"], help = "Run Rumdl." }
 lint = { sequence = ["_ruff", "_rumdl"], help = "Run development linters." }
 check = { sequence = ["validate", "lint"], help = "Run validation and linters." }
 serve = { cmd = "python -m http.server 0 --directory docs", help = "Serve the diagram gallery on an available local port." }
