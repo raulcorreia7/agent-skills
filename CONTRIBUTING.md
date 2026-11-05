@@ -53,6 +53,35 @@ These apply to every skill, reference, baseline, and doc.
 9. **Release review.** For a substantial change, check invocation, process,
    completion, context cost, interface, output, feedback, and safety. A missing
    invocation, completion, output, or safety contract blocks release.
+10. **What, not how.** `SKILL.md` holds the job, trigger, steps, completion
+    criteria, gates, and output. Techniques, commands, and language or
+    provider specifics live in `references/` or `scripts/`. Give a rule a
+    one-clause reason only when the reason isn't obvious.
+11. **Any harness.** The portable core is `SKILL.md`, `references/`, and
+    `scripts/`. Name capabilities, not product tools ("an isolated context if
+    the harness has one"), and give a single-context fallback. Client
+    adapters under `agents/` are optional.
+12. **Lightest path.** Default to the smallest process that does the job: no
+    extra files, and no questions unless one blocks the work. State what makes
+    the skill escalate.
+13. **Gates and inputs.** Name each approval-gated action the skill can take.
+    When the skill reads untrusted inputs (review comments, CI logs, tickets,
+    fetched pages), add one line naming them as data, because `--project`
+    installs ship no baseline. Don't repeat other baseline rules.
+14. **Edges point down.** Composition goes from the broader job to the
+    narrower specialist. A route back up is a one-line boundary.
+15. **Plain emphasis.** Don't use capitals or words like CRITICAL to force a
+    rule. A rule with no exceptions belongs in the validator or a script.
+16. **Budgets.** These are guidance, not checks: a description of 80 words or
+    fewer that leads with the words people type; `SKILL.md` in about 200
+    lines; a contents list for a reference over 150 lines; references one
+    level deep, with one router index only when its table would overflow
+    `SKILL.md`.
+17. **Split rarely.** Make a branch its own skill only when it has its own
+    trigger and audience and someone could install it without the parent.
+
+An optional `Gotchas` section, placed before `Guardrails`, lists
+non-obvious failure modes.
 
 Flow pseudocode style:
 
