@@ -15,7 +15,7 @@ Gates flag what needs a look; they are not pass or fail verdicts.
 | Coverage | < 80% of changed lines, or < 60% for the project | SonarQube new-code gate; Google "acceptable" |
 | Churn hotspot | Top-10% churned file that also fails the complexity gate | Defined here |
 | Vulnerability | HIGH or CRITICAL (CVSS ≥ 7.0) with a fix available | CVSS bands; trivy `--ignore-unfixed` |
-| Secret | A verified hit, or one that survives a look at the file | trufflehog verification |
+| Secret | Any hit that survives a look at the file | gitleaks and trufflehog pattern match; verification only with approval |
 | IaC | HIGH or CRITICAL | trivy severity |
 
 Safety-critical code needs stricter gates (CCN ≤ 10, full branch coverage);
@@ -57,15 +57,22 @@ Every family, with the same row shape, plus a list of unknowns and limits.
 Scan what the change adds, then label each finding `introduced` or
 `pre-existing`:
 
-```sh
-base=$(git merge-base main HEAD)
-files=$(git diff --name-only --diff-filter=AM "$base"...HEAD)
+```bash
+# BASE overrides the default branch when origin/HEAD is unset.
+base_ref=${BASE:-$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD)}
+: "${base_ref:?set BASE to the default branch, e.g. BASE=origin/main}"
+base=$(git merge-base "$base_ref" HEAD)
+mapfile -t files < <(git diff --name-only --diff-filter=AM "$base"...HEAD)
 
-uvx lizard -w -C 20 -L 100 $files
-npx jscpd $files --min-tokens 50
-semgrep scan --config p/default --metrics=off $files
+if (( ${#files[@]} )); then
+  uvx lizard -w -C 20 -L 100 "${files[@]}"
+  npx jscpd "${files[@]}" --min-tokens 50
+  semgrep scan --config p/default --metrics=off "${files[@]}"
+else
+  echo "no added or modified files"
+fi
 gitleaks git . --log-opts="$base..HEAD" --no-banner
-trufflehog git file://. --since-commit "$base" --results=verified,unknown --no-update
+trufflehog git file://. --since-commit "$base" --no-verification --no-update
 ```
 
 Dependency and IaC scanners read whole lockfiles and configs. Run them on the

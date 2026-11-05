@@ -5,8 +5,6 @@ description: "Entry point for the system documentation."
 timestamp: "{{timestamp}}"
 ---
 
-# {{system title}}
-
 {{one-sentence purpose}}
 
 ## scope

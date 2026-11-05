@@ -24,21 +24,27 @@ SOURCE_KINDS = {
 }
 OUTPUT_FORMATS = ("pdf", "png", "svg")
 GRAPHVIZ_ENGINES = ("circo", "dot", "fdp", "neato", "osage", "patchwork", "sfdp", "twopi")
+DEFAULT_TIMEOUT = 120.0
 EXAMPLES = r"""Resolve <skill-root> as the directory containing SKILL.md.
 
 POSIX examples:
   python3 <skill-root>/scripts/render.py architecture.mmd
-  python3 <skill-root>/scripts/render.py one.dot two.d2 --format png
+  python3 <skill-root>/scripts/render.py one.dot two.d2 --format svg
+  python3 <skill-root>/scripts/render.py checkout.mmd --mermaid-config mermaid-png.json
   python3 <skill-root>/scripts/render.py diagrams/ --recursive --output-dir build/diagrams
 
 Windows examples:
   py -3 <skill-root>\scripts\render.py architecture.mmd
-  py -3 <skill-root>\scripts\render.py one.dot two.d2 --format png
+  py -3 <skill-root>\scripts\render.py one.dot two.d2 --format svg
   py -3 <skill-root>\scripts\render.py diagrams\ --dry-run
 
 Behavior:
   Source renderers must be available on PATH.
-  The default output is a sibling SVG; --output or --format changes it.
+  The default output is a sibling PNG; --output or --format changes it.
+  Request static SVG only when the destination needs it, such as a repository docs site.
+  PDF is for print or Office destinations.
+  Mermaid renders with a white background (-b white); --mermaid-config adds -c.
+  Each renderer call stops after --timeout seconds (default 120) and fails the job.
   Successful implicit and explicit outputs replace existing regular files atomically.
   No --force or --overwrite flag is required for ordinary replacement.
   A batch stops at the first failure and retains earlier successful outputs.
@@ -99,6 +105,16 @@ def reject_non_regular_output(path: Path) -> None:
         raise UsageError(f"existing output is not a regular file: {path}")
 
 
+def positive_seconds(value: str) -> float:
+    try:
+        seconds = float(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"not a number: {value}") from exc
+    if not seconds > 0:
+        raise argparse.ArgumentTypeError(f"must be greater than 0: {value}")
+    return seconds
+
+
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -110,7 +126,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "-f",
         "--format",
         choices=OUTPUT_FORMATS,
-        help="Output format. The default is SVG or the --output suffix.",
+        help="Output format. The default is PNG or the --output suffix.",
     )
     output = parser.add_mutually_exclusive_group()
     output.add_argument("-o", "--output", type=Path, help="Output path for one source file.")
@@ -122,6 +138,17 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         choices=GRAPHVIZ_ENGINES,
         default="dot",
         help="Graphviz layout engine. The default is dot.",
+    )
+    parser.add_argument(
+        "--mermaid-config",
+        type=Path,
+        help="Mermaid CLI configuration file passed to mmdc as -c. It must exist.",
+    )
+    parser.add_argument(
+        "--timeout",
+        type=positive_seconds,
+        default=DEFAULT_TIMEOUT,
+        help=f"Seconds each renderer call may run. The default is {DEFAULT_TIMEOUT:g}.",
     )
     return parser.parse_args(argv)
 
@@ -157,7 +184,7 @@ def collect_sources(paths: Sequence[Path], *, recursive: bool) -> list[Path]:
 
 def select_format(args: argparse.Namespace) -> str:
     if args.output is None:
-        return args.format or "svg"
+        return args.format or "png"
     suffix = args.output.suffix.lower().removeprefix(".")
     if suffix not in OUTPUT_FORMATS:
         supported = ", ".join(OUTPUT_FORMATS)
@@ -172,6 +199,12 @@ def build_jobs(args: argparse.Namespace) -> tuple[list[Job], str]:
     output_format = select_format(args)
     if args.output is not None and len(sources) != 1:
         raise UsageError("--output requires exactly one source file")
+    if args.mermaid_config is not None:
+        config = lexical_absolute(args.mermaid_config)
+        reject_symlink_components(config, label="--mermaid-config")
+        if not config.is_file():
+            raise UsageError(f"--mermaid-config is not a file: {args.mermaid_config}")
+        args.mermaid_config = config
 
     output_dir = lexical_absolute(args.output_dir) if args.output_dir is not None else None
     if output_dir is not None and output_dir == Path(output_dir.anchor):
@@ -220,22 +253,25 @@ def require_renderers(jobs: Sequence[Job]) -> None:
         raise UsageError(f"required renderer not found on PATH: {', '.join(missing)}")
 
 
-def command_for(job: Job, output: Path, *, graphviz_engine: str) -> list[str]:
+def command_for(job: Job, output: Path, *, graphviz_engine: str, mermaid_config: Path | None = None) -> list[str]:
     output_format = output.suffix.lower().removeprefix(".")
     if job.kind == "mermaid":
-        return ["mmdc", "-i", str(job.source), "-o", str(output)]
+        command = ["mmdc", "-i", str(job.source), "-o", str(output), "-b", "white"]
+        if mermaid_config is not None:
+            command += ["-c", str(mermaid_config)]
+        return command
     if job.kind == "graphviz":
         return ["dot", f"-K{graphviz_engine}", f"-T{output_format}", str(job.source), "-o", str(output)]
     return ["d2", str(job.source), str(output)]
 
 
-def print_plan(jobs: Sequence[Job], *, graphviz_engine: str) -> None:
+def print_plan(jobs: Sequence[Job], *, graphviz_engine: str, mermaid_config: Path | None) -> None:
     for job in jobs:
-        command = command_for(job, job.output, graphviz_engine=graphviz_engine)
+        command = command_for(job, job.output, graphviz_engine=graphviz_engine, mermaid_config=mermaid_config)
         print(shlex.join(command))
 
 
-def render(job: Job, *, graphviz_engine: str) -> bool:
+def render(job: Job, *, graphviz_engine: str, mermaid_config: Path | None, timeout: float) -> bool:
     try:
         reject_symlink_components(job.source, label="input")
         reject_symlink_components(job.output, label="output")
@@ -243,8 +279,15 @@ def render(job: Job, *, graphviz_engine: str) -> bool:
         reject_symlink_components(job.output, label="output")
         with tempfile.TemporaryDirectory(prefix=f".{job.output.stem}.", dir=job.output.parent) as temporary_dir:
             temporary = Path(temporary_dir) / job.output.name
-            command = command_for(job, temporary, graphviz_engine=graphviz_engine)
-            completed = subprocess.run(command, check=False)
+            command = command_for(job, temporary, graphviz_engine=graphviz_engine, mermaid_config=mermaid_config)
+            try:
+                completed = subprocess.run(command, check=False, timeout=timeout)
+            except subprocess.TimeoutExpired:
+                print(
+                    f"render timed out after {timeout:g}s (raise --timeout to allow more): {job.source}",
+                    file=sys.stderr,
+                )
+                return False
             if completed.returncode != 0:
                 print(f"render failed ({completed.returncode}): {job.source}", file=sys.stderr)
                 return False
@@ -268,7 +311,7 @@ def run(args: argparse.Namespace) -> int:
     try:
         jobs, _ = build_jobs(args)
         if args.dry_run:
-            print_plan(jobs, graphviz_engine=args.graphviz_engine)
+            print_plan(jobs, graphviz_engine=args.graphviz_engine, mermaid_config=args.mermaid_config)
             return 0
         require_renderers(jobs)
     except UsageError as exc:
@@ -276,7 +319,9 @@ def run(args: argparse.Namespace) -> int:
         return 2
 
     for job in jobs:
-        if not render(job, graphviz_engine=args.graphviz_engine):
+        if not render(
+            job, graphviz_engine=args.graphviz_engine, mermaid_config=args.mermaid_config, timeout=args.timeout
+        ):
             return 1
     return 0
 

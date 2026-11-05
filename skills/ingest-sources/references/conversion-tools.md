@@ -53,10 +53,10 @@ Add OCR only where an existing text layer is absent:
 ocrmypdf --skip-text source.pdf derived/searchable.pdf
 ```
 
-Run converters in the isolated worker defined by the parent skill. Use local
-retained inputs instead of converter URL features. Record the tool version,
-command, warnings, and output hashes. Compare representative difficult content
-with the source before retrieval uses the derivative.
+Run converters in an isolated worker as defined in `safety.md` (Workers). Use
+local retained inputs instead of converter URL features. Record the tool
+version, command, warnings, and output hashes. Compare representative difficult
+content with the source before retrieval uses the derivative.
 
 ## Sources
 

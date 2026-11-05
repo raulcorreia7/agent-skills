@@ -5,31 +5,31 @@ description: "Agent-maintained reconstruction, iteration, and reconciliation led
 timestamp: "{{timestamp}}"
 ---
 
-# coverage
+## coverage
 
 | provider | authorized scope | status | checked-at | limitation |
 |---|---|---|---|---|
 | {{provider}} | {{scope}} | {{status}} | {{timestamp}} | {{limitation}} |
 
-# sources
+## sources
 
 | source id | kind | locator | observed-at | coverage |
 |---|---|---|---|---|
 | {{src-id}} | {{kind}} | {{locator}} | {{timestamp}} | {{coverage}} |
 
-# elements
+## elements
 
 | element id | kind | subtype | name | environment | canonical locator | source ids |
 |---|---|---|---|---|---|---|
 | {{element-id}} | {{kind}} | {{subtype}} | {{name}} | {{environment}} | {{locator}} | {{source ids}} |
 
-# relationships
+## relationships
 
 | source element | relationship | target element | evidence ids | status |
 |---|---|---|---|---|
 | {{source}} | {{relationship}} | {{target}} | {{evidence ids}} | {{status}} |
 
-# reconciliation
+## reconciliation
 
 | claim id | context reference | expected state | observed state | result | evidence ids | next check |
 |---|---|---|---|---|---|---|

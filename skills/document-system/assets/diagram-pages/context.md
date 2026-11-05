@@ -5,15 +5,15 @@ description: "System context and external relationships."
 timestamp: "{{timestamp}}"
 ---
 
-# purpose
+## purpose
 
 {{question this view answers}}
 
-# scope
+## scope
 
 {{included boundary and audience}}
 
-# diagram
+## diagram
 
 ```mermaid
 graph LR
@@ -21,14 +21,14 @@ graph LR
     system -->|{{confirmed or observed relationship}}| external["{{external system}}"]
 ```
 
-# legend
+## legend
 
 {{notation and boundary explanation}}
 
-# evidence
+## evidence
 
 {{portable evidence citations for every relationship}}
 
-# known omissions
+## known omissions
 
 {{evidence-backed omissions or none}}

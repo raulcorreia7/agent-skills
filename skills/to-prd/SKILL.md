@@ -18,9 +18,11 @@ is already decided.
    users, business context, constraints, and requested document location.
    Complete when each is stated or marked unknown.
 2. Inspect repository, documentation, research, issues, or approved external
-   evidence when it can change requirements. Separate observed facts, user
-   direction, assumptions, and open questions in the evidence register.
-   Complete when every key claim has a register entry with a status.
+   evidence when it can change requirements. Record each claim in the evidence
+   register with one status: `fact` (observed in a source), `policy` (a
+   standing rule), `direction` (stakeholder or user direction), `assumption`,
+   or `open` (an unanswered question). Complete when every key claim has a
+   register entry with a status.
 3. Define goals, measurable outcomes, non-goals, users, use cases, functional
    requirements, quality attributes, constraints, dependencies, risks, and
    acceptance measures. Complete when every significant requirement cites a
@@ -34,7 +36,7 @@ is already decided.
 
 ```text
 input ← problem, opportunity, or idea + reader and evidence boundary
-inspect evidence → register(fact | direction | assumption | open)
+inspect evidence → register(fact | policy | direction | assumption | open)
 requirements ← goals, outcomes, non-goals, acceptance; each cites an ID
 check → hidden significant decision? yes → mark it open | no → continue
 stop: decision-ready, every open decision visible
@@ -49,10 +51,10 @@ Use applicable items from step 3 as sections.
 
   | ID | Source locator | Status | Claim or requirement |
   | --- | --- | --- | --- |
-  | E1 | source and location | evidence, policy, user direction, or assumption | concise statement |
+  | E1 | source and location | fact, policy, direction, assumption, or open | concise statement |
 
-  Every significant requirement cites an ID. Without evidence, label an assumption,
-  policy, or user direction; never imply validation.
+  Every significant requirement cites an ID. Without a `fact`, use `policy`,
+  `direction`, `assumption`, or `open`; never imply validation.
 - Keep current facts separate from target decisions. Set a numeric target only
   from evidence or user direction; otherwise mark it open.
 - A PRD is not decision-ready while significant contract, data, security,
@@ -60,7 +62,7 @@ Use applicable items from step 3 as sections.
 
 ## Guardrails
 
-- Label stakeholder direction separately from verified facts.
+- Label `direction` separately from `fact`.
 - Keep non-goals, constraints, privacy, security, accessibility, operations,
   migration, and rollout requirements visible.
 - Keep external work-item systems unchanged.

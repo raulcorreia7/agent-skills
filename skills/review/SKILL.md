@@ -63,13 +63,21 @@ stop: verdict ← pass | findings | not reviewable, with coverage and residual r
 
 Use these priorities in every mode, and state each with its severity, such as
 `P1 (High)`. Rate a significant defect at the priority its evidence supports.
+A confirmed `P0` or `P1` finding blocks acceptance; keep optional suggestions
+that are not defects separate from findings.
 
-| Priority | Severity | Meaning |
-| --- | --- | --- |
-| `P0` | Critical | Immediate risk of data loss, security compromise, outage, or a broken public contract |
-| `P1` | High | Significant correctness or safety defect that blocks acceptance |
-| `P2` | Medium | Significant risk that should be addressed soon but does not block acceptance |
-| `P3` | Low | Localized, non-blocking improvement; keep optional suggestions separate when they are not defects |
+Severity:
+
+- `Critical`: data loss, security break, production outage, or broken public
+  contract.
+- `High`: likely bug or regression, unsafe migration, or essential protection
+  gap.
+- `Medium`: maintainability, confidence, ownership, documentation, or
+  operational risk.
+- `Low`: localized improvement with limited impact.
+
+Review priorities map to severity: `P0` = Critical, `P1` = High, `P2` = Medium,
+`P3` = Low.
 
 ## Guardrails
 
@@ -80,6 +88,9 @@ Use these priorities in every mode, and state each with its severity, such as
 ## Output
 
 - A `pass`, `findings`, or `not reviewable` verdict and priority-ordered,
-  evidence-backed findings, in the selected mode's output order
+  evidence-backed findings, in the selected mode's output order. When several
+  modes apply, give one combined report in this order, omitting empty
+  sections: Verdict, Findings (one list across modes, each labelled with its
+  mode), Questions, Coverage, Checks, Residual risk.
 - Key questions, reviewed coverage, and residual risk
 - Copy-pasteable review text only when the user requests it for a PR/MR

@@ -5,19 +5,19 @@ description: "Logical components, interfaces, and dependencies within the system
 timestamp: "{{timestamp}}"
 ---
 
-# purpose
+## purpose
 
 {{reader question about component responsibilities or interfaces}}
 
-# scope
+## scope
 
 {{included system boundary, audience, and single logical abstraction level. exclude runtime placement}}
 
-# source basis
+## source basis
 
 {{human-confirmed context references and portable evidence citations used for this view}}
 
-# diagram
+## diagram
 
 ```mermaid
 graph TB
@@ -28,14 +28,14 @@ graph TB
     interface -->|{{observed relationship}}| dependency["{{observed external dependency}}"]
 ```
 
-# legend
+## legend
 
 {{notation and boundary explanation}}
 
-# evidence
+## evidence
 
 {{portable evidence citations for every component and relationship}}
 
-# known omissions
+## known omissions
 
 {{evidence-backed omissions or none}}

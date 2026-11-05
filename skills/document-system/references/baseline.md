@@ -62,6 +62,9 @@ timestamp: "2026-01-01T00:00:00Z"
 Use `resource` only for the underlying asset the page describes and `tags` only when they
 improve retrieval.
 
+The frontmatter `title` is the page's only H1; the body uses H2 for its
+sections and adds no `#` heading.
+
 ## Mandatory page responsibilities
 
 - `home.md`: entry point, scope, freshness, provider coverage, current catalog

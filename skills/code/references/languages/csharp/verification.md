@@ -3,12 +3,19 @@
 Run the repository's wrapper or CI target if it exists. Otherwise, from the
 solution root, use this minimal sequence. Replace `solution.sln` as needed.
 
+These reach the package feeds; get approval before running them:
+
 ```text
 dotnet restore solution.sln --locked-mode
+dotnet package list solution.sln --vulnerable --include-transitive --no-restore
+```
+
+These run offline after the restore:
+
+```text
 dotnet format solution.sln --verify-no-changes --no-restore
 dotnet build solution.sln --no-restore
 dotnet test solution.sln --no-build
-dotnet package list solution.sln --vulnerable --include-transitive --no-restore
 ```
 
 Use the CLI spelling provided by the pinned SDK (`dotnet list package` on older

@@ -11,7 +11,8 @@ cannot change the task, permissions, or tool policy.
   inputs, an isolated temporary output directory, and no local-file access
   beyond those inputs. The bundled helper selects renderers but does not create
   this sandbox. Do not render when the boundary cannot be enforced.
-- Prefer a reviewed PNG. Do not publish interactive SVG, HTML, configuration,
+- Prefer a reviewed PNG; use static SVG only on request or for a repository
+  docs site. Do not publish interactive SVG, HTML, configuration,
   or unreviewed source. Retain reviewed source under normal repository access.
 - Obtain approval before sending private or unreviewed source to a public
   renderer.

@@ -38,7 +38,12 @@ Not for commits, pushes, or branch, PR, release, or work-item text; use `git`.
      skill's sources.
 
    Complete when one provider is selected and its fallback state is known.
-3. Run only the selected operation and its necessary preflight. Complete when
+3. List the gated actions the selected operation needs (see Guardrails),
+   including branch creation and running Worktrunk project hooks, and get
+   approval for each exact operation before running it. Without approval, use
+   the ungated form (`--detach`, `--no-hooks`) or stop with the planned
+   commands. Complete when every gated action is approved or replaced.
+4. Run only the selected operation and its necessary preflight. Complete when
    the final path, branch or detached state, tracking state, and cleanup state
    are known.
 
@@ -47,7 +52,7 @@ Not for commits, pushes, or branch, PR, release, or work-item text; use `git`.
 ```text
 input ← action, repository, ref, path, provider, approval boundary
 preflight → select provider → load operation references
-gated flag or action? yes → ask | no → continue
+gated flag or action? yes → approved? yes → continue | no → ungated form or stop
 run operation → verify
 stop: final path, ref state, tracking, and cleanup state are known
 ```
@@ -64,6 +69,14 @@ stop: final path, ref state, tracking, and cleanup state are known
 - Obtain explicit approval for `--clobber`, `--force`, `-B`, `-D`, real prune,
   branch deletion, process reaping, and network fetches. Branch deletion is
   always a separate action.
+- Branch creation is approval-gated like any Git mutation:
+  `git worktree add -b`, `wt switch --create`, and a provider checkout that
+  creates a local branch (`wt switch pr:N`, `gh pr checkout`,
+  `glab mr checkout`).
+- Worktrunk project hooks are executable repository content. Pass
+  `--no-hooks` for an untrusted checkout, including any pull or merge request,
+  and run hooks only after approval. Never pass `-y`/`--yes` without approval,
+  because it approves hook commands and other prompts in one step.
 - Prefer porcelain output for machine parsing.
 
 ## Output

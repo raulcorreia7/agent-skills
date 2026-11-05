@@ -94,12 +94,15 @@ package.
 | Tool | Scans | Example |
 |---|---|---|
 | gitleaks | Files | `gitleaks dir . --no-banner` |
-| gitleaks | Commits | `gitleaks git . --log-opts="main..HEAD" --no-banner` |
-| trufflehog | Files | `trufflehog filesystem . --results=verified,unknown --no-update` |
-| trufflehog | Commits | `trufflehog git file://. --since-commit main --results=verified,unknown --no-update` |
+| gitleaks | Commits | `gitleaks git . --log-opts="$base..HEAD" --no-banner` |
+| trufflehog | Files | `trufflehog filesystem . --no-verification --no-update` |
+| trufflehog | Commits | `trufflehog git file://. --since-commit "$base" --no-verification --no-update` |
 
-gitleaks matches patterns offline. trufflehog checks each hit with its
-provider, so a verified hit is a live credential.
+`$base` is the merge base from `workflows.md` › PR or branch. gitleaks matches
+patterns offline. trufflehog with `--no-verification` does too and reports
+every hit as unverified. Verification sends each candidate secret to its
+provider, so run it (drop `--no-verification`, add `--results=verified`)
+only with approval. A verified hit is a live credential.
 
 ## Static analysis
 

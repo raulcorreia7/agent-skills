@@ -1,15 +1,23 @@
 # Rust Verification
 
 Run focused tests while iterating. Before merge, run this sequence or the
-repository equivalent from the workspace root:
+repository equivalent from the workspace root.
+
+These fetch crates or advisory data; get approval before running them:
+
+```text
+cargo fetch --locked
+cargo deny check
+```
+
+These run offline after the fetch (`--frozen` is `--locked --offline`):
 
 ```text
 cargo fmt --all -- --check
-cargo clippy --workspace --all-targets --all-features --locked
-cargo build --workspace --all-targets --all-features --locked
-cargo test --workspace --all-targets --all-features --locked
-cargo test --workspace --doc --all-features --locked
-cargo deny check
+cargo clippy --workspace --all-targets --all-features --frozen
+cargo build --workspace --all-targets --all-features --frozen
+cargo test --workspace --all-targets --all-features --frozen
+cargo test --workspace --doc --all-features --frozen
 ```
 
 `--all-features` is correct only when the feature set is intentionally

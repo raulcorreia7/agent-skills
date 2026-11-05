@@ -1,6 +1,6 @@
-# Review a GitHub PR with Claude, then post only after the author approves.
+# Review a GitHub PR with Claude, then post only after the reviewer approves.
 version: 1
-goal: One deduplicated review comment on the PR, posted with the author's approval.
+goal: One deduplicated review comment on the PR, posted with the reviewer's approval.
 inputs:
   AGENT: { description: Agent CLI that takes a prompt argument, default: "claude --allowedTools Read --model sonnet -p" }
   PR: { description: Pull request number }
@@ -26,8 +26,8 @@ nodes:
     next: { succeeded: approve }
   approve:
     kind: gate
-    outcome: The PR author approves posting review.md
-    gate: { authority: PR author, evidence: [draft] }
+    outcome: The reviewer running this graph approves posting review.md
+    gate: { authority: Reviewer (the user who started the review), evidence: [draft] }
     next: { approved: post, rejected: kept-local }
   post:
     outcome: Post the review

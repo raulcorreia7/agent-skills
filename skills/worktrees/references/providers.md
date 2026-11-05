@@ -20,6 +20,14 @@ operations.
 Use `wt remove --no-delete-branch --foreground` by default. Get approval before
 you use `--clobber`, `--force`, `-D`, or `--reap`.
 
+Project hooks (pre-switch, pre-start, post-start, post-switch, pre-remove,
+post-remove) run commands from the repository's Worktrunk configuration. Treat
+them as executable external content: pass `--no-hooks` to `wt switch` and
+`wt remove` for an untrusted checkout, and run hooks only after approval.
+`-y`/`--yes` skips every approval prompt, including unapproved project hook
+commands, so it is approval-gated. `wt switch --create` creates a branch and
+needs the same approval as `git worktree add -b`.
+
 Inspect Worktrunk's path configuration before creation. Make sure its destination
 is outside the source repository, report the actual path after creation, and do
 not change the template unless the user requests that configuration.
@@ -28,11 +36,16 @@ Use its ignored-file copy step only when the repository explicitly selects the
 files and the filesystem supports the desired copy-on-write behavior. Do not
 assume that a copy saves disk space on every filesystem.
 
-Use native `git worktree prune` for stale Git registrations. Use
-`wt step prune` only after explicit approval because it removes merged
-worktrees and branches.
+Use native `git worktree prune` for stale Git registrations. Preview
+`wt step prune` with `wt step prune --dry-run`, and run it for real only after
+explicit approval of that preview, because it removes merged worktrees and
+branches and runs their remove hooks.
 
 ## Simgit
+
+Before the first `sg` command, confirm `sg --help` names simgit; another tool
+(such as ast-grep) can install the same `sg` name. If it does not, report
+simgit as unavailable.
 
 Use simgit when the request requires low disk use through copy-on-write and a
 disposable pilot has passed for the current filesystem and repository shape.

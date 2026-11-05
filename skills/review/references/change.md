@@ -20,7 +20,7 @@ Review significant risk and return evidence-backed findings.
 Use this order and omit empty sections:
 
 1. **Verdict:** `pass`, `findings`, or `not reviewable`.
-2. **Findings:** Severity-ordered (`P0` through `P3`), each with a concise
+2. **Findings:** Priority-ordered (`P0` through `P3`), each with a concise
    title, precise location, impact, evidence, and smallest safe fix.
 3. **Questions:** Only questions whose answers change correctness or
    risk.
