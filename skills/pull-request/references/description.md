@@ -29,7 +29,6 @@ applies, in this order:
 | Screenshots | Before and after for a visible UI change; omit otherwise. |
 | Review notes | Where you want scrutiny or a decision, or `None`. |
 | Follow-ups | Adjacent improvements committed separately (one line each), suggested ones not made, and larger work left for later. |
-| AI disclosure | `None`, or the tool and what it did, and what a person verified. |
 
 - Record a check only when it ran, with the command as you ran it. Explain a
   missing check only when its absence leaves a real risk.
@@ -112,7 +111,4 @@ The expiry comparison in `token_service.py`: is `>=` the boundary we want?
   name hid that it returns None).
 - Rotate refresh tokens on use (#490).
 
-## AI disclosure
-
-None.
 ```

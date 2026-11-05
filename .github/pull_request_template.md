@@ -25,7 +25,3 @@
 ## Follow-ups
 
 <!-- Small adjacent fixes made in their own commits, and larger work left for later. Write "None" if empty. -->
-
-## AI disclosure
-
-<!-- "None", or the tool and what it did, e.g. "Claude Code drafted the parser; I rewrote the tests and reviewed every line." An agent-posted PR also ends with a footer line naming its role, model, and effort. -->
