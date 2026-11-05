@@ -1,0 +1,6 @@
+interface:
+  display_name: "Pull Request"
+  short_description: "Open, describe, and iterate on your own PR or MR"
+  default_prompt: "Use $pull-request to open a pull request for this branch with a clear description."
+policy:
+  allow_implicit_invocation: true

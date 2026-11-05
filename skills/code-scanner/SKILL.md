@@ -1,6 +1,6 @@
 ---
 name: code-scanner
-description: "Manual invocation only. Run scanner checks — complexity, duplication, churn, coverage, dependencies, secrets, SAST — and report thresholded findings. Not audit verdicts or change review."
+description: "Manual invocation only. Run scanner checks — complexity, duplication, churn, coverage, dependencies, secrets, SAST — and report thresholded findings. Not for audit verdicts, change review, or gate setup; use `audit`, `review`, or `quality-gates`."
 ---
 
 # Code Scanner

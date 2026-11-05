@@ -1,0 +1,12 @@
+# Source record for the ASD-STE100 skill. The official PDF is authoritative;
+# this package does not bundle or cache it.
+standard:
+  title: "ASD-STE100 Simplified Technical English — Standard for Technical Documentation"
+  issue: "Issue 9"
+  issue_date: "2025-01-15"
+  publisher: "Aerospace, Security and Defence Industries Association of Europe (ASD)"
+  copyright_owner: "Aerospace, Security and Defence Industries Association of Europe (ASD)"
+  url: "https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf"
+  pages: 434
+  scope: "A controlled natural language standard for technical documentation, not a general-purpose style guide."
+  license: "Copyright ASD. The official source has copyright and distribution conditions; see references/source-acquisition.md before keeping a copy."

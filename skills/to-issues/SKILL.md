@@ -75,8 +75,8 @@ B; use that direction in drafts and tracker links.
 
 ## Composition
 
-- Use `git` for branch, PR, release, and work-item linking conventions after
-  issues exist.
+- Use `git` for branch, release, and work-item linking conventions after
+  issues exist. Not for opening or describing the PR; use `pull-request`.
 
 ## Output
 

@@ -15,7 +15,7 @@ These run offline once dependencies are installed:
 ```text
 npm exec prettier -- --check .
 npm exec eslint -- . --max-warnings 0
-npm exec tsc -- --project tsconfig.verify.json
+npm exec tsc -- --noEmit  # or the repository's verify tsconfig
 npm test
 npm run build
 ```

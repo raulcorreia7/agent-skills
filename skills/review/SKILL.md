@@ -19,7 +19,7 @@ Select every mode that applies.
 | Mode | Use when | Load |
 | --- | --- | --- |
 | `change` | A diff, branch, commit set, or implementation | `references/change.md` |
-| `pull-request` | A PR/MR or story-backed change | `references/pull-request.md`, plus `references/change.md` when substantive implementation is present |
+| `pr` | A PR/MR or story-backed change | `references/pr.md`, plus `references/change.md` when substantive implementation is present |
 | `architecture` | A system design, architecture document, ADR, or system structure | `references/architecture.md` |
 
 ## Steps
@@ -53,7 +53,7 @@ Select every mode that applies.
 
 ```text
 input ← artifact, intent, scope, contracts, validation evidence
-modes ← change | pull-request | architecture → load references
+modes ← change | pr | architecture → load references
 finding ← criterion + locator + consequence + evidence
 falsified? yes → reject | no → verify or label uncertain → priority
 stop: verdict ← pass | findings | not reviewable, with coverage and residual risk

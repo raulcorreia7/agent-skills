@@ -1,14 +1,16 @@
 ---
 name: git
-description: "Inspects Git state, drafts Git text, and performs approved repository mutations. Use when a commit, branch, pull request, release, or work-item link is the primary deliverable. Not for worktree management; use `worktrees`."
+description: "Inspects Git state, drafts commit, branch, and release text, and performs approved repository mutations. Use when a commit, branch, release, or work-item link is the primary deliverable. Not for the PR lifecycle; use `pull-request`. Not for worktree management; use `worktrees`."
 ---
 
 # Git
 
 ## Job
 
-Assist with human-owned Git state: inspect safely, draft clear Git text, and
-mutate Git only after explicit approval for the exact operation and boundary.
+Assist with human-owned Git state for commits, branches, releases, and
+work-item links: inspect safely, draft clear Git text, and mutate Git only
+after explicit approval for the exact operation and boundary.
+Not for the PR lifecycle; use `pull-request`.
 
 ## Modes
 
@@ -29,10 +31,10 @@ mutate Git only after explicit approval for the exact operation and boundary.
    draft:
    - Read `references/commits.md` for commit messages and breaking-change markers.
    - Read `references/branch-names.md` for branch naming.
-   - Read `references/work-item-links.md` for issue and work-item references.
-   - Read `references/pull-requests.md` for PR titles, bodies, templates, and
-     create or update evidence.
-   - Read `references/releases.md` for generated version, changelog, and tag flow.
+   - Read `references/work-item-links.md` for issue and work-item references
+     and closing keywords.
+   - Read `references/releases.md` for generated version, changelog, tag flow,
+     and release PRs.
 
    Complete when each requested fact or draft is backed by repository evidence
    and follows the loaded reference or the local convention.
@@ -58,8 +60,10 @@ stop: checked state matches the approved boundary
 ## Guardrails
 
 - Every Git mutation is approval-gated, including local ones such as branch
-  creation, staging, and commits. Approval covers one exact operation; get it
-  again for each further mutation.
+  creation, staging, commits, renames, and history rewrites. Approval covers
+  one exact operation; get it again for each further mutation.
+- Rewrite pushed history only with approval, and push the rewrite with
+  `--force-with-lease`, never a plain `--force`.
 - Keep unrelated files outside staging and mutations.
 - Preserve generated release workflows.
 - If sensitive data appears, stop the exposure and identify only the affected

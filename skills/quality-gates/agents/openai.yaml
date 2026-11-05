@@ -1,0 +1,6 @@
+interface:
+  display_name: "Quality Gates"
+  short_description: "Set up linters, type checks, hooks, and CI gates"
+  default_prompt: "Use $quality-gates to set up or tighten this repository's formatter, linter, type checker, hooks, and CI gate."
+policy:
+  allow_implicit_invocation: true

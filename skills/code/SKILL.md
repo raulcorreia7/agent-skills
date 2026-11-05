@@ -46,7 +46,7 @@ coherent change.
      measure, or a bounded high-assurance component. Load each matching leaf.
    - [languages/index.md](references/languages/index.md): only when behavior
      depends on language-specific rules or the repository has no clear
-     convention; then each matching language and concern leaf. For a language
+     convention; then each matching contracts or verification leaf. For a language
      without a guide, use repository evidence.
    - [code structure](references/readability/structure.md): substantial
      control-flow, expression, naming, indentation, or semantic-block work.

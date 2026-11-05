@@ -23,5 +23,4 @@ change should actually close or resolve the item.
 - Preserve any required platform or team title prefix. Keep the remaining title
   readable.
 
-Suggest a better reference when useful. Do not rewrite history without explicit
-approval.
+Suggest a better reference when useful.

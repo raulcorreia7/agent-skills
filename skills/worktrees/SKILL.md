@@ -10,7 +10,7 @@ description: Manual invocation only. Safe Git worktree management and provider r
 Run predictable Git worktree workflows with explicit paths, provider selection,
 preflight checks, and cleanup guardrails. This skill resolves existing refs
 directly.
-Not for commits, pushes, or branch, PR, release, or work-item text; use `git`.
+Not for commits, pushes, or branch, release, or work-item text; use `git`. Not for PR text or the PR lifecycle; use `pull-request`.
 
 ## Steps
 

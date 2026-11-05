@@ -1,0 +1,41 @@
+reviewed_on: "2026-11-05"
+limitations:
+  - "glab was not installed when the CLI sources were reviewed; every glab command and flag in providers.md is unverified."
+  - "The GitHub review-thread reply endpoint and the resolveReviewThread mutation come from the GitHub API documentation and were not exercised locally."
+  - "The note that older Git applies rebase --autosquash only with -i was not checked against an older Git build; git 2.56.0 was installed."
+sources:
+  gh_pr:
+    title: "GitHub CLI gh pr view, diff, create, edit, ready, checks, comment, close, and merge (local --help, gh 2.102.1)"
+    url: "https://cli.github.com/manual/gh_pr"
+    reviewed_on: "2026-11-05"
+  gh_run:
+    title: "GitHub CLI gh run view and gh run rerun (local --help, gh 2.102.1)"
+    url: "https://cli.github.com/manual/gh_run"
+    reviewed_on: "2026-11-05"
+  gh_repo_view:
+    title: "GitHub CLI gh repo view --json merge settings (local --help, gh 2.102.1)"
+    url: "https://cli.github.com/manual/gh_repo_view"
+    reviewed_on: "2026-11-05"
+  gh_api:
+    title: "GitHub CLI gh api (local --help, gh 2.102.1)"
+    url: "https://cli.github.com/manual/gh_api"
+    reviewed_on: "2026-11-05"
+  github_review_comment_replies:
+    title: "GitHub REST API: create a reply for a review comment"
+    url: "https://docs.github.com/en/rest/pulls/comments"
+  github_resolve_review_thread:
+    title: "GitHub GraphQL API: resolveReviewThread mutation"
+    url: "https://docs.github.com/en/graphql/reference/mutations#resolvereviewthread"
+  glab_mr:
+    title: "GitLab CLI glab mr"
+    url: "https://docs.gitlab.com/cli/mr/"
+  glab_ci:
+    title: "GitLab CLI glab ci"
+    url: "https://docs.gitlab.com/cli/ci/"
+  git_rebase:
+    title: "Git rebase --onto and --autosquash (local -h, git 2.56.0)"
+    url: "https://git-scm.com/docs/git-rebase"
+    reviewed_on: "2026-11-05"
+  conventional_commits:
+    title: "Conventional Commits 1.0.0"
+    url: "https://www.conventionalcommits.org/en/v1.0.0/"
