@@ -40,6 +40,8 @@ CHECKS: dict[str, Check] = {
     "toml": validate_toml,
     "setup": run_setup_checks,
 }
+# Warnings print to stderr and never fail the run.
+WARNINGS: dict[str, Check] = {"skills": skills.warnings}
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -66,6 +68,8 @@ def run(selected: Sequence[str], *, quiet: bool) -> int:
                 print(f"- {error}", file=sys.stderr)
         elif not quiet:
             print(f"{name} passed.")
+        for warning in WARNINGS.get(name, lambda: [])():
+            print(f"warning: {warning}", file=sys.stderr)
     if not quiet:
         print("Validation failed." if failed else "Validation passed.")
     return 1 if failed else 0
