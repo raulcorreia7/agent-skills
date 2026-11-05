@@ -29,10 +29,10 @@ eye on the PR overnight or until a time.
 
 1. Identify the PR, its provider, and the role: `author` when the user wrote
    it, `reviewer` otherwise. Ask when the role is unclear. For the reviewer
-   role, take two optional lists from the user: `analysis` (which lenses to
-   apply; default all in Reviewer analysis) and `skills` (which skills or
-   tools to use; default whatever is available from the mapping in
-   `references/passes.md`). Complete when the PR number, repository, role, end
+   role, take an optional `preset` (`light`, `regular`, or `strict`; default
+   `regular`) and two optional lists: `analysis` (lenses to apply; replaces
+   the preset) and `skills` (skills or tools to use; default whatever is
+   available from the mapping in `references/passes.md`). Complete when the PR number, repository, role, end
    time, and, for a reviewer, the lenses and skills are known.
 2. Record the grant: role, PR, the role's actions from Guardrails, and the end
    time (default 08:00 local). Print it to the user before the first pass.
@@ -66,22 +66,29 @@ stop: summary posted, grant and open items reported to the user
 Each reviewer pass applies the chosen lenses to the new push only. Every
 finding names its lens, file and line, evidence, and priority.
 
-| Lens | Do |
-| --- | --- |
-| `intent` | Check that each change serves the PR's stated goal. Flag changes outside it. |
-| `bugs` | Find defects: wrong logic, off-by-one, unhandled null or error paths, races, and resource leaks. |
-| `tests` | Check that new or changed behavior has tests. Flag deleted, skipped, or weakened tests. |
-| `checks` | Run the repository's format check, linter, type checker, and tests on the new head. Report each failure with its command. |
-| `duplication` | Flag code that repeats logic already in the repository or elsewhere in the PR, and name the original. |
-| `complexity` | Flag changed functions over the repository's complexity or length limits; without limits, over cyclomatic complexity 20 or 100 lines. |
-| `churn` | Flag changed files that are hotspots: among the most changed in six months and over the complexity limit. Name files that usually change with them but didn't. |
-| `coverage` | Report changed-line coverage from the repository's coverage task, and flag changed branches no test reaches. |
-| `design` | Flag needless indirection, code in the wrong layer, dead code, misleading names, and broken local conventions. |
-| `contracts` | Flag changes to public APIs, config, data shapes, migrations, or compatibility that the PR doesn't declare. |
-| `security` | Flag secrets, missing authorization, injection, unsafe input handling, and new or upgraded dependencies. |
-| `performance` | Flag added work on hot paths: queries in loops, unbounded memory or iteration, and blocking I/O. |
-| `docs` | Check that docs, comments, and the changelog match the change. |
-| `follow-through` | Mark each earlier finding as fixed, moved, or open. |
+A preset applies every lens at its level and below:
+
+- `light`: intent, defects, security, and the repository's own checks.
+- `regular`: adds tests, structure, and docs, read from the diff. The default.
+- `strict`: adds the metric lenses, which run tools and the test suite with
+  coverage.
+
+| Lens | Preset | Do |
+| --- | --- | --- |
+| `intent` | light | Check that each change serves the PR's stated goal. Flag changes outside it. |
+| `bugs` | light | Find defects: wrong logic, off-by-one, unhandled null or error paths, races, and resource leaks. |
+| `checks` | light | Run the repository's format check, linter, type checker, and tests on the new head. Report each failure with its command. |
+| `security` | light | Flag secrets, missing authorization, injection, unsafe input handling, and new or upgraded dependencies. |
+| `follow-through` | light | Mark each earlier finding as fixed, moved, or open. |
+| `tests` | regular | Check that new or changed behavior has tests. Flag deleted, skipped, or weakened tests. |
+| `duplication` | regular | Flag code that repeats logic already in the repository or elsewhere in the PR, and name the original. |
+| `design` | regular | Flag needless indirection, code in the wrong layer, dead code, misleading names, and broken local conventions. |
+| `contracts` | regular | Flag changes to public APIs, config, data shapes, migrations, or compatibility that the PR doesn't declare. |
+| `performance` | regular | Flag added work on hot paths: queries in loops, unbounded memory or iteration, and blocking I/O. |
+| `docs` | regular | Check that docs, comments, and the changelog match the change. |
+| `complexity` | strict | Flag changed functions over the repository's complexity or length limits; without limits, over cyclomatic complexity 20 or 100 lines. |
+| `churn` | strict | Flag changed files that are hotspots: among the most changed in six months and over the complexity limit. Name files that usually change with them but didn't. |
+| `coverage` | strict | Report changed-line coverage from the repository's coverage task, and flag changed branches no test reaches. |
 
 Metric lenses (`complexity`, `churn`, `coverage`) point at code to read. Report
 a number only with the code it points to and why it matters there.
