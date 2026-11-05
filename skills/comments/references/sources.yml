@@ -1,4 +1,4 @@
-retrieved_on: "2026-07-14"
+reviewed_on: "2026-07-14"
 sources:
   - name: PEP 8 comments
     url: https://peps.python.org/pep-0008/#comments

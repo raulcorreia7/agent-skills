@@ -7,7 +7,8 @@ installing and using the kit; root `AGENTS.md` routes agents here.
 
 Set up once with `uv sync --all-groups`. Run `uv run poe` to list the tasks,
 and `uv run poe check` before every PR. Checks make no network calls and change
-no installed user files.
+no installed user files. Source-age warnings print to stderr without failing;
+set `SKILLS_TODAY=YYYY-MM-DD` to reproduce them for a given date.
 
 ## Writing rules
 
@@ -33,8 +34,8 @@ These apply to every skill, reference, baseline, and doc.
    ```
 
    The "Not for" clause is optional; add it when a neighbour skill is easy to
-   confuse. `agents/openai.yaml` sets `allow_implicit_invocation` to match the
-   form and stays in the client's own format.
+   confuse. When present, `agents/openai.yaml` sets `allow_implicit_invocation`
+   to match the form and stays in the client's own format.
 3. **Shape.** Follow `templates/skill/SKILL.md`: `Job`, optional `Modes` and
    `Depth`, `Steps`, `Flow`, domain sections, `Guardrails`, optional
    `Composition`, `Output`.
@@ -45,8 +46,9 @@ These apply to every skill, reference, baseline, and doc.
    approval, questions, external content as data). A skill lists only the
    limits its domain adds.
 6. **Composition.** Route by skill name; never link into another skill's files.
-   Composition must stay acyclic. A boundary ("Not for X; use `y`.") and the
-   frontmatter description name a neighbour without composing it.
+   Composition must stay acyclic. A backticked skill name in prose counts as a
+   composition edge. A boundary ("Not for X; use `y`.") and the frontmatter
+   description name a neighbour without composing it.
 7. **References.** Local to the skill, each reachable from `SKILL.md` behind a
    loading condition (see Reference contract).
 8. **Catalog.** Add or change the row in `skills/README.md` by hand.
@@ -134,7 +136,12 @@ Review priorities map to severity: `P0` = Critical, `P1` = High, `P2` = Medium,
   for a second decision, and keep it a map.
 - Keep a definition with its rules and caveats. When you move a reference,
   update every pointer in the same edit; add no compatibility files.
-- Preserve pinned source content, licenses, and source records.
+- Preserve pinned source content, licenses, and source records. A source
+  record (a skill's `sources.yml`) has a top-level `sources` key and a
+  `reviewed_on` date at top level or per source; validation warns when the
+  newest date is more than a year old.
+- Validation checks reachability lexically: a file counts as reachable when a
+  reachable file mentions its name, whatever the loading condition says.
 
 ## Agent contract
 

@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import datetime as dt
+import os
 import re
+from collections.abc import Iterator
 from pathlib import Path
 
 from lib import ROOT, SKILLS, skill_names
@@ -26,6 +29,18 @@ HEADING = re.compile(r"^## (.+)$", re.MULTILINE)
 STEP = re.compile(r"^(\d+)\. ", re.MULTILINE)
 CRITERION = "Complete when"
 SEVERITY_START = "- `Critical`:"
+PRIORITY_START = "Review priorities map to severity:"
+SEVERITY_TERM = r"(?:\*\*)?`?(?:Critical|High|Medium|Low)`?(?:\*\*)?"
+# A severity definition: a bullet that opens with the term and a separator, or a
+# two- or three-cell table row whose first cell is the term.
+SEVERITY_BULLET = re.compile(rf"^\s*[-*]\s+{SEVERITY_TERM}\s*[:\u2014\u2013-]", re.MULTILINE)
+SEVERITY_ROW = re.compile(rf"^\|\s*{SEVERITY_TERM}\s*\|[^|\n]*(?:\|[^|\n]*)?\|\s*$", re.MULTILINE)
+PRIORITY_MAP = re.compile(r"`?P0`?\s*(?:=|:|\u2192|->)\s*`?Critical")
+FLOW_BLOCK = re.compile(r"^## Flow\n.*?^```[^\n]*\n(.*?)^```", re.MULTILINE | re.DOTALL)
+FLOW_LINES = ("input \u2190", "stop:")
+SOURCE_FILES = frozenset({"sources.yml", "sources.yaml"})
+SOURCE_MAX_AGE_DAYS = 365
+TODAY_ENV = "SKILLS_TODAY"
 
 
 def sections(text: str) -> dict[str, str]:
@@ -57,12 +72,106 @@ def steps(body: str) -> list[str]:
     return [body[start:end] for start, end in zip(starts, [*starts[1:], len(body)], strict=False)]
 
 
-def severity_block() -> str:
-    """The shared severity scale owned by CONTRIBUTING.md."""
+def _paragraph(start_marker: str) -> str:
+    """The CONTRIBUTING.md paragraph that starts with the marker."""
     text = CONTRIBUTING.read_text(encoding="utf-8")
-    start = text.index(SEVERITY_START)
+    start = text.index(start_marker)
     end = text.index("\n\n", start)
     return text[start:end]
+
+
+def severity_errors(path: Path) -> list[str]:
+    """A file that defines the severity scale or the P-map copies CONTRIBUTING.md byte for byte."""
+    text = path.read_text(encoding="utf-8")
+    relative = path.relative_to(ROOT)
+    errors: list[str] = []
+    if (SEVERITY_BULLET.search(text) or SEVERITY_ROW.search(text)) and _paragraph(SEVERITY_START) not in text:
+        errors.append(f"{relative}: severity scale differs from CONTRIBUTING.md")
+    if PRIORITY_MAP.search(text) and _paragraph(PRIORITY_START) not in text:
+        errors.append(f"{relative}: priority-to-severity map differs from CONTRIBUTING.md")
+    return errors
+
+
+def description_errors(description: str) -> list[str]:
+    if description.startswith(MANUAL_MARKER):
+        verb = description.removeprefix(MANUAL_MARKER).split(maxsplit=1)[:1]
+        word = verb[0].rstrip(",;:") if verb else ""
+        if not word[:1].isupper() or not word.endswith("s"):
+            return [f"manual description needs a verb such as 'Runs' after '{MANUAL_MARKER}'"]
+        return []
+    return [
+        f"implicit description needs '{phrase}'"
+        for phrase in ("Use when", "primary deliverable")
+        if phrase not in description
+    ]
+
+
+def flow_errors(text: str) -> list[str]:
+    block = FLOW_BLOCK.search(text)
+    if not block:
+        return []
+    lines = block.group(1).splitlines()
+    return [
+        f"Flow needs a line starting '{start}'"
+        for start in FLOW_LINES
+        if not any(line.startswith(start) for line in lines)
+    ]
+
+
+def _review_dates(value: object) -> Iterator[object]:
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if key == "reviewed_on":
+                yield item
+            else:
+                yield from _review_dates(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from _review_dates(item)
+
+
+def source_record(path: Path) -> tuple[list[str], dt.date | None]:
+    """Check a source record's required keys; return its errors and newest review date."""
+    relative = path.relative_to(ROOT)
+    try:
+        record = load_yaml(path)
+    except ValueError as exc:
+        return [str(exc)], None
+    errors = [] if "sources" in record else [f"{relative}: top-level 'sources' key required"]
+    dates: list[dt.date] = []
+    for raw in _review_dates({"reviewed_on": record.get("reviewed_on"), "sources": record.get("sources")}):
+        if raw is None:
+            continue
+        try:
+            dates.append(raw if isinstance(raw, dt.date) else dt.date.fromisoformat(str(raw)))
+        except ValueError:
+            errors.append(f"{relative}: reviewed_on must be an ISO date, got {raw!r}")
+    if not dates and not errors:
+        errors.append(f"{relative}: 'reviewed_on' required at top level or per source")
+    return errors, max(dates, default=None)
+
+
+def source_files() -> list[Path]:
+    return [path for skill in skill_dirs() for path in sorted(skill.rglob("*")) if path.name in SOURCE_FILES]
+
+
+def today() -> dt.date:
+    """Today, or the ISO date in SKILLS_TODAY for reproducible runs."""
+    override = os.environ.get(TODAY_ENV)
+    return dt.date.fromisoformat(override) if override else dt.date.today()
+
+
+def warnings() -> list[str]:
+    """Source records whose newest review is more than a year old."""
+    found: list[str] = []
+    now = today()
+    for path in source_files():
+        _, newest = source_record(path)
+        if newest and (now - newest).days > SOURCE_MAX_AGE_DAYS:
+            found.append(
+                f"{path.relative_to(ROOT)}: newest reviewed_on {newest} is over {SOURCE_MAX_AGE_DAYS} days old"
+            )
+    return found
 
 
 def skill_dirs() -> list[Path]:
@@ -100,15 +209,15 @@ def validate_skill(skill: Path) -> list[str]:
             errors.append(f"{relative}/SKILL.md: step {number} needs a '{CRITERION} ...' criterion")
     if len(items) > FLOW_STEP_THRESHOLD and "Flow" not in found:
         errors.append(f"{relative}/SKILL.md: more than {FLOW_STEP_THRESHOLD} steps need a Flow")
-    if isinstance(description, str) and not description.startswith(MANUAL_MARKER) and "Use when" not in description:
-        errors.append(f"{relative}/SKILL.md: implicit description needs a 'Use when' trigger")
-    if SEVERITY_START in text and severity_block() not in text:
-        errors.append(f"{relative}/SKILL.md: severity scale differs from CONTRIBUTING.md")
+    if isinstance(description, str):
+        errors.extend(f"{relative}/SKILL.md: {problem}" for problem in description_errors(description))
+    errors.extend(f"{relative}/SKILL.md: {problem}" for problem in flow_errors(text))
+    for path in [skill_file, *sorted((skill / "references").rglob("*.md"))]:
+        errors.extend(severity_errors(path))
 
+    # Adapters are optional; check one only when it is present.
     adapter = skill / "agents/openai.yaml"
-    if not adapter.is_file():
-        errors.append(f"{adapter.relative_to(ROOT)}: missing adapter")
-    else:
+    if adapter.is_file():
         try:
             config = load_yaml(adapter)
         except ValueError as exc:
@@ -137,11 +246,8 @@ def validate_skill(skill: Path) -> list[str]:
                 errors.append(f"{path.relative_to(ROOT)}: symlinks are not allowed")
             if not path.is_file():
                 continue
-            if path.name in {"sources.yml", "sources.yaml"}:
-                try:
-                    load_yaml(path)
-                except ValueError as exc:
-                    errors.append(str(exc))
+            if path.name in SOURCE_FILES:
+                errors.extend(source_record(path)[0])
     for path in skill.rglob("*"):
         if path.is_symlink():
             errors.append(f"{path.relative_to(ROOT)}: skill packages must not contain symlinks")
@@ -185,10 +291,10 @@ def validate_catalog() -> list[str]:
         if name != linked_name:
             errors.append(f"skills/README.md: {name} links to {linked_name}")
             continue
-        adapter = load_yaml(SKILLS / name / "agents/openai.yaml")
-        expected = "implicit" if adapter.get("policy", {}).get("allow_implicit_invocation") is True else "manual"
+        description = frontmatter(SKILLS / name / "SKILL.md").get("description", "")
+        expected = "manual" if str(description).startswith(MANUAL_MARKER) else "implicit"
         if mode != expected:
-            errors.append(f"skills/README.md: {name} is {mode}, adapter is {expected}")
+            errors.append(f"skills/README.md: {name} is {mode}, description is {expected}")
     return errors
 
 
