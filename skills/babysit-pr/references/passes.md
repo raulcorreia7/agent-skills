@@ -59,11 +59,25 @@ The PR is someone else's. Nothing is posted until the end.
 2. When the head moved, list the commits since the last-seen head, and the
    files they change. A force-push leaves no common base; review the whole
    diff again and say so.
-3. Review only what changed and is relevant through `review` in `pr` mode,
-   with the PR's intent as context. Skip files that changed only by a rebase.
+3. Review only what changed and is relevant, applying the chosen lenses
+   with the chosen skills (table below), with the PR's intent as context.
+   Skip files that changed only by a rebase.
 4. Merge new findings into the local list: drop ones the new push fixed,
    update ones it moved, and keep the priority from `review`.
 5. Save the state and log the pass. Post nothing.
+
+### Lens to skill or tool
+
+Use a row's skill only when it is installed and the user's `skills` list
+allows it; otherwise apply the lens by reading the diff.
+
+| Lens | Skill, when available | Tool |
+| --- | --- | --- |
+| `intent`, `correctness`, `contracts` | `review` in `pr` mode | `gh pr view`, `gh pr diff` (or `glab mr`) |
+| `evidence` | `worktrees` for a separate review checkout | the repository's own check command there; `gh pr checks` |
+| `correctness` (structural patterns) | `ast-grep` | `ast-grep run` on changed files |
+| `safety` (dependencies, secrets) | `code-scanner`, only when the user names it | its scanners on changed files, verification off |
+| `follow-through` | none | the pass log's earlier findings |
 
 At the end, the summary carries the findings as one review summary comment,
 not an approval or a change request.
