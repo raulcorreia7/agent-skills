@@ -15,7 +15,7 @@ inputs:
   CHECK: { description: The repository's own local check, default: uv run poe check }
   MAX_FIX: { description: Failed fix attempts in a row on one check before the babysitter stops and reports, default: 2 }
   STATE: { description: Pass log outside the work tree, default: .git/babysit-pr.md }
-  FOOTER: { description: Last line of every post, default: "🌙 Overnight PR babysitter (author) · unknown effort: unknown" }
+  FOOTER: { description: Last line of every post, default: "🤖 Agent (babysit-pr, author) · unknown effort: unknown" }
   READER: { description: Read-only agent CLI, default: "claude --allowedTools Read Bash(gh pr view:*) Bash(gh pr diff:*) Bash(gh pr checks:*) Bash(gh run view:*) --model sonnet -p" }
   ACTOR: { description: Agent CLI for granted actions only, default: "claude --allowedTools Read Edit Bash(uv run:*) Bash(git add:*) Bash(git commit:*) Bash(gh:*) --model sonnet -p" }
 extensions:
