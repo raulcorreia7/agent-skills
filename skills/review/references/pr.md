@@ -1,40 +1,32 @@
-# Pull Request Review
+# PR Review
 
-Assess the PR/MR or story-backed change against its stated intent.
+Assess the PR or MR, or the story-backed change, against its stated intent.
 
-## Steps
+## Fetch
 
-1. Resolve the available context. Check the title, description, linked story,
-   acceptance criteria, author notes, diff, changed files, tests, configuration,
-   migrations, documentation, and rollout notes.
-2. Identify intended behavior and distinguish missing behavior from
-   out-of-scope behavior. Never invent acceptance criteria.
-3. Assess intent coverage, reviewability, documentation freshness, deployment
-   framing, and whether evidence demonstrates each acceptance criterion.
-4. Ask alignment questions only when an answer changes intent, public behavior,
-   risk, scope, rollout, testing, or PR framing.
-5. Draft concise private reviewer notes and produce public review comments only
-   when requested.
+Read-only commands. The `gh` flags were checked against `gh --help` for
+gh 2.102.1; the `glab` commands are unverified, so check
+`glab <command> --help` first.
 
-## Output
+| Need | GitHub | GitLab (unverified) |
+| --- | --- | --- |
+| Title, body, base, head, state | `gh pr view <number> --json title,body,baseRefName,headRefName,headRefOid,isDraft,files,reviewDecision` | `glab mr view <number>` |
+| Discussion | `gh pr view <number> --comments` | `glab mr view <number> --comments` |
+| Diff or file list | `gh pr diff <number>`, `gh pr diff <number> --name-only` | `glab mr diff <number>` |
+| Checks | `gh pr checks <number>`, `gh pr checks <number> --required` | `glab ci status` |
 
-Use this order and omit empty sections:
+Add `--repo <owner>/<repo>` (`gh`) when the PR is in another repository.
 
-1. **Verdict:** `pass`, `findings`, or `not reviewable`, with a one-sentence
-   rationale. A provider review maps them to approve / request changes /
-   comment. Treat the verdict as a recommendation unless the user separately
-   approves the post.
-2. **Findings:** `P0`-through-`P3` ordered findings with precise locations,
-   evidence, impact, and smallest fixes.
-3. **Questions:** Key intent or acceptance decisions and the recommended
-   default for each.
-4. **Coverage:** Requested outcome, acceptance coverage, documentation
-   freshness, and unverified scope.
-5. **Checks:** Evidence, commands, and results when they informed the review.
-6. **Review text:** Copy-pasteable public comments only when requested.
-   Otherwise private reviewer notes.
-7. **Residual risk:** Assumptions, unreviewed surfaces, rollout concerns, and
-   confidence limits.
+## Check
 
-When there are no findings, say so explicitly and still report checks and
-residual risk.
+- Read the title, description, linked story, acceptance criteria, author
+  notes, diff, changed files, tests, configuration, migrations,
+  documentation, and rollout notes.
+- Name the intended behaviour, and tell missing behaviour apart from
+  out-of-scope behaviour. Take acceptance criteria only from the PR and its
+  linked work; don't invent them.
+- Assess intent coverage, reviewability, documentation freshness, deployment
+  framing, and whether the evidence demonstrates each acceptance criterion.
+- Ask an alignment question only when its answer changes intent, public
+  behaviour, risk, scope, rollout, testing, or how the PR is framed.
+- Keep reviewer notes private unless the user asks for public review text.

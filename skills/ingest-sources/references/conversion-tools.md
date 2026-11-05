@@ -3,11 +3,9 @@
 Select a maintained tool that preserves the evidence needed for the approved
 questions. Keep the original source and write each conversion as a derivative.
 
-Use the tool for the mechanical conversion. Use the agent to select the tool,
-set limits, inspect warnings, compare difficult sections, and decide whether
-another representation is needed. Do not ask the model to recreate Markdown
-from raw HTML, PDF extraction noise, XML, JSON, or an office document when an
-approved parser or converter can do it.
+The tool does the mechanical conversion. The agent selects the tool, sets
+limits, inspects warnings, compares difficult sections, and decides whether
+another representation is needed.
 
 | Need | Prefer | Main limit |
 | --- | --- | --- |
@@ -53,7 +51,7 @@ Add OCR only where an existing text layer is absent:
 ocrmypdf --skip-text source.pdf derived/searchable.pdf
 ```
 
-Run converters in an isolated worker as defined in `safety.md` (Workers). Use
+Run converters in a worker as defined in `safety.md` (Workers). Use
 local retained inputs instead of converter URL features. Record the tool
 version, command, warnings, and output hashes. Compare representative difficult
 content with the source before retrieval uses the derivative.

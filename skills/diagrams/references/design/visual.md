@@ -2,6 +2,10 @@
 
 Review faithfulness before presentation. Never trade a correct model for style.
 
+Contents: Design And Release Pass, Readable Layout And Density, Labels And
+Notation, Purposeful Visual Style, Choose A Color Strategy, Visual Tokens And
+Family Defaults, Motion, Accessibility, Family Recipes.
+
 ## Design And Release Pass
 
 1. State the reader question and diagram scope in one sentence.

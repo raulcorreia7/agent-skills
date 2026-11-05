@@ -21,6 +21,7 @@ Several leaves can apply to one change. Stop after the common contract and the
 selected leaves.
 
 Use the [structured-data router](../structured-data/index.md) for format and
-protocol behavior. Use the [quality router](../../quality/index.md) for
-dependency or observability changes. Use `create-tests` when security tests are
-the primary artifact.
+protocol behavior, and the
+[dependency](../../quality/dependencies-and-supply-chain.md) or
+[observability](../../quality/observability.md) leaf for those changes. Use
+`create-tests` when security tests are the primary artifact.

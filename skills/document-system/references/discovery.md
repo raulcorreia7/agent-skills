@@ -15,9 +15,10 @@
    observations in coverage. Keep access within scope.
 
 Select a provider-specific adapter only after the provider and scope are
-confirmed. Keep provider requests separate when that reduces noise. The parent
-reconciles all results. A discovery agent never writes project files or changes
-external state. Do not substitute remembered platform facts for unavailable
+confirmed. Keep provider requests separate when that reduces noise, each in
+an isolated context if the harness has one, otherwise one after another. The
+parent reconciles all results. A discovery request never writes project files
+or changes external state. Do not substitute remembered platform facts for unavailable
 live discovery.
 
 ## Example request

@@ -1,28 +1,26 @@
 # Agent-Generated Tests
 
-Treat an agent-generated test as a candidate, not as evidence by itself.
+An agent-generated test is a candidate, not evidence by itself.
 
 1. Compile and run the test.
-2. Check the oracle, assertions, failure message, determinism, and distinct
-   risk.
-3. Safely confirm that a regression detects the known broken behavior.
-4. Add an independent probe for a consequential claim. Use a held-out case,
+2. Check the oracle, assertions, failure message, determinism, and the
+   distinct risk it protects.
+3. Confirm safely that a regression test detects the known broken behavior.
+4. Add an independent probe for a consequential claim: a held-out case,
    reference implementation, property, differential check, or mutation audit.
-5. Inspect the final implementation and test diff together.
+5. Read the final test diff together with the code it exercises.
 
-Stop a repair loop when evidence repeats or oscillates. Preserve the first
-failure and each significant change in evidence. Do not expose hidden evaluation
-tests or their exact feedback to the repair loop.
-
-A second instance of the same model is not automatically an independent oracle.
+Don't expose hidden evaluation tests or their exact feedback to the agent
+writing the tests. A second instance of the same model is not an independent
+oracle.
 
 ## Example
 
 ```text
-candidate ← agent adds tests for a rounding defect and repairs the function
+candidate ← agent adds tests for a rounding defect
 oracle ← published currency-rounding rule
 probe ← mutate the boundary comparison; the focused test must fail
-stop ← two repairs, same failure → requirement gap
+stop ← the mutant survives twice after fixes → requirement gap
 ```
 
 ## Evidence Base

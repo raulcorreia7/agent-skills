@@ -65,9 +65,8 @@ Important: sandbox credentials do not work in production.
   changelog, and troubleshooting when those pages exist.
 - Use short descriptions that help an agent select the right source.
 - Avoid unexplained internal jargon. Link a glossary when needed.
-- Exclude secrets, credentials, customer data, private hostnames, and
-  privileged operational detail unless the surface is explicitly private and
-  trusted.
+- Private hostnames and privileged operational detail belong only on a
+  surface that is explicitly private and trusted.
 - Generate from main navigation when it is clean and stable. Curate
   manually when generated navigation is noisy.
 

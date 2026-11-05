@@ -6,9 +6,7 @@ real boundaries with `subgraph`, and label non-obvious edges. Target-specific
 syntax belongs to the applicable platform profile.
 
 Use `LR` for pipelines and request paths and `TB` for decomposition and decision
-trees. Keep the main path straight and exceptions at the perimeter. In a
-controlled PNG profile, start near 48 pixels of node spacing and 56 pixels of
-rank spacing; change one value only when labels or boundaries collide.
+trees. Keep the main path straight and exceptions at the perimeter.
 
 ```mermaid
 flowchart LR

@@ -2,17 +2,19 @@
 
 Use comments for non-obvious contracts, constraints, risk, and rationale.
 
-## Classify The Comment
+## Classification examples
 
-- **Keep:** durable contract, invariant, rationale, risk, or external quirk.
-- **Revise:** useful intent that is vague, wordy, stale, or inconsistent with
-  local language conventions.
-- **Remove:** narration of visible mechanics, obsolete behavior, or history
-  better owned by Git, an ADR, an issue, or documentation.
-- **Add:** a public boundary or surprising local constraint lacks enough context
-  to prevent misuse.
+The classes are defined in the skill.
 
-Prefer clear code and enforceable contracts. Do not refactor merely to avoid a
+| Comment | Class | Reason |
+|---|---|---|
+| `# The provider drops the first TLS handshake; retry once.` above a retry | keep | External quirk the code can't show |
+| `# Returns the user.` on a function that returns `None` when the user is missing | revise | The contract is incomplete |
+| `# Increment the counter.` above `count += 1` | remove | Narrates the visible mechanics |
+| `# Changed in 2021 to fix the login bug.` | remove | History that Git owns |
+| No comment on a public `send()` that isn't safe to call from two threads | add | A concurrency constraint callers can't infer |
+
+Prefer clear code and enforceable contracts. Don't refactor only to avoid a
 comment unless refactoring is in scope.
 
 ## Public API Documentation
@@ -40,7 +42,6 @@ architecture and history in owned documentation.
 
 - Update or remove nearby comments when behavior, intent, constraints, or
   contracts change.
-- Treat stale comments as correctness risk.
 - Pair enforceable safety, security, compatibility, and data rules with tests,
   types, assertions, validation, or linters when practical.
 - Let comments explain rationale and constraints that enforcement cannot.
@@ -70,5 +71,3 @@ verification/removal path. Avoid bare reminders. Prefer Ruff `TD`, ESLint
   that future edits could weaken.
 - Link owned docs, ADRs, standards, upstream issues, or runbooks when needed.
   Retain enough local context to survive link rot.
-
-Use concise, neutral, present-tense language.

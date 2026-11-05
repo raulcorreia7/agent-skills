@@ -1,7 +1,6 @@
 # Scan Rules
 
-Use a complete configuration mapping with
-`ast-grep scan --rule <rule.yml> <path>`:
+A rule file is a complete configuration mapping, run with `--rule` (`cli.md`):
 
 ```yaml
 id: no-console-log

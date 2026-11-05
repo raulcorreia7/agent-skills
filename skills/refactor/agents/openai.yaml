@@ -3,4 +3,4 @@ interface:
   short_description: "Reshape code while preserving behavior"
   default_prompt: "Use $refactor to improve this code's structure without changing observable behavior."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

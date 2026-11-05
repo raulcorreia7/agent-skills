@@ -34,8 +34,8 @@ Small examples before large examples.
 |---|---|---|
 ```
 
-Omit empty sections. Put background, trade-offs, long lists, and historical
-notes after the task path.
+Omit empty sections. Background, trade-offs, long lists, and historical notes
+go after the task path.
 
 ## Common Document Types
 
@@ -55,5 +55,3 @@ Configuration tables should distinguish safe examples from real values:
 
 | Key | Required | Default or example | Source | Purpose |
 |---|---|---|---|---|
-
-Never include real secrets or private live values.

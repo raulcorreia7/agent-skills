@@ -3,4 +3,4 @@ interface:
   short_description: "Manage Git worktrees with safety checks"
   default_prompt: "Use $worktrees to carry out this Git worktree workflow with explicit safety checks."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

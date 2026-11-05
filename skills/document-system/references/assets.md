@@ -29,5 +29,4 @@ After diagram selection, load only each chosen diagram template:
 - Replace every `{{...}}` token in a selected asset, including Mermaid node and
   relationship labels, so every published label and relationship comes from the
   evidence. Remove inapplicable links.
-- Keep portable Markdown links as the default navigation. Add
-  destination-specific navigation metadata only for a confirmed destination.
+- Navigation follows the destination rule in `intake.md`.

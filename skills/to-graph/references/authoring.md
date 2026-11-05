@@ -61,8 +61,8 @@ run. See the nightly CI health example.
 
 - `on`, `off`, `yes`, and `no` read as booleans. Use `when:` for keys, and
   quote such words as values or ids.
-- A comma inside `{ }` splits a value, and `: ` inside plain text starts a
-  mapping. Quote such text, or use a `|` block.
+- A comma inside `{ }` splits a value, and a colon followed by a space in
+  plain text starts a mapping. Quote such text, or use a `|` block.
 
 ## Extensions
 

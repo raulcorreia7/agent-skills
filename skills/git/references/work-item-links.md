@@ -1,7 +1,7 @@
 # Work-Item Links
 
-Treat work-item IDs, issue IDs, story IDs, and URLs as traceability metadata,
-not commit scopes.
+Work-item, issue, and story IDs and URLs are traceability metadata, not commit
+scopes. They go in the commit footer or the PR body, never the header.
 
 ```text
 docs(api): add authentication examples
@@ -15,12 +15,7 @@ fix(auth): reject expired tokens
 Fixes #1234
 ```
 
-Use neutral `Refs:` wording for related work. Use closing syntax only when the
-change should actually close or resolve the item.
-
-- Put generic URLs in a PR body or commit footer, not a Conventional Commit
-  header.
-- Preserve any required platform or team title prefix. Keep the remaining title
-  readable.
-
-Suggest a better reference when useful.
+- Use neutral `Refs:` for related work. Use a closing keyword only when the
+  change should close or resolve the item.
+- Keep any required platform or team title prefix, and keep the rest of the
+  title readable.

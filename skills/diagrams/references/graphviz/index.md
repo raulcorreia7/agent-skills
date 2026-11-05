@@ -1,7 +1,7 @@
 # Graphviz Router
 
-Load `core.md` for all DOT authoring. Then load only the files matching the
-required engine, composition feature, or formal notation.
+Load only the files matching the required engine, composition feature, or
+formal notation.
 
 | Trigger | File |
 |---|---|

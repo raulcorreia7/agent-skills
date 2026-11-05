@@ -3,15 +3,26 @@
 `<skill-root>` is the directory that holds `SKILL.md`. Examples scan `.`; use
 the target path instead.
 
-Each example shows the native command. When `command -v <tool>` finds
-nothing, run the same command through the toolbox image, or install the binary
-with `fetch-tools`. If neither works, report the family as unmeasured with the
-missing command. Install nothing into the system.
+## Runner order
+
+Each example shows the native command. Run it with the first runner that
+works:
+
+1. The native binary, when `command -v <tool>` finds it.
+2. `uvx` or `npx`, for the Python and Node tools (lizard, jscpd, pip-audit,
+   c8). Each downloads a package, so it needs approval.
+3. The toolbox image below, for the binaries pinned in `tools.txt` and
+   semgrep. Building it pulls layers, so it needs approval.
+4. `<skill-root>/fetch-tools <temp-dir> <tool>`, which downloads the pinned,
+   checksummed binary into a temporary directory. It needs approval.
+5. None of these: report the family as unmeasured, naming the missing command.
+
+Install nothing into the system.
 
 ## Toolbox image
 
-The image holds every binary pinned in `tools.txt`, plus semgrep, git,
-ripgrep, and ctags.
+The image, built from `<skill-root>/Dockerfile`, holds every binary pinned in
+`tools.txt`, plus semgrep, git, ripgrep, and ctags.
 
 ```sh
 docker build -t code-scanner:latest <skill-root>     # once; pulls layers

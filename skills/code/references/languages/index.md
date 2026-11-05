@@ -1,8 +1,7 @@
 # Language Guides
 
-Read each leaf that matches the implementation language and the task.
-
-Not for formatter, linter, type-checker, hook, or CI gate setup; use `quality-gates`.
+Read each leaf that matches the implementation language and the task. For a
+language without a guide, use repository evidence.
 
 | Language | Implement code or review contracts | Select or run checks |
 | --- | --- | --- |

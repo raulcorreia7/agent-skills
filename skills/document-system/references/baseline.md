@@ -33,17 +33,13 @@ docs/
     schema.md         # conditional
 ```
 
-Keep new bundle paths, filenames, stable IDs, frontmatter keys, `type` values,
-and tags lowercase. Preserve existing destination-specific path and filename
-casing unless an approved migration explicitly changes it. Human-facing titles
-can use normal casing. Use portable Markdown links for navigation. Use
-`home.md` as the entry point and link from `system.md` to selected technical
-pages. Cross-link detail pages only when the link helps answer a reader
-question. Link only to pages that exist.
-
-If the destination is ambiguous and changes paths, navigation metadata, link
-syntax, or renderer constraints, ask before adding destination-specific files.
-Otherwise keep the portable baseline.
+The paths above use the default `docs/` destination; the destination rule
+and existing-casing exception are in `intake.md`. Keep new bundle
+paths, filenames, stable IDs, frontmatter keys, `type` values, and tags
+lowercase. Human-facing titles can use normal casing. Use `home.md` as the
+entry point and link from `system.md` to selected technical pages.
+Cross-link detail pages only when the link helps answer a reader question.
+Link only to pages that exist.
 
 ## Frontmatter
 
@@ -72,9 +68,8 @@ sections and adds no `#` heading.
 - `system.md`: short reconciled current-state overview, boundary, operational
   posture, and links to the selected detail pages. It does not repeat detail
   from those pages.
-- `context.md`: human-maintained knowledge, purpose, scope, exclusions, flows,
+- `context.md`: human-owned knowledge, purpose, scope, exclusions, flows,
   expectations, constraints, terminology, starting points, and open questions.
-  AI changes remain proposals until confirmed.
 - `evidence.md`: agent-maintained working ledger for structured discovery,
   reverse engineering, iteration, and reconciliation.
 - `gaps.md`: non-match records, click-ops risks, documentation gaps, next
@@ -82,34 +77,25 @@ sections and adds no `#` heading.
 
 ## Technical page selection and contracts
 
-Use the smallest set of pages that provides a durable answer to reader
-questions. Do not create a page only because a heading or template exists.
+Use the smallest set of pages that gives a durable answer to reader
+questions. Don't create a page only because a heading or template exists.
 Key statements on every selected page use the portable evidence citations
-defined in [the evidence contract](evidence.md). Do not expose raw provider
-output, credentials, secret-bearing configuration, customer data, or
-unnecessary exploitable detail.
+defined in [the evidence contract](evidence.md).
 
-| Page | Select when evidence supports | Owns the reader question |
-|---|---|---|
-| `modules.md` | Code, components, entry points, dependencies, or tests matter to system operation or change. | What does each code component own, how does it connect, and where is it tested? |
-| `schema.md` | Observed schemas, migrations, interface contracts, or live metadata establish data structures or lifecycle. | What data is owned, how is it identified and related, and how does it evolve? |
-| `interfaces.md` | Owned HTTP/API endpoints, events, queues, or CLI contracts are observed. | What contracts does this system expose or own? |
-| `integrations.md` | External systems and their exchanged data or operating constraints matter. | Which external systems are involved and how are failures, authentication, limits, and validation handled? |
-| `infrastructure.md` | Environments, resources, topology, operational boundaries, or reliable cost information matter. | Where does the system run and what operational or cost boundaries apply? |
-| `delivery.md` | Build, release, configuration, rollout, rollback, recovery, or verification evidence is available. | How does a change reach an environment and how is it verified or recovered? |
+This table is the page map: each key claim goes to the page that owns its
+reader question.
 
-Use `modules.md` for responsibilities, seams, dependencies, entry points, and
-test boundaries. Use `schema.md` for entities, fields, keys, relationships,
-ownership, lifecycle, migrations, and schema contracts. Link it to
-`diagrams/schema.md` only when that diagram exists. Use `interfaces.md` only
-for owned contracts. Describe consumed external contracts in `integrations.md`
-when that distinction helps. Use `integrations.md` for authentication class,
-exchanged data, limits or cost boundaries, failure handling, and safe
-validation. Use `infrastructure.md` for environments, resources, topology,
-operational boundary, dated cost basis, and cleanup candidates. Cost figures
-require a reliable source and check date. Otherwise record the missing basis in
-`gaps.md`. Use `delivery.md` for build/release path, configuration sources,
-rollout, rollback or recovery, and verification.
+| Page | Select when evidence supports | Owns the reader question | Holds |
+|---|---|---|---|
+| `modules.md` | Code, components, entry points, dependencies, or tests matter to system operation or change. | What does each code component own, how does it connect, and where is it tested? | Responsibilities, seams, dependencies, entry points, test boundaries |
+| `schema.md` | Observed schemas, migrations, interface contracts, or live metadata establish data structures or lifecycle. | What data is owned, how is it identified and related, and how does it evolve? | Entities, fields, keys, relationships, ownership, lifecycle, migrations, schema contracts |
+| `interfaces.md` | Owned HTTP/API endpoints, events, queues, or CLI contracts are observed. | What contracts does this system expose or own? | Owned contracts only |
+| `integrations.md` | External systems and their exchanged data or operating constraints matter. | Which external systems are involved and how are failures, authentication, limits, and validation handled? | Consumed external contracts, authentication class, exchanged data, limits or cost boundaries, failure handling, safe validation |
+| `infrastructure.md` | Environments, resources, topology, operational boundaries, or reliable cost information matter. | Where does the system run and what operational or cost boundaries apply? | Environments, resources, topology, operational boundary, dated cost basis, cleanup candidates |
+| `delivery.md` | Build, release, configuration, rollout, rollback, recovery, or verification evidence is available. | How does a change reach an environment and how is it verified or recovered? | Build and release path, configuration sources, rollout, rollback or recovery, verification |
+
+A cost figure needs a reliable source and a check date; without them, record
+the missing basis in `gaps.md`.
 
 Keep each page focused. A page may link to related pages but must not become a
 second overview. Do not prescribe a cloud, architecture style,
@@ -123,13 +109,13 @@ evidence, or both support one overview that answers a reader need neither
 focused view meets. Keep it at one abstraction level. Do not combine
 context relationships with deployment topology in the same diagram. Create
 `logical.md` when multiple components or interfaces make a separate logical
-view clearer. Create `schema.md` only when observed schemas, migrations, interface
-contracts, or live metadata support its structures and relationships. Do not infer fields, keys, or cardinality from architecture
+view clearer. Create `schema.md` only when observed schemas, migrations,
+interface contracts, or live metadata support its structures and
+relationships. Do not infer fields, keys, or cardinality from architecture
 evidence alone.
 
 Each diagram page contains purpose, scope, diagram, legend, evidence, and
-known omissions. Replace every template placeholder, including Mermaid node
-and relationship labels. Do not publish generic sample labels or relationships.
+known omissions. Do not publish generic sample labels or relationships.
 
 If evidence is insufficient, add the missing view to `gaps.md`. Do not create
 an empty or invented page. Remove absent pages from `home.md`, `system.md`, and
@@ -143,8 +129,7 @@ destination-specific navigation.
 - Frontmatter parses and every concept has a non-empty `type`.
 - Evidence headings, columns, IDs, relationships, and results follow the
   evidence contract.
-- Internal Markdown links resolve and navigation links only target existing
-  pages.
+- Links and page quality pass the `docs` link sweep and page audit.
 - Key claims link to evidence IDs.
 - `home.md` reports freshness, coverage, and unresolved significant gaps.
 - `system.md` stays short, uses links, and does not repeat page detail.

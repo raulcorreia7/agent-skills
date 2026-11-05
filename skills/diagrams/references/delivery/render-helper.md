@@ -29,7 +29,7 @@ inspect a batch.
 | `pdf` | Print or Office destinations |
 
 The helper passes `-b white` to `mmdc`. Pass `--mermaid-config <file>` to add
-`-c <file>`, for example the PNG profile in `../mermaid/core.md`; the file must
+`-c <file>`, for example the fixed PNG profile in `mermaid.md`; the file must
 exist. Each renderer call stops after `--timeout` seconds (default 120), and
 the job fails without replacing its destination.
 

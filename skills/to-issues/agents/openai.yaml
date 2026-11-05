@@ -3,4 +3,4 @@ interface:
   short_description: "Draft dependent issues from an approved PRD or plan"
   default_prompt: "Use $to-issues to decompose this approved PRD or plan into dependent issue drafts; publish only with explicit approval."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

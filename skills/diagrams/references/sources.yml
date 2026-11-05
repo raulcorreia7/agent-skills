@@ -77,6 +77,24 @@ icons:
   iconify_collections: "https://icon-sets.iconify.design/"
   font_awesome_free_license: "https://fontawesome.com/license/free"
 
+mermaid_beta_families:
+  observed_version: "11.16.0"
+  keywords:
+    - architecture-beta
+    - block-beta
+    - cynefin-beta
+    - ishikawa-beta
+    - packet-beta
+    - radar-beta
+    - sankey-beta
+    - swimlane-beta
+    - treeView-beta
+    - treemap-beta
+    - venn-beta
+    - wardley-beta
+    - xychart-beta
+  needs_reverification: "Beta keywords, grammar, and host support can change in any Mermaid release. Re-verify each keyword and the version notes in its family leaf against current Mermaid syntax docs and the target host before relying on it."
+
 curation:
   approach: "Team-authored practical guidance summarized from official sources; no upstream skill, icon asset, or documentation body is vendored."
   refresh_rule: "Recheck official syntax, platform support, versions, icon terms, and current accessibility recommendations before materially changing the references."

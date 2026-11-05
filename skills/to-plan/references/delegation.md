@@ -1,52 +1,25 @@
 # Delegation Briefs
 
-The parent owns scope, collision control, integration, and final quality.
+Load for `parallel` mode. The parent owns scope, collision control,
+integration, and final quality.
 
-## Slice Contract
+Slices run in isolated contexts when the harness can run parallel agents.
+Without that capability, the same briefs run in order in one context; the
+ownership and collision rules still hold.
 
-Every brief contains:
+## Brief template
 
-| Field | Required content |
-|---|---|
-| Objective | One bounded, observable outcome |
-| Mode | `read-only`, `planning`, `review`, `edit`, or `validation` |
-| Ownership | Exact paths, packages, contracts, or responsibilities |
-| Inputs | Evidence, decisions, and usable upstream outputs |
-| Dependencies | Slices or contracts that must finish first |
-| Mutation | Whether source or external state may change |
-| Boundaries | Actions, paths, systems, and decisions outside the slice |
-| Validation | Slice-owned commands or observable checks |
-| Return | Changes, evidence, significant checks, risks, and handoff data |
-
-## Mode Boundaries
-
-- `read-only`: inspect or map; do not change files or external systems.
-- `planning`: produce bounded planning input; do not implement.
-- `review`: report evidence-backed findings; do not fix them.
-- `edit`: change only the assigned, disjoint write set; adapt to concurrent work
-  and never revert another slice.
-- `validation`: run assigned checks; change source only when the brief includes
-  validation setup or fixes.
-
-## Dependency And Collision Rules
-
-- Assign one owner to shared contracts, schemas, migrations, generated files,
-  lockfiles, catalogs, and integration surfaces.
-- Make consumers wait for explicit owner output. Do not overlap edit globs or
-  generated output.
-- Separate exploration from mutation when useful; report unexpected overlap.
-
-## Brief Template
+Every slice gets one brief with all of these fields.
 
 ```text
-Objective: <one bounded outcome>
+Objective: <one bounded, observable outcome>
 Mode: <read-only | planning | review | edit | validation>
 
 Owned scope:
-- <paths, package, contract, or responsibility>
+- <exact paths, package, contract, or responsibility>
 
 Inputs and dependencies:
-- <approved decisions or upstream outputs>
+- <approved decisions, upstream outputs, and slices that must finish first>
 
 Allowed mutations:
 - <none, source paths, or explicitly approved external state>
@@ -62,19 +35,40 @@ Validate:
 
 Return:
 - evidence or files changed;
-- behavior or decisions produced;
+- behaviour or decisions produced;
 - checks run and results;
 - risks, conflicts, and handoff data.
 ```
 
-- For inspection, request facts, inferences, unknowns, and approval-gated checks.
-- For planning, request constraints, dependencies, risks, and open decisions.
-- For review, request blocking and non-blocking findings with artifact evidence.
-- For an edit, include exact files and expected behavior or output.
-- For validation, include commands, expected signals, and likely failure owners.
+Add what the mode needs:
 
-## Parent Synthesis
+- `read-only`: ask for facts, inferences, unknowns, and approval-gated checks.
+- `planning`: ask for constraints, dependencies, risks, and open decisions.
+- `review`: ask for blocking and non-blocking findings with artifact evidence.
+- `edit`: name the exact files and the expected behaviour or output.
+- `validation`: name the commands, expected signals, and likely failure owners.
 
-Before completion, reconcile assumptions and overlapping diffs, remove duplicate
-findings, and record unowned residual risk. Run integration only on user request
-or when it efficiently addresses significant risk.
+## Mode boundaries
+
+- `read-only`: inspect or map; change no files or external systems.
+- `planning`: produce bounded planning input; don't implement.
+- `review`: report evidence-backed findings; don't fix them.
+- `edit`: change only the assigned, disjoint write set; adapt to concurrent work
+  and never revert another slice.
+- `validation`: run the assigned checks; change source only when the brief
+  includes validation setup or fixes.
+
+## Dependency and collision rules
+
+- Give shared contracts, schemas, migrations, generated files, lockfiles,
+  catalogs, and integration surfaces one owner each.
+- Consumers wait for the owner's explicit output. Edit globs and generated
+  output never overlap.
+- Separate exploration from mutation when that helps; report unexpected
+  overlap.
+
+## Parent synthesis
+
+Before completion, reconcile assumptions and overlapping diffs, remove
+duplicate findings, and record unowned residual risk. Run integration only on
+request or when it cheaply addresses a significant risk.

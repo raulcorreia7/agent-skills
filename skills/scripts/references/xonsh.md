@@ -21,7 +21,8 @@ current variables, so `ls -l` runs a command. Keep that ambiguity impossible:
 
 ```xonsh
 #!/usr/bin/env xonsh
-# $ARG1..$ARGn are set in either mode; $ARGS is a list in Python mode only.
+# $ARG<n> works in either mode; $ARGS is a list in Python mode only, and
+# $ARGS[0] is the script path, like sys.argv[0].
 
 def main(args: list[str]) -> int:
     if not args:
@@ -31,7 +32,7 @@ def main(args: list[str]) -> int:
     print(f"handling {len(args)} argument(s)")
     return 0
 
-main($ARGS)
+raise SystemExit(main($ARGS[1:]))
 ```
 
 Run it as `xonsh script.xsh <args>`, or use `xonsh -c '<code>'` for a one-liner.
