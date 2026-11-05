@@ -1,6 +1,6 @@
 ---
 name: ast-grep
-description: "Finds syntax-aware code structures and authors ast-grep rules. Use when a structural search or ast-grep rule is the primary deliverable and text search cannot reliably express the syntax or AST relationship."
+description: "Finds syntax-aware code structures and writes ast-grep rules. Use when a structural search or rule is the primary deliverable and text search can't express it."
 ---
 
 # ast-grep

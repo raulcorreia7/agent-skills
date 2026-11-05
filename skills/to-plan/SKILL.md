@@ -1,6 +1,6 @@
 ---
 name: to-plan
-description: "Produces an implementation-ready plan for a change whose requirements are approved, and lists each open key decision as a blocker. Use when an implementation plan is the primary deliverable. Not for remediation of verified findings; use `plan-remediation`."
+description: "Produces an implementation-ready plan for a change with approved requirements and flags open decisions as blockers. Use when a plan is the primary deliverable. Not for remediation; use `plan-remediation`."
 ---
 
 # To Plan

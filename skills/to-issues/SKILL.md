@@ -1,6 +1,6 @@
 ---
 name: to-issues
-description: "Decomposes an approved PRD or plan into dependency-aware issue drafts, and publishes them only after the user approves a preview. Use when issue drafts or a published issue set is the primary deliverable. Not for unresolved requirements or plans; use `to-prd` or `to-plan`."
+description: "Breaks an approved PRD or plan into dependency-aware issues and publishes them after an approved preview. Use when issues are the primary deliverable. Not for unsettled plans; use `to-plan`."
 ---
 
 # To Issues

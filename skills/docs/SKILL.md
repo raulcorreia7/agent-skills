@@ -1,6 +1,6 @@
 ---
 name: docs
-description: "Creates, edits, audits, or validates standalone documentation: guides, references, runbooks, specifications, and ADRs. Use when standalone documentation is the primary deliverable. Not for source comments or coordinated system bundles; use `comments` or `document-system`."
+description: "Creates, edits, audits, or validates guides, references, runbooks, specifications, and ADRs. Use when standalone documentation is the primary deliverable. Not for source comments; use `comments`."
 ---
 
 # Docs

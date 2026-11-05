@@ -1,6 +1,6 @@
 ---
 name: worktrees
-description: "Creates, inspects, moves, removes, and prunes Git worktrees, and checks out a pull or merge request into one for review. Use when a worktree or a review checkout is the primary deliverable. Not for commits, pushes, or branch text; use `git`."
+description: "Creates, moves, removes, and prunes Git worktrees, and checks out PRs into one for review. Use when a worktree is the primary deliverable. Not for commits or pushes; use `git`."
 ---
 
 # Worktrees

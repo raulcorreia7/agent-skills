@@ -1,6 +1,6 @@
 ---
 name: plan-remediation
-description: "Plans remediation of verified findings in code, plans, codebases, or infrastructure across three horizons: stabilize, correct the root cause, and prevent recurrence. Use when a remediation plan is the primary deliverable. Not for planning a new change; use `to-plan`."
+description: "Plans fixes for verified findings in three horizons: stabilize, correct the root cause, prevent recurrence. Use when a remediation plan is the primary deliverable. Not for new changes; use `to-plan`."
 ---
 
 # Plan Remediation

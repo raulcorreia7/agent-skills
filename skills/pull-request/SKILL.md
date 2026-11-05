@@ -1,6 +1,6 @@
 ---
 name: pull-request
-description: "Opens, updates, and describes a pull or merge request (PR or MR) as its author, addresses review comments, and fixes the PR's failing CI. Use when the author's own PR or MR is the primary deliverable. Not for reviewing someone else's PR; use `review`."
+description: "Opens, updates, and describes your own pull or merge request, answers review comments, and fixes its CI. Use when your PR is the primary deliverable. Not for reviewing others' PRs; use `review`."
 ---
 
 # Pull Request

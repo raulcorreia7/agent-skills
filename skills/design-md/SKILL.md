@@ -1,6 +1,6 @@
 ---
 name: design-md
-description: Authors, updates, lints, compares, exports, and explains Google DESIGN.md files under the pinned specification. Use when a DESIGN.md or a design-token file in that format is the primary deliverable.
+description: "Authors, lints, compares, and exports Google DESIGN.md files under the pinned spec. Use when a DESIGN.md file is the primary deliverable."
 ---
 
 # DESIGN.md

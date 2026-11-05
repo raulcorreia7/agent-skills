@@ -1,6 +1,6 @@
 ---
 name: research-highquality
-description: "Manual invocation only. Researches a broad or contested external question and returns a synthesis with traceable claims, source appraisal, conflict analysis, and explicit coverage. Not for a quick single-source lookup."
+description: "Manual invocation only. Researches a broad or contested question with traceable claims, source appraisal, and stated coverage. Not for a quick lookup."
 ---
 
 # High-Quality Research

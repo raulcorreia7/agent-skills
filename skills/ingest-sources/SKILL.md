@@ -1,6 +1,6 @@
 ---
 name: ingest-sources
-description: "Acquires and prepares external web, PDF, structured, and repository sources with source records, safety, and retention controls. Use when a prepared source corpus (conversion, OCR, curation, bounded fetching, freshness, or removal) is the primary deliverable. Not for one ordinary page the active research tool can open directly."
+description: "Acquires and prepares web, PDF, structured, and repository sources with source records and safety controls. Use when a prepared source corpus is the primary deliverable. Not for opening one page."
 ---
 
 # Ingest Sources

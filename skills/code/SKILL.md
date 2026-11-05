@@ -1,6 +1,6 @@
 ---
 name: code
-description: "Implements or explains application behavior. Use when application code or its explanation is the primary deliverable. Not for diagnosis, refactoring, tests, scripts, documentation, comments, review, or gate setup; use `debug`, `refactor`, `create-tests`, `scripts`, `docs`, `comments`, `review`, or `quality-gates`."
+description: "Implements or explains application behavior. Use when application code or its explanation is the primary deliverable. Not for debugging, refactoring, or tests; use `debug`, `refactor`, or `create-tests`."
 ---
 
 # Code

@@ -1,6 +1,6 @@
 ---
 name: triage
-description: "Sorts bugs, issues, tickets, PRs, alerts, and reports into ordered, owned next actions. Use when a triaged queue is the primary deliverable. Not for diagnosing one failure; use `debug`."
+description: "Sorts bugs, issues, PRs, and alerts into ordered, owned next actions. Use when a triaged queue is the primary deliverable. Not for diagnosing one failure; use `debug`."
 ---
 
 # Triage

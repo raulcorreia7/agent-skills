@@ -1,6 +1,6 @@
 ---
 name: git
-description: "Inspects Git state, drafts commit, branch, and release text, and performs approved repository mutations. Use when a commit, branch, release, or work-item link is the primary deliverable. Not for the PR lifecycle; use `pull-request`. Not for worktree management; use `worktrees`."
+description: "Inspects Git state, drafts commit, branch, and release text, and runs approved Git operations. Use when a commit, branch, or release is the primary deliverable. Not for PRs; use `pull-request`."
 ---
 
 # Git

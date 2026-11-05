@@ -1,6 +1,6 @@
 ---
 name: scripts
-description: "Builds or explains developer automation: scripts, command-line tools, and task-runner entries. Use when automation is the primary deliverable. Not for application behavior; use `code`. Not for linter, hook, or CI gate setup; use `quality-gates`."
+description: "Builds or explains scripts, command-line tools, and task-runner entries. Use when automation is the primary deliverable. Not for gate setup; use `quality-gates`."
 ---
 
 # Scripts
