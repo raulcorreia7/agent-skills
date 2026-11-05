@@ -77,9 +77,7 @@ Avoid vague or mixed headers such as `Update stuff`, `patch bump`, `fix #1`, or
 `build: change dependencies and docs and runtime config`.
 
 For version bumps, include the exact version. Keep generated changelog and
-version output separate from unrelated changes. Do not rewrite pushed history
-without explicit approval. Prefer `--force-with-lease` only when an approved
-workflow genuinely requires a remote branch rewrite.
+version output separate from unrelated changes.
 
 Sources: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/),
 [commitlint rules](https://commitlint.js.org/reference/rules.html), and reviewed

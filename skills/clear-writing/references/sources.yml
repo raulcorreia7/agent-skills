@@ -1,0 +1,253 @@
+# Evidence behind references/patterns.md and references/targets.md.
+# Evidence strength: S peer-reviewed and quantified; M one study, preprint, or
+# expert taxonomy; W practitioner consensus. Word lists drift with each model
+# generation, so re-check them when this date is more than a year old.
+reviewed_on: "2026-11-05"
+llm_tells:
+  - id: N2
+    authors: "Roongta, Gaddipati, Huynh"
+    title: "SlopBench: How Well Can We Rank Language Models by Slop? A Multi-Domain Benchmark of Repetitive AI Writing"
+    year: 2026
+    url: "https://arxiv.org/abs/2609.33905"
+    status: "preprint"
+  - id: N3
+    authors: "Oh, Lee, Ahn, Kim, Kang"
+    title: "Science or Slop?: Benchmarking and Mitigating Scientific Slop in AI-Generated Papers"
+    year: 2026
+    url: "https://arxiv.org/abs/2610.00531"
+    status: "preprint"
+  - id: N4
+    authors: "Borisov, Gröger, Mikhael, Schreiber"
+    title: "Do Chatbot LLMs Talk Too Much? The YapBench Benchmark"
+    year: 2026
+    url: "https://arxiv.org/abs/2601.00624"
+    status: "preprint"
+  - id: N5
+    authors: "Holzwarth, González-Márquez, Kobak"
+    title: "Most biomedical publications show signs of LLM-assisted writing"
+    year: 2026
+    url: "https://arxiv.org/abs/2608.10715"
+    status: "preprint"
+  - id: N6
+    authors: "Juzek"
+    title: "AI-Associated Lexical Shifts Across 34 Languages: Cross-Lingual Convergence and Diachronic Uptake in News Writing"
+    year: 2026
+    url: "https://arxiv.org/abs/2605.25358"
+    status: "committed to EMNLP 2026"
+  - id: N8
+    authors: "Inoshita, Omura, Yamanaka, Maeda, Tsuji"
+    title: "Does AI Homogenize Student Thinking? A Multi-Dimensional Analysis of Structural Convergence in AI-Augmented Essays"
+    year: 2026
+    url: "https://arxiv.org/abs/2603.21228"
+    status: "preprint"
+  - id: N9
+    authors: "Freeburg"
+    title: "The Last Fingerprint: How Markdown Training Shapes LLM Prose"
+    year: 2026
+    url: "https://arxiv.org/abs/2603.27006"
+    status: "single-author preprint"
+  - id: N11
+    authors: "not checked"
+    title: "Em-dash population studies (medRxiv preprints; US Congress press releases)"
+    year: 2026
+    url: ["https://arxiv.org/abs/2606.29540", "https://arxiv.org/abs/2608.05889"]
+    status: "titles only read"
+  - id: A1
+    authors: "Kobak, González-Márquez, Horvát, Lause"
+    title: "Delving into LLM-assisted writing in biomedical publications through excess vocabulary"
+    year: 2025
+    url: "https://doi.org/10.1126/sciadv.adt3813"
+    status: "Science Advances 11(27)"
+  - id: A5
+    authors: "Juzek, Ward"
+    title: "Why Does ChatGPT \"Delve\" So Much? Exploring the Sources of Lexical Overrepresentation in Large Language Models"
+    year: 2025
+    url: "https://arxiv.org/abs/2412.11385"
+    status: "COLING 2025"
+  - id: A6
+    authors: "Reinhart, Markey, Laudenbach, Pantusen, Yurko, Weinberg, Brown"
+    title: "Do LLMs write like humans? Variation in grammatical and rhetorical styles"
+    year: 2025
+    url: "https://doi.org/10.1073/pnas.2422455122"
+    status: "PNAS 122(8)"
+  - id: A8
+    authors: "Shaib, Elazar, Li, Wallace"
+    title: "Detection and Measurement of Syntactic Templates in Generated Text"
+    year: 2024
+    url: "https://arxiv.org/abs/2407.00211"
+    status: "EMNLP 2024"
+  - id: A9
+    authors: "Paech, Roush, Goldfeder, Shwartz-Ziv"
+    title: "Antislop: A Comprehensive Framework for Identifying and Eliminating Repetitive Patterns in Language Models"
+    year: 2025
+    url: "https://arxiv.org/abs/2510.15061"
+    status: "listed as ICLR 2026"
+  - id: A10
+    authors: "Shaib, Chakrabarty, Garcia-Olano, Wallace"
+    title: "Measuring AI \"Slop\" in Text"
+    year: 2025
+    url: "https://arxiv.org/abs/2509.19163"
+    status: "COLM 2026"
+  - id: A14
+    authors: "Sharma, Tong, Korbak, et al."
+    title: "Towards Understanding Sycophancy in Language Models"
+    year: 2024
+    url: "https://arxiv.org/abs/2310.13548"
+    status: "ICLR 2024"
+  - id: A15
+    authors: "Zhou, Hwang, Ren, Sap"
+    title: "Relying on the Unreliable: The Impact of Language Models' Reluctance to Express Uncertainty"
+    year: 2024
+    status: "ACL 2024 (long), pp. 3623-3643"
+  - id: A17
+    authors: "Singhal, Goyal, Xu, Durrett"
+    title: "A Long Way to Go: Investigating Length Correlations in RLHF"
+    year: 2024
+    url: "https://arxiv.org/abs/2310.03716"
+    status: "COLM 2024"
+  - id: A18
+    authors: "Zheng et al."
+    title: "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena"
+    year: 2023
+    url: "https://arxiv.org/abs/2306.05685"
+    status: "NeurIPS 2023 Datasets and Benchmarks"
+  - id: A19
+    authors: "Kirk, Mediratta, Nalmpantis, Luketina, Hambro, Grefenstette, Raileanu"
+    title: "Understanding the Effects of RLHF on LLM Generalisation and Diversity"
+    year: 2024
+    url: "https://arxiv.org/abs/2310.06452"
+    status: "ICLR 2024"
+natural_writing:
+  - id: B1
+    authors: "Chakrabarty, Laban, Wu"
+    title: "Can AI writing be salvaged? Mitigating Idiosyncrasies and Improving Human-AI Alignment in the Writing Process through Edits"
+    year: 2025
+    url: "https://doi.org/10.1145/3706598.3713559"
+    status: "CHI 2025"
+  - id: B2
+    authors: "Chakrabarty, Laban, Wu"
+    title: "AI-Slop to AI-Polish? Aligning Language Models through Edit-Based Writing Rewards and Test-time Computation"
+    year: 2025
+    url: "https://arxiv.org/abs/2504.07532"
+    status: "COLM 2025"
+  - id: B3
+    authors: "Chakrabarty, Laban, Agarwal, Muresan, Wu"
+    title: "Art or Artifice? Large Language Models and the False Promise of Creativity"
+    year: 2024
+    url: "https://arxiv.org/abs/2309.14556"
+    status: "CHI 2024"
+  - id: B4
+    authors: "Agarwal, Naaman, Vashistha"
+    title: "AI Suggestions Homogenize Writing Toward Western Styles and Diminish Cultural Nuances"
+    year: 2025
+    url: "https://arxiv.org/abs/2409.11360"
+    status: "CHI 2025"
+  - id: P1
+    authors: "Anthropic"
+    title: "Prompting Claude Fable 5.1, Writing density (mannered prose)"
+    year: 2026
+    url: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1"
+    status: "vendor guidance"
+plain_language:
+  - id: C1
+    authors: "ISO TC 37"
+    title: "ISO 24495-1:2023 Plain language, Part 1: Governing principles and guidelines"
+    year: 2023
+    url: "https://www.iso.org/standard/78907"
+    status: "standard; paywalled"
+  - id: C3
+    authors: "Government Digital Service"
+    title: "Writing to GOV.UK standards: Clear language"
+    year: live
+    url: "https://guidance.publishing.service.gov.uk/writing-to-gov-uk-standards/writing-guidelines/clear-language/"
+    status: "practice guide"
+  - id: C5
+    authors: "Google"
+    title: "Google developer documentation style guide: Voice and tone"
+    year: live
+    url: "https://developers.google.com/style/tone"
+    status: "practice guide"
+  - id: C6
+    authors: "Microsoft"
+    title: "Microsoft Writing Style Guide: Top 10 tips for style and voice"
+    year: live
+    url: "https://learn.microsoft.com/en-us/style-guide/top-10-tips-style-voice"
+    status: "practice guide; tuned for UI and marketing"
+  - id: C7
+    authors: "Procida"
+    title: "Diátaxis"
+    year: live
+    url: "https://diataxis.fr/"
+    status: "framework"
+  - id: C8
+    authors: "Google"
+    title: "Google Engineering Practices: Writing good CL descriptions"
+    year: live
+    url: "https://google.github.io/eng-practices/review/developer/cl-descriptions.html"
+    status: "practice guide"
+  - id: C9
+    authors: "Git project"
+    title: "SubmittingPatches"
+    year: live
+    url: "https://git-scm.com/docs/SubmittingPatches"
+    status: "practice guide"
+  - id: C10
+    authors: "Morkes, Nielsen"
+    title: "Concise, SCANNABLE, and Objective: How to Write for the Web"
+    year: 1997
+    url: "https://www.nngroup.com/articles/concise-scannable-and-objective-how-to-write-for-the-web/"
+    status: "controlled study; old"
+  - id: C11
+    authors: "Redish"
+    title: "Readability formulas have even more limitations than Klare discusses"
+    year: 2000
+    url: "https://doi.org/10.1145/344599.344637"
+    status: "ACM Journal of Computer Documentation 24(3)"
+  - id: C12
+    authors: "Martínez, Mollica, Gibson"
+    title: "Poor writing, not specialized concepts, drives processing difficulty in legal language"
+    year: 2022
+    status: "Cognition 224"
+  - id: C13
+    authors: "Ferreira"
+    title: "The misinterpretation of noncanonical sentences"
+    year: 2003
+    status: "Cognitive Psychology 47"
+  - id: Orwell
+    authors: "George Orwell"
+    title: "Politics and the English Language"
+    year: 1946
+    url: "https://www.orwellfoundation.com/the-orwell-foundation/orwell/essays-and-other-works/politics-and-the-english-language/"
+    status: "flexible advice for general prose"
+    license: "The Orwell Foundation publishes this authorized text with permission from the Orwell Estate."
+cohesion_and_hedging:
+  - id: D1
+    authors: "McNamara, Kintsch, Songer, Kintsch"
+    title: "Are Good Texts Always Better? Interactions of Text Coherence, Background Knowledge, and Levels of Understanding in Learning From Text"
+    year: 1996
+    status: "Cognition and Instruction 14(1)"
+  - id: D2
+    authors: "Ozuru, Dempsey, McNamara"
+    title: "Prior knowledge, reading skill, and text cohesion in the comprehension of science texts"
+    year: 2009
+    status: "Learning and Instruction 19(3)"
+  - id: D3
+    authors: "Sanders, Noordman"
+    title: "The role of coherence relations and their linguistic markers in text processing"
+    year: 2000
+    status: "Discourse Processes 29(1)"
+  - id: D4
+    authors: "Degand, Sanders"
+    title: "The impact of relational markers on expository text comprehension in L1 and L2"
+    year: 2002
+    status: "Reading and Writing 15(7-8)"
+  - id: D5
+    authors: "Hyland"
+    title: "Hedging in Scientific Research Articles"
+    year: 1998
+    status: "John Benjamins, Pragmatics and Beyond New Series 54"
+  - id: D6
+    authors: "Kleijn, Pander Maat, Sanders"
+    title: "Comprehension Effects of Connectives Across Texts, Readers, and Coherence Relations"
+    year: 2019
+    status: "Discourse Processes 56(5-6)"

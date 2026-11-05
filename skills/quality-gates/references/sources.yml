@@ -1,0 +1,116 @@
+reviewed_on: "2026-11-05"
+limitations:
+  - "Action and hook versions in ci.md and hooks.md are examples; read the current release before pinning."
+sources:
+  python:
+    - name: Ruff configuration
+      url: https://docs.astral.sh/ruff/configuration/
+    - name: Ruff rule selection
+      url: https://docs.astral.sh/ruff/linter/
+    - name: Pyright configuration
+      url: https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+    - name: Mypy strict mode
+      url: https://mypy.readthedocs.io/en/stable/getting_started.html
+    - name: pytest configuration reference
+      url: https://docs.pytest.org/en/latest/reference/reference.html
+    - name: Python packaging, setup.py deprecation
+      url: https://packaging.python.org/en/latest/discussions/setup-py-deprecated/
+  typescript:
+    - name: TypeScript strict
+      url: https://www.typescriptlang.org/tsconfig/strict
+    - name: TypeScript compiler options
+      url: https://www.typescriptlang.org/tsconfig/
+    - name: noUncheckedIndexedAccess
+      url: https://www.typescriptlang.org/tsconfig/noUncheckedIndexedAccess.html
+    - name: exactOptionalPropertyTypes
+      url: https://www.typescriptlang.org/tsconfig/exactOptionalPropertyTypes.html
+    - name: skipLibCheck
+      url: https://www.typescriptlang.org/tsconfig/skipLibCheck.html
+    - name: typescript-eslint shared configs
+      url: https://typescript-eslint.io/users/configs/
+    - name: typescript-eslint parser and project service
+      url: https://typescript-eslint.io/packages/parser/
+    - name: Prettier CLI
+      url: https://prettier.io/docs/cli.html
+  go:
+    - name: Go Modules Reference
+      url: https://go.dev/ref/mod
+    - name: go vet
+      url: https://pkg.go.dev/cmd/vet
+    - name: govulncheck
+      url: https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck
+    - name: Staticcheck configuration
+      url: https://staticcheck.dev/docs/configuration/
+    - name: Staticcheck check options
+      url: https://staticcheck.dev/docs/configuration/options/
+  rust:
+    - name: rustup overrides
+      url: https://rust-lang.github.io/rustup/overrides.html
+    - name: Cargo configuration
+      url: https://doc.rust-lang.org/cargo/reference/config.html
+    - name: Cargo workspaces
+      url: https://doc.rust-lang.org/cargo/reference/workspaces.html
+    - name: rustc lint levels
+      url: https://doc.rust-lang.org/rustc/lints/levels.html
+    - name: Clippy lints
+      url: https://rust-lang.github.io/rust-clippy/master/index.html
+    - name: cargo-deny checks
+      url: https://embarkstudios.github.io/cargo-deny/checks/
+    - name: cargo-deny advisories config
+      url: https://embarkstudios.github.io/cargo-deny/checks/advisories/cfg.html
+    - name: cargo-deny bans config
+      url: https://embarkstudios.github.io/cargo-deny/checks/bans/cfg.html
+    - name: cargo-deny licenses config
+      url: https://embarkstudios.github.io/cargo-deny/checks/licenses/cfg.html
+    - name: cargo-deny sources config
+      url: https://embarkstudios.github.io/cargo-deny/checks/sources/cfg.html
+  java:
+    - name: javac options
+      url: https://docs.oracle.com/en/java/javase/24/docs/specs/man/javac.html
+    - name: Maven Compiler --release
+      url: https://maven.apache.org/components/plugins/maven-compiler-plugin/examples/set-compiler-release.html
+    - name: Maven Enforcer rules
+      url: https://maven.apache.org/components/enforcer/enforcer-rules/
+    - name: Gradle Java builds
+      url: https://docs.gradle.org/current/userguide/building_java_projects.html
+    - name: Gradle toolchains
+      url: https://docs.gradle.org/current/userguide/toolchains.html
+    - name: Gradle dependency locking
+      url: https://docs.gradle.org/current/userguide/dependency_locking.html
+    - name: Gradle dependency verification
+      url: https://docs.gradle.org/current/userguide/dependency_verification.html
+  csharp:
+    - name: .NET code analysis overview
+      url: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview
+    - name: Analyzer configuration files and precedence
+      url: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-files
+    - name: Analyzer rule categories
+      url: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/categories
+    - name: MSBuild SDK properties
+      url: https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props
+    - name: dotnet format
+      url: https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-format
+    - name: NuGet audit
+      url: https://learn.microsoft.com/en-us/nuget/concepts/auditing-packages
+    - name: NuGet lock files
+      url: https://learn.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files
+    - name: NuGet Package Source Mapping
+      url: https://learn.microsoft.com/en-us/nuget/consume-packages/package-source-mapping
+  ci:
+    - name: GitHub Actions workflow syntax
+      url: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+    - name: GitHub Actions secure use reference
+      url: https://docs.github.com/en/actions/reference/security/secure-use
+    - name: GitHub Actions dependency caching
+      url: https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching
+    - name: GitLab CI/CD YAML syntax
+      url: https://docs.gitlab.com/ci/yaml/
+    - name: GitLab CI/CD caching
+      url: https://docs.gitlab.com/ci/caching/
+  hooks:
+    - name: pre-commit
+      url: https://pre-commit.com/
+    - name: ruff-pre-commit
+      url: https://github.com/astral-sh/ruff-pre-commit
+    - name: Git hooks and core.hooksPath
+      url: https://git-scm.com/docs/githooks

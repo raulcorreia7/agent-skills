@@ -11,6 +11,7 @@ An `implicit` skill activates when a request matches its description. Ask for a
 | [`refactor`](refactor/SKILL.md) | `manual` | Restructure code while preserving behavior |
 | [`scripts`](scripts/SKILL.md) | `implicit` | Build scripts, CLI helpers, and developer automation |
 | [`create-tests`](create-tests/SKILL.md) | `implicit` | Create or improve a primary test deliverable |
+| [`quality-gates`](quality-gates/SKILL.md) | `implicit` | Set up or tune linters, formatters, type checkers, hooks, and CI gates |
 
 ## Research, inspect, and improve
 
@@ -30,7 +31,7 @@ An `implicit` skill activates when a request matches its description. Ask for a
 | Skill | Invocation | Use |
 |---|---|---|
 | [`adversarial-review`](adversarial-review/SKILL.md) | `manual` | Run two isolated artifact reviews and adjudicate their evidence |
-| [`review`](review/SKILL.md) | `manual` | Assess supplied changes, PRs, and designs against evidence |
+| [`review`](review/SKILL.md) | `manual` | Review pull requests, diffs, and designs against their intent and evidence |
 
 ## Decide and plan
 
@@ -47,7 +48,8 @@ An `implicit` skill activates when a request matches its description. Ask for a
 
 | Skill | Invocation | Use |
 |---|---|---|
-| [`clear-writing`](clear-writing/SKILL.md) | `implicit` | Write, rewrite, or review prose |
+| [`clear-writing`](clear-writing/SKILL.md) | `implicit` | Write, edit, or review any prose so it reads naturally, without LLM noise |
+| [`ste100`](ste100/SKILL.md) | `manual` | Write or audit ASD-STE100 Simplified Technical English |
 | [`docs`](docs/SKILL.md) | `implicit` | Create, edit, audit, or validate standalone documentation |
 | [`comments`](comments/SKILL.md) | `implicit` | Maintain comments and source API documentation |
 | [`design-md`](design-md/SKILL.md) | `implicit` | Work with Google DESIGN.md files |
@@ -58,5 +60,6 @@ An `implicit` skill activates when a request matches its description. Ask for a
 
 | Skill | Invocation | Use |
 |---|---|---|
-| [`git`](git/SKILL.md) | `implicit` | Inspect Git, draft text, or run an approved Git workflow |
+| [`git`](git/SKILL.md) | `implicit` | Inspect Git, draft commits, branches, and releases, or run an approved Git workflow |
+| [`pull-request`](pull-request/SKILL.md) | `implicit` | Prepare, describe, open, and iterate on your own PR or MR |
 | [`worktrees`](worktrees/SKILL.md) | `manual` | Manage Git worktrees and provider review checkouts |

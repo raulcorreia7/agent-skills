@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Manual invocation only. Inspects repository or system state read-only across project, test, dependency, security, delivery, infrastructure, operations, and cloud concerns.
+description: Manual invocation only. Inspects repository or system state read-only across project, test, dependency, security, delivery, infrastructure, operations, and cloud concerns. Not for setting up or tuning quality gates; use `quality-gates`.
 ---
 
 # Audit

@@ -1,6 +1,6 @@
 ---
 name: scripts
-description: Builds or explains developer automation. Use when automation is the primary deliverable.
+description: Builds or explains developer automation. Use when automation is the primary deliverable. Not for linter, hook, or CI gate setup; use `quality-gates`.
 ---
 
 # Scripts

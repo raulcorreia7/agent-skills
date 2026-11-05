@@ -1,7 +1,7 @@
 # Python Verification
 
-Run repository scripts first. A minimal gate for a Python package
-using the baseline is below.
+Run repository scripts first. Without them, a minimal gate for a Python
+package that uses Ruff, one type checker, and pytest is below.
 
 These run offline:
 

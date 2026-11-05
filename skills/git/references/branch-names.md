@@ -14,5 +14,4 @@ type/scope-short-subject-1234
 - Keep branch names less formal than PR titles but understandable without the
   linked issue.
 
-Suggest a better name when useful. Do not rename a branch without explicit
-approval.
+Suggest a better name when useful.

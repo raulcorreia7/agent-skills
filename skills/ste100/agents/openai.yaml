@@ -1,0 +1,6 @@
+interface:
+  display_name: "ASD-STE100"
+  short_description: "Write, convert, or audit text for ASD-STE100 compliance"
+  default_prompt: "Use $ste100 to audit this procedure for ASD-STE100 Issue 9 compliance."
+policy:
+  allow_implicit_invocation: false

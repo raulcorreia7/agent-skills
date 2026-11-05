@@ -1,7 +1,7 @@
 # Formal ASD-STE100 workflow
 
-Resolve `<skill-root>` as the directory that contains this `SKILL.md`. All
-skill files and commands below are relative to that directory.
+Resolve `<skill-root>` as the directory that contains the skill's `SKILL.md`.
+All skill files and commands below are relative to that directory.
 
 1. Classify each block as a `procedure` or `description`. Apply the safety
 overlay to text that controls a risk.

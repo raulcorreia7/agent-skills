@@ -19,3 +19,17 @@ Generated changelog: 1.4.0 section
 Expected tag: v1.4.0
 Tag target: reviewed release-PR merge commit
 ```
+
+## Release section in a PR template
+
+When a PR template has a release section and the PR is a process or tooling
+change rather than a version bump, say so explicitly:
+
+```text
+## Release PR
+
+- Version: Not a version bump PR.
+- Generated changelog checked: Not applicable; unchanged in this PR.
+- Expected tag: Not created by this PR.
+- Release trigger: Follow-up release flow after this PR merges.
+```
