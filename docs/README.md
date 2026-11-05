@@ -1,6 +1,7 @@
 # Documentation
 
-Research reports and the diagram gallery for this repository.
+Research reports and the diagram gallery for this repository. The gallery is
+published at <https://raulcorreia7.github.io/agent-skills/>.
 
 | Reader task | Document |
 | --- | --- |
