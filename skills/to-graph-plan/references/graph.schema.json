@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-skills.dev/workflows/to-graph-plan/graph.schema.json",
+  "title": "Implementation plan DAG",
+  "description": "Tool-neutral structural contract for a compiled implementation-plan DAG. Dependency existence, acyclicity, and phase ordering are semantic checks.",
+  "type": "object",
+  "required": ["version", "nodes"],
+  "properties": {
+    "version": { "const": 1 },
+    "nodes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "extensions": { "$ref": "#/$defs/extensions" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "gate": {
+      "type": "object",
+      "required": ["decision", "authority", "approved_when"],
+      "properties": {
+        "decision": { "$ref": "#/$defs/text" },
+        "authority": { "$ref": "#/$defs/text" },
+        "approved_when": { "$ref": "#/$defs/text" }
+      },
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "phase", "outcome", "depends_on", "done_when"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "phase": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "outcome": { "$ref": "#/$defs/text" },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "uniqueItems": true
+        },
+        "done_when": { "$ref": "#/$defs/text" },
+        "gate": { "$ref": "#/$defs/gate" },
+        "recovery": { "$ref": "#/$defs/text" },
+        "owner": { "$ref": "#/$defs/text" },
+        "extensions": { "$ref": "#/$defs/extensions" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Graph Workflow"
+  short_description: "Compile plans into orchestrator-ready graphs"
+  default_prompt: "Use $to-graph-workflow to compile this approved implementation plan into a detailed execution graph."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Graph Plan"
+  short_description: "Compile approved plans into dependency-valid DAGs"
+  default_prompt: "Use $to-graph-plan to compile this approved implementation-ready plan into a minimal dependency-valid YAML DAG."
+policy:
+  allow_implicit_invocation: false
