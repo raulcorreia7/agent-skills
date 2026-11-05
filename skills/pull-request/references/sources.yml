@@ -22,7 +22,7 @@ sources:
   github_review_comment_replies:
     title: "GitHub REST API: create a reply for a review comment"
     url: "https://docs.github.com/en/rest/pulls/comments"
-    verified: "2026-11-05: POST /pulls/{n}/comments/{id}/replies replied on a test PR (raulcorreia7/agent-skills#2)."
+    verified: "2026-11-05: the review-comment reply endpoint replied on a test PR (raulcorreia7/agent-skills#2)."
   github_resolve_review_thread:
     title: "GitHub GraphQL API: resolveReviewThread mutation"
     url: "https://docs.github.com/en/graphql/reference/mutations#resolvereviewthread"
