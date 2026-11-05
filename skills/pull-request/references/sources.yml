@@ -1,7 +1,6 @@
 reviewed_on: "2026-11-05"
 limitations:
   - "glab was not installed when the CLI sources were reviewed; every glab command and flag in providers.md is unverified."
-  - "The GitHub review-thread reply endpoint and the resolveReviewThread mutation come from the GitHub API documentation and were not exercised locally."
   - "The note that older Git applies rebase --autosquash only with -i was not checked against an older Git build; git 2.56.0 was installed."
 sources:
   gh_pr:
@@ -23,9 +22,11 @@ sources:
   github_review_comment_replies:
     title: "GitHub REST API: create a reply for a review comment"
     url: "https://docs.github.com/en/rest/pulls/comments"
+    verified: "2026-11-05: POST /pulls/{n}/comments/{id}/replies replied on a test PR (raulcorreia7/agent-skills#2)."
   github_resolve_review_thread:
     title: "GitHub GraphQL API: resolveReviewThread mutation"
     url: "https://docs.github.com/en/graphql/reference/mutations#resolvereviewthread"
+    verified: "2026-11-05: resolved a thread on a test PR (raulcorreia7/agent-skills#2)."
   glab_mr:
     title: "GitLab CLI glab mr"
     url: "https://docs.gitlab.com/cli/mr/"
