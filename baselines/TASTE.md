@@ -7,10 +7,10 @@ this file once and never overwrites it, so edit it freely.
 
 Interfaces people use (CLIs, prompts, errors, docs):
 
-- Familiar words; the common safe action is the obvious one.
-- Essential choices first, advanced options on request, consequences before
-  mechanics.
-- Errors say what failed, then the next safe action.
+- Use familiar words, and make the common safe action the obvious one.
+- Show essential choices first and advanced options on request. Explain
+  consequences before mechanics.
+- Make errors say what failed, then the next safe action.
 
 ## Yours
 
