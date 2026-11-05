@@ -1,0 +1,58 @@
+# After a PR merges, follow the deploy and the workflows it triggers. A small
+# model can drive this; only the diagnosis uses a bigger one, read-only.
+# `${node.output}` is the last line that node printed.
+version: 1
+goal: The merged change deploys and its follow-up runs pass, or the owner gets a diagnosis.
+inputs:
+  AGENT: { description: Agent CLI that takes a prompt argument, default: "claude --allowedTools Read --model opus -p" }
+  PR: { description: Pull request number }
+  DEPLOY: { description: Deploy workflow file, default: deploy.yml }
+  FOLLOW_UP: { description: Workflow that runs after deploy, default: validate-agent-run.yml }
+nodes:
+  merged:
+    outcome: The PR is merged; print the merge SHA
+    run: gh pr view ${PR} --json state,mergeCommit --jq 'if .state == "MERGED" then .mergeCommit.oid else "pending" end'
+    outcomes: [pending]
+    retry: { max: 360, when: pending, every: 5m, then: timed-out }
+    next: { succeeded: deploy-run }
+  deploy-run:
+    outcome: The deploy run for the SHA exists; print its ID
+    run: gh run list --commit ${merged.output} --workflow ${DEPLOY} --limit 1 --json databaseId --jq '.[0].databaseId // "pending"'
+    outcomes: [pending]
+    retry: { max: 30, when: pending, every: 1m, then: timed-out }
+    next: { succeeded: deploy }
+  deploy:
+    outcome: The deploy run succeeded
+    run: gh run watch ${deploy-run.output} --exit-status --interval 30 > /dev/null && echo ${deploy-run.output}
+    next: { succeeded: follow-up-run, failed: diagnose }
+  follow-up-run:
+    outcome: The follow-up run for the SHA exists; print its ID
+    run: gh run list --commit ${merged.output} --workflow ${FOLLOW_UP} --limit 1 --json databaseId --jq '.[0].databaseId // "pending"'
+    outcomes: [pending]
+    retry: { max: 30, when: pending, every: 1m, then: timed-out }
+    next: { succeeded: follow-up }
+  follow-up:
+    outcome: The follow-up run succeeded
+    run: gh run watch ${follow-up-run.output} --exit-status --interval 30
+    next: { succeeded: healthy, failed: diagnose }
+  diagnose:
+    outcome: Explain why the post-merge run failed when the PR checks passed
+    done_when: diagnosis.md names the failing step, the cause, and the PR check that missed it
+    run: |
+      gh run list --commit ${merged.output} --status failure --json databaseId --jq '.[].databaseId' \
+        | xargs -n1 gh run view --log-failed > failed.log
+      gh pr checks ${PR} > pr-checks.txt || true
+      ${AGENT} "failed.log is from runs after merge; pr-checks.txt shows the PR checks that passed. Name the failing step, the cause, and which PR check missed it and why." > diagnosis.md
+    next: { succeeded: approve-revert }
+  approve-revert:
+    kind: gate
+    outcome: The service owner decides whether to revert
+    gate: { authority: service owner, evidence: [diagnose] }
+    next: { approved: revert, rejected: reported, unavailable: timed-out }
+  revert:
+    outcome: A revert PR is open
+    run: gh pr revert ${PR} --body-file diagnosis.md
+    next: { succeeded: reported }
+  healthy: { kind: terminal, status: success, outcome: Deploy and follow-up passed }
+  reported: { kind: terminal, status: failure, outcome: Failure diagnosed and handed to the owner }
+  timed-out: { kind: terminal, status: blocked, outcome: Nothing finished in the watch window }

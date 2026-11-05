@@ -1,0 +1,37 @@
+# Upgrade one Python dependency; let Claude fix breakages a bounded number of times.
+version: 1
+goal: A PR that upgrades the package with a green suite, or a clear stop.
+inputs:
+  AGENT: { description: Agent CLI that takes a prompt argument, default: "claude --allowedTools Read Edit Bash(uv:*) --model sonnet -p" }
+  PACKAGE: { description: Package to upgrade }
+nodes:
+  branch:
+    outcome: Work happens on a fresh branch
+    run: git switch -c deps/${PACKAGE}
+    next: { succeeded: upgrade }
+  upgrade:
+    outcome: The lockfile has the new version
+    run: uv lock --upgrade-package ${PACKAGE} && uv sync
+    next: { succeeded: test }
+  test:
+    outcome: The suite passes
+    run: uv run pytest -q 2>&1 | tail -n 50 > test.log; test ${PIPESTATUS[0]} -eq 0
+    next: { succeeded: open-pr, failed: fix }
+  fix:
+    outcome: Code is adapted to the new version and tests pass
+    run: ${AGENT} "Upgrading ${PACKAGE} broke tests; see test.log. Fix the code, not the tests, then run uv run pytest -q." && uv run pytest -q
+    retry: { max: 2, when: failed, then: abandon }
+    next: { succeeded: open-pr }
+  open-pr:
+    outcome: An upgrade PR is open
+    run: |
+      git commit -am "build(deps): upgrade ${PACKAGE}"
+      git push -u origin HEAD
+      gh pr create --fill
+    next: { succeeded: proposed }
+  abandon:
+    outcome: The branch is dropped
+    run: git switch - && git branch -D deps/${PACKAGE}
+    next: { succeeded: not-viable }
+  proposed: { kind: terminal, status: success, outcome: PR ready for review }
+  not-viable: { kind: terminal, status: failure, outcome: Upgrade needs a human; see test.log }

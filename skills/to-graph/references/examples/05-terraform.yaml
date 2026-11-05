@@ -1,0 +1,39 @@
+# Apply exactly the plan that was reviewed, then prove there is no drift.
+version: 1
+goal: Infrastructure matches the reviewed plan.
+inputs:
+  AGENT: { description: Agent CLI that takes a prompt argument, default: "claude --allowedTools Read --model sonnet -p" }
+  DIR: { description: Terraform root module, default: infra }
+nodes:
+  static:
+    outcome: Format and validate pass
+    run: terraform -chdir=${DIR} fmt -check -recursive && terraform -chdir=${DIR} init -input=false && terraform -chdir=${DIR} validate
+    next: { succeeded: plan, failed: stopped }
+  plan:
+    outcome: A saved plan and its JSON form exist
+    run: terraform -chdir=${DIR} plan -input=false -out=tfplan && terraform -chdir=${DIR} show -json tfplan > tfplan.json
+    next: { succeeded: policy, failed: stopped }
+  policy:
+    outcome: The plan passes the OPA policies in policy/
+    run: conftest test tfplan.json --policy policy
+    next: { succeeded: approve, failed: stopped }
+  approve:
+    kind: gate
+    outcome: The platform owner approves this exact plan
+    gate: { authority: platform owner, evidence: [plan, policy] }
+    next: { approved: apply, rejected: stopped }
+  apply:
+    outcome: The saved plan is applied
+    writes: [cloud resources]
+    run: terraform -chdir=${DIR} apply -input=false tfplan
+    next: { succeeded: drift, failed: diagnose }
+  drift:
+    outcome: A fresh plan shows no changes (exit 2 means drift)
+    run: terraform -chdir=${DIR} plan -input=false -detailed-exitcode
+    next: { succeeded: applied, failed: diagnose }
+  diagnose:
+    outcome: Explain the apply failure or drift
+    run: terraform -chdir=${DIR} plan -input=false -no-color 2>&1 | ${AGENT} "Explain why this differs from the approved plan in tfplan.json, and the smallest fix." > diagnosis.md
+    next: { succeeded: stopped }
+  applied: { kind: terminal, status: success, outcome: Infrastructure matches code }
+  stopped: { kind: terminal, status: failure, outcome: "Not applied, or applied with drift; see diagnosis.md" }

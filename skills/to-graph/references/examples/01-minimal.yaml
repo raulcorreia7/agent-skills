@@ -1,0 +1,9 @@
+# Smallest useful graph: lint and test a Python project. Copy it to start.
+version: 1
+nodes:
+  check:
+    outcome: Lint and tests pass
+    run: uv run ruff check . && uv run pytest -q
+    next: { succeeded: green, failed: red }
+  green: { kind: terminal, status: success, outcome: Ready to commit }
+  red: { kind: terminal, status: failure, outcome: Fix lint or tests first }

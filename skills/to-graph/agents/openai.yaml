@@ -1,0 +1,6 @@
+interface:
+  display_name: "To Graph"
+  short_description: "Turn repeatable tasks into runnable workflow graphs"
+  default_prompt: "Use $to-graph to turn this task into a checked workflow graph."
+policy:
+  allow_implicit_invocation: false

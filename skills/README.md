@@ -40,6 +40,7 @@ An `implicit` skill activates when a request matches its description. Ask for a
 | [`to-prd`](to-prd/SKILL.md) | `manual` | Produce source-backed, decision-ready requirements |
 | [`to-plan`](to-plan/SKILL.md) | `manual` | Produce an implementation-ready plan |
 | [`to-issues`](to-issues/SKILL.md) | `manual` | Decompose an approved PRD or plan into issue drafts |
+| [`to-graph`](to-graph/SKILL.md) | `manual` | Turn a repeatable task into a checked, renderable, runnable workflow graph |
 | [`plan-remediation`](plan-remediation/SKILL.md) | `manual` | Plan evidence-backed remediation across three horizons |
 
 ## Document and explain

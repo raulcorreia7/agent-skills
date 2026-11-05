@@ -1,0 +1,39 @@
+# Alembic migration on PostgreSQL with a dump taken first.
+version: 1
+goal: The schema is at head and the app still works, with a restorable dump.
+inputs:
+  DATABASE_URL: { description: PostgreSQL connection URL }
+nodes:
+  dump:
+    outcome: A custom-format dump exists
+    run: pg_dump --format=custom --file=pre-migration.dump "${DATABASE_URL}"
+    next: { succeeded: sql }
+  sql:
+    outcome: The migration SQL is rendered for review
+    run: alembic upgrade head --sql > migration.sql
+    next: { succeeded: approve }
+  approve:
+    kind: gate
+    outcome: The data owner approves migration.sql
+    gate: { authority: data owner, evidence: [sql] }
+    next: { approved: migrate, rejected: cancelled }
+  migrate:
+    outcome: The database is at head
+    run: alembic upgrade head && alembic current
+    next: { succeeded: smoke, failed: downgrade }
+  smoke:
+    outcome: Smoke tests pass against the migrated database
+    run: uv run pytest -q tests/smoke
+    next: { succeeded: done, failed: downgrade }
+  downgrade:
+    outcome: The previous revision is restored by Alembic
+    run: alembic downgrade -1
+    next: { succeeded: rolled-back, failed: restore }
+  restore:
+    outcome: The database is restored from the dump
+    run: pg_restore --clean --if-exists --dbname="${DATABASE_URL}" pre-migration.dump
+    next: { succeeded: rolled-back, failed: needs-human }
+  done: { kind: terminal, status: success, outcome: Schema migrated }
+  rolled-back: { kind: terminal, status: failure, outcome: Back on the previous schema }
+  cancelled: { kind: terminal, status: blocked, outcome: Migration not approved }
+  needs-human: { kind: terminal, status: blocked, outcome: Restore failed; a DBA must act }

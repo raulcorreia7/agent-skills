@@ -1,0 +1,34 @@
+# Scheduled workflow: every night, summarize failed runs on main and file one issue.
+# Schedule it with any scheduler; each calls the same command. For example:
+#   crontab:  0 6 * * *  cd ~/src/app && uv run ~/.agents/skills/to-graph/scripts/to_graph.py run ci-health.yaml
+#   GitHub:   on: { schedule: [{ cron: "0 6 * * *" }] } then the same command in a step
+# Swap the harness without editing the graph: to_graph.py run ci-health.yaml AGENT="codex exec"
+version: 1
+goal: Failed runs on main from the last day are summarized in one tracking issue.
+inputs:
+  BRANCH: { description: Branch to watch, default: main }
+  AGENT: { description: Agent CLI that takes a prompt argument, default: "claude --allowedTools Read --model haiku -p" }
+nodes:
+  failures:
+    outcome: List yesterday's failed runs; print none if there are none
+    run: |
+      gh run list --branch ${BRANCH} --status failure --created ">=$(date -u -d yesterday +%F)" \
+        --json databaseId,workflowName,displayTitle,url > failures.json
+      if [ "$(jq length failures.json)" -eq 0 ]; then echo none; fi
+    outcomes: [none]
+    next: { succeeded: logs, none: quiet }
+  logs:
+    outcome: Failed-step logs are saved
+    run: jq -r '.[].databaseId' failures.json | xargs -n1 gh run view --log-failed > failed.log
+    next: { succeeded: summarize }
+  summarize:
+    outcome: One summary groups failures by cause
+    done_when: summary.md lists each cause with its runs and a likely owner
+    run: ${AGENT} "failures.json lists failed CI runs and failed.log has their logs. Group them by root cause; for each give the runs, the cause, and the likely fix. Markdown only." > summary.md
+    next: { succeeded: file-issue }
+  file-issue:
+    outcome: The summary is on today's tracking issue
+    run: gh issue create --title "CI failures on ${BRANCH} $(date -u +%F)" --label ci-health --body-file summary.md
+    next: { succeeded: filed }
+  quiet: { kind: terminal, status: success, outcome: No failures; nothing filed }
+  filed: { kind: terminal, status: success, outcome: Issue filed }

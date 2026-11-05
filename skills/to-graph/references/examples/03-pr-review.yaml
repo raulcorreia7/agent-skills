@@ -1,0 +1,37 @@
+# Review a GitHub PR with Claude, then post only after the author approves.
+version: 1
+goal: One deduplicated review comment on the PR, posted with the author's approval.
+inputs:
+  AGENT: { description: Agent CLI that takes a prompt argument, default: "claude --allowedTools Read --model sonnet -p" }
+  PR: { description: Pull request number }
+nodes:
+  fetch:
+    outcome: Save the diff and the PR description
+    run: |
+      gh pr diff ${PR} > pr.diff
+      gh pr view ${PR} --json title,body --jq '.title + "\n\n" + .body' > pr.md
+    next: { succeeded: review-bugs }
+  review-bugs:
+    outcome: List correctness bugs with file and line
+    run: ${AGENT} "Read pr.md and pr.diff. List correctness bugs as file:line - problem - fix. Write nothing else." > bugs.md
+    next: { succeeded: review-security }
+  review-security:
+    outcome: List security issues with file and line
+    run: ${AGENT} "Read pr.diff. List security issues as file:line - risk - fix. Write nothing else." > security.md
+    next: { succeeded: draft }
+  draft:
+    outcome: Merge both lists into one comment
+    done_when: review.md exists and repeats no finding
+    run: ${AGENT} "Merge bugs.md and security.md into one PR review comment. Drop duplicates." > review.md
+    next: { succeeded: approve }
+  approve:
+    kind: gate
+    outcome: The PR author approves posting review.md
+    gate: { authority: PR author, evidence: [draft] }
+    next: { approved: post, rejected: kept-local }
+  post:
+    outcome: Post the review
+    run: gh pr review ${PR} --comment --body-file review.md
+    next: { succeeded: posted }
+  posted: { kind: terminal, status: success, outcome: Review posted }
+  kept-local: { kind: terminal, status: success, outcome: review.md kept locally }

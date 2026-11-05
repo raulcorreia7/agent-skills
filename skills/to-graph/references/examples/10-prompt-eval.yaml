@@ -1,0 +1,32 @@
+# Compare a prompt change against the baseline with promptfoo.
+version: 1
+goal: Ship the candidate prompt only if it passes at least as many cases.
+criteria:
+  AC-1: { statement: Candidate passes no fewer cases than baseline, verified_by: [compare] }
+inputs:
+  AGENT: { description: Agent CLI that takes a prompt argument, default: "claude --allowedTools Read --model sonnet -p" }
+nodes:
+  baseline:
+    outcome: Baseline results saved
+    run: npx promptfoo@latest eval -c evals/baseline.yaml -o baseline.json --no-progress-bar
+    next: { succeeded: compare, failed: compare }
+  candidate:
+    outcome: Candidate results saved
+    run: npx promptfoo@latest eval -c evals/candidate.yaml -o candidate.json --no-progress-bar
+    next: { succeeded: compare, failed: compare }
+  compare:
+    outcome: Print improved or regressed
+    run: |
+      b=$(jq '.results.stats.successes' baseline.json)
+      c=$(jq '.results.stats.successes' candidate.json)
+      echo "baseline=$b candidate=$c"
+      if [ "$c" -ge "$b" ]; then echo improved; else echo regressed; fi
+    outcomes: [improved, regressed]
+    next: { improved: ship, regressed: explain, failed: broken }
+  explain:
+    outcome: Explain each case that regressed
+    run: ${AGENT} "Compare baseline.json and candidate.json. For each test that passed in baseline and failed in candidate, give the input and why it failed." > regressions.md
+    next: { succeeded: keep }
+  ship: { kind: terminal, status: success, outcome: Ship the candidate prompt }
+  keep: { kind: terminal, status: failure, outcome: Keep the baseline; see regressions.md }
+  broken: { kind: terminal, status: failure, outcome: An eval did not run }

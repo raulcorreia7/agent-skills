@@ -1,0 +1,32 @@
+# Release a Python package: notes from git-cliff, build with uv, publish with gh.
+version: 1
+goal: Tag v${VERSION} exists with built artifacts and release notes.
+inputs:
+  VERSION: { description: "Version without the v, such as 1.4.0" }
+nodes:
+  notes:
+    outcome: Release notes for the unreleased commits
+    run: git cliff --unreleased --tag v${VERSION} --strip all > notes.md
+    next: { succeeded: ready, failed: ready }
+  build:
+    outcome: The sdist and wheel are built
+    run: uv build
+    next: { succeeded: ready, failed: ready }
+  ready:
+    outcome: Notes and build both succeeded
+    next: { succeeded: approve, failed: held }
+  approve:
+    kind: gate
+    outcome: A maintainer approves the version and notes.md
+    gate: { authority: maintainer, evidence: [notes, build] }
+    next: { approved: tag, rejected: held }
+  tag:
+    outcome: The tag is pushed
+    run: git tag -a v${VERSION} -m v${VERSION} && git push origin v${VERSION}
+    next: { succeeded: publish }
+  publish:
+    outcome: The GitHub release has notes and artifacts
+    run: gh release create v${VERSION} dist/* --verify-tag --notes-file notes.md
+    next: { succeeded: released }
+  released: { kind: terminal, status: success, outcome: Released }
+  held: { kind: terminal, status: blocked, outcome: Release held }

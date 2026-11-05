@@ -1,0 +1,21 @@
+# Fan-out and join. `all-checks` has no run: it waits for every node that links
+# to it and succeeds only if all of them succeeded.
+version: 1
+nodes:
+  lint:
+    outcome: Ruff finds no issues
+    run: uv run ruff check .
+    next: { succeeded: all-checks, failed: all-checks }
+  types:
+    outcome: Mypy finds no type errors
+    run: uv run mypy src
+    next: { succeeded: all-checks, failed: all-checks }
+  tests:
+    outcome: The test suite passes
+    run: uv run pytest -q
+    next: { succeeded: all-checks, failed: all-checks }
+  all-checks:
+    outcome: Every check passed
+    next: { succeeded: green, failed: red }
+  green: { kind: terminal, status: success, outcome: Ready to merge }
+  red: { kind: terminal, status: failure, outcome: At least one check failed }

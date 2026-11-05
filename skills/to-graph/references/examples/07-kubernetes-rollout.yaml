@@ -1,0 +1,29 @@
+# Roll out a new image and roll back automatically if it does not become ready.
+version: 1
+goal: The deployment runs the new image, or the old one is back.
+inputs:
+  NAMESPACE: { description: Kubernetes namespace }
+  DEPLOYMENT: { description: Deployment name }
+  IMAGE: { description: Full image reference with tag }
+nodes:
+  set-image:
+    outcome: The deployment points at the new image
+    run: kubectl -n ${NAMESPACE} set image deployment/${DEPLOYMENT} app=${IMAGE}
+    next: { succeeded: rollout, failed: stopped }
+  rollout:
+    outcome: All replicas are ready within 5 minutes
+    run: kubectl -n ${NAMESPACE} rollout status deployment/${DEPLOYMENT} --timeout=5m
+    next: { succeeded: errors, failed: undo }
+  errors:
+    outcome: No pod restarted after the rollout
+    run: |
+      restarts=$(kubectl -n ${NAMESPACE} get pods -l app=${DEPLOYMENT} -o jsonpath='{range .items[*]}{.status.containerStatuses[0].restartCount}{"\n"}{end}' | awk '{s+=$1} END {print s+0}')
+      test "$restarts" -eq 0
+    next: { succeeded: live, failed: undo }
+  undo:
+    outcome: The previous ReplicaSet is back
+    run: kubectl -n ${NAMESPACE} rollout undo deployment/${DEPLOYMENT} && kubectl -n ${NAMESPACE} rollout status deployment/${DEPLOYMENT} --timeout=5m
+    next: { succeeded: rolled-back, failed: stopped }
+  live: { kind: terminal, status: success, outcome: New image live }
+  rolled-back: { kind: terminal, status: failure, outcome: Rolled back to the previous image }
+  stopped: { kind: terminal, status: blocked, outcome: Rollout and rollback both failed; page on-call }
