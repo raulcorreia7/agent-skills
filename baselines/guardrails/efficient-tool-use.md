@@ -33,8 +33,8 @@ the installed tools. Prefer, in order:
 
 1. Repository-owned tasks, scripts, generators, and validators that own the
    fact or check.
-2. An approved MCP server or connector, within its approved scope, through its
-   filters and structured fields.
+2. An approved MCP server or connector, within its scope, through its filters
+   and structured fields.
 3. Stack-aware tools: compilers, type checkers, language servers, symbol
    indexes, test runners, package managers, schema tools, and read-only
    platform clients.
@@ -51,7 +51,7 @@ risk, outweighs its setup, maintenance, and trust cost.
 
 ## Operations
 
-- Discover and summarise first; then fetch detail for what the summary selects.
+- Summarise first, then fetch detail only for what the summary selects.
 - Filter at the source and select only the fields you need.
 - Fetch another page only when coverage needs it, and treat a single page as
   possibly incomplete.

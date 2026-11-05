@@ -1,5 +1,11 @@
 # AGENTS.md: Agent Skills repository
 
+For contributors working in this repository.
+
+Read `baselines/AGENTS.md` first and follow it, so you work under the rules
+users get. Its `~/.agents/` files live in `baselines/` and its skills in
+`skills/`.
+
 This repository is the source of truth for the Agent Skills kit. Rules for
 every artifact live in `CONTRIBUTING.md`; this file only routes.
 
