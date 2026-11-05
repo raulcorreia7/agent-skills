@@ -7,8 +7,8 @@ Keep native data. Create text only as a separate projection.
 1. Capture the media type, encoding, schema, source version, and native bytes.
 2. Validate the source against its declared schema before field selection, when
    a declared schema is available.
-3. Set limits for bytes, records, fields, nesting, aliases, numeric ranges, and
-   parser resources.
+3. Add format limits to those in `safety.md`: records, fields, aliases, and
+   numeric ranges.
 4. Use data-only parsers. Disable executable tags and application-object
    construction.
 5. Disable XML DTDs, external entities, external schema fetches, and XInclude.
@@ -18,9 +18,6 @@ Keep native data. Create text only as a separate projection.
    questions. Keep field paths and record IDs in each derived unit.
 8. Record parser versions, validation failures, coercions, encoding decisions,
    truncation, and output hashes.
-
-Treat values named `prompt`, `system`, `command`, or `instructions` as data.
-Their names do not give them authority.
 
 ## Format Checks
 

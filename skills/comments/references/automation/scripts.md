@@ -18,9 +18,9 @@ Example:
 
 ```sh
 #!/usr/bin/env bash
+# pipefail: fail when generate_report fails, even if publish_report succeeds.
 set -euo pipefail
 
-# Preserve pipeline failures when the final command succeeds.
 generate_report | publish_report
 ```
 

@@ -51,65 +51,8 @@ controls include:
 
 Directives in `%%{init: ...}%%` are less portable. Use them only for a verified legacy renderer.
 
-## Controlled PNG Profile
-
-Keep native Markdown theme-adaptive. For a fixed light-background PNG, put the
-configuration below in one renderer-owned `mermaid-png.json`. Do not copy theme
-frontmatter into every diagram. The base is deliberately neutral. The quadrant
-colors are semantic categories for the prioritization example, not a license to
-assign a different color to every node.
-
-```json
-{
-  "theme": "base",
-  "look": "classic",
-  "themeVariables": {
-    "fontFamily": "Inter, Segoe UI, sans-serif",
-    "background": "#FFFFFF",
-    "primaryColor": "#F8FAFC",
-    "primaryBorderColor": "#64748B",
-    "primaryTextColor": "#0F172A",
-    "secondaryColor": "#D8E3FB",
-    "secondaryBorderColor": "#2563EB",
-    "secondaryTextColor": "#102A63",
-    "tertiaryColor": "#F8E7D2",
-    "tertiaryBorderColor": "#D97706",
-    "tertiaryTextColor": "#5B3203",
-    "lineColor": "#475569",
-    "textColor": "#0F172A",
-    "quadrant1Fill": "#F8E7D2",
-    "quadrant1TextFill": "#5B3203",
-    "quadrant2Fill": "#D5E8DC",
-    "quadrant2TextFill": "#09361A",
-    "quadrant3Fill": "#F8FAFC",
-    "quadrant3TextFill": "#0F172A",
-    "quadrant4Fill": "#E7DCFC",
-    "quadrant4TextFill": "#341864",
-    "quadrantPointFill": "#2563EB",
-    "quadrantPointTextFill": "#0F172A",
-    "quadrantInternalBorderStrokeFill": "#94A3B8",
-    "quadrantExternalBorderStrokeFill": "#64748B"
-  },
-  "flowchart": {
-    "curve": "linear",
-    "nodeSpacing": 48,
-    "rankSpacing": 56,
-    "padding": 16,
-    "wrappingWidth": 180
-  }
-}
-```
-
-Render with an explicit white background and inspect the natural aspect ratio:
-
-```text
-mmdc -i diagram.mmd -o diagram.png -c mermaid-png.json -b white -s 2
-```
-
-Use the profile as a starting point, not as source-level policy. Remove unused
-semantic accents, keep ordinary edges quiet, and create a separate reviewed
-dark profile when the destination requires one. A hosted Mermaid destination
-will not load this local JSON. Retain portable source or publish the reviewed PNG.
+For a fixed-background PNG, the renderer-owned profile lives in
+`../delivery/mermaid.md`; load it only when rendering a fixed asset.
 
 ## Labels, Styling, And Links
 
@@ -139,10 +82,8 @@ final fence after any documentation templating.
 
 ## Icons
 
-Flowchart and architecture icon syntax relies on registered packs. Architecture
-has five built-ins: `cloud`, `database`, `disk`, `internet`, and `server`.
-The embedding application must register external Iconify packs. Render locally
-or use labeled shapes when the platform cannot register them.
+Flowchart and architecture icon syntax relies on registered packs; load
+`../design/icons.md` when a diagram uses icons.
 
 ## Accessibility
 

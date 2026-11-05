@@ -1,8 +1,5 @@
 # Documentation Information Architecture
 
-Propose disruptive moves and apply them only after approval of the structure
-change.
-
 ## Reader model
 
 Classify content by reader need:
@@ -58,9 +55,7 @@ For example, route reader tasks rather than mirroring the source tree:
 | Look up configuration keys | `reference/configuration.md` |
 
 Keep a small orientation diagram only when it helps. Split dense diagrams into
-focused context, runtime, sequence, data/state, or trust-boundary views. Use the
-`diagrams` skill when construction or renderer compatibility requires a
-specialist pass.
+focused context, runtime, sequence, data/state, or trust-boundary views.
 
 Validate entry points, generated navigation, moved pages, and the resulting
 task routes.

@@ -10,9 +10,8 @@ relationship:
    can resolve a significant gap.
 5. Stop when every key item has a state, even if visible gaps remain.
 
-A publishable baseline can contain non-match states. Catalog completion is a
-stricter gate: no significant `unresolved`, `context-only`, or unexplained
-`evidence-only` records remain.
+A publishable baseline can contain non-match states. The stricter catalog
+completion gate is in the skill's validation step.
 
 ## Example
 

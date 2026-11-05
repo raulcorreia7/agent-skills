@@ -7,6 +7,9 @@ safer, improving a test seam, removing demonstrated confusion, or correcting a
 compatibility or fault risk.
 
 - Find the owner before moving or extracting code.
+- Put a consequential decision behind one small interface. Keep its
+  representation and policy private when callers don't need them, and drop a
+  layer that only forwards calls.
 - Add an abstraction for a stable seam, ownership, compatibility, testability,
   or repeated change. Do not extract similar syntax alone.
 - Consolidate duplication when copies share one rule or change obligation. Keep
@@ -19,7 +22,8 @@ compatibility or fault risk.
   direct local conventions when a technique would surprise maintainers or make
   debugging less obvious.
 - Use smells, complexity, coupling, cohesion, churn, and co-change to locate an
-  investigation target. Do not make a detector score the objective.
+  investigation target. Do not make a detector score the objective, and do
+  not read frequent change as poor quality or poor authorship.
 
 ## Apply And Assess
 

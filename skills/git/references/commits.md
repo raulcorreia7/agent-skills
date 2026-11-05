@@ -1,8 +1,8 @@
 # Commit Messages
 
-Follow the repository's convention first. Prefer `commitlint` or an equivalent
-hook in the consuming repository for header grammar. Otherwise use a concise
-Conventional Commit-style header:
+Use this fallback when the repository has no convention of its own. When the
+repository runs commitlint or an equivalent hook, that hook owns the header
+grammar.
 
 ```text
 type: subject
@@ -11,48 +11,46 @@ type!: subject
 type(scope)!: subject
 ```
 
-- Use an imperative or present-tense subject.
-- Keep the first word lowercase unless it is a proper noun.
-- Omit the final period.
+- Write the subject in the imperative, lowercase unless it starts with a
+  proper noun, with no final period.
 - Keep one intent per commit when practical.
-- Add a scope only when it improves stable grouping or search.
-- Keep work-item IDs and URLs in the body or footer, not the scope.
+- Add a scope only when it gives stable grouping or search.
+- Put work-item IDs and URLs in the body or footer, never the scope.
+- For a version bump, give the exact version.
 
 ## Types
 
 | Type | Use |
-|---|---|
+| --- | --- |
 | `feat` | New capability |
-| `fix` | Defect or broken behavior |
+| `fix` | Defect or broken behaviour |
 | `docs` | Documentation-only change |
-| `refactor` | Behavior-preserving code-shape change |
+| `refactor` | Behaviour-preserving change to code shape |
 | `test` | Test-only change |
 | `ci` | CI or pipeline automation |
 | `build` | Build, packaging, or dependency tooling |
 | `perf` | Performance improvement |
-| `revert` | Revert a prior commit |
-| `style` | Formatting-only change when locally useful |
+| `revert` | Revert of a prior commit |
+| `style` | Formatting-only change, when the repository uses it |
 | `chore` | Residual maintenance with no clearer type |
 
-Use `test`, not `tests`. Prefer `ci:` over `chore(ci):`. Use `chore` only as a
-fallback.
+Use `test`, not `tests`, and `ci:` rather than `chore(ci):`. `chore` is the
+last resort.
 
-## Scopes
+Scopes are optional and open-ended. Prefer stable repository areas, such as
+api, auth, ui, db, deps, docs, infra, repo, release, or testing, over
+abbreviations, URLs, work-item IDs, and one-off names.
 
-Scopes are optional and open-ended. Prefer stable repository areas such as
-`api`, `auth`, `ui`, `db`, `deps`, `docs`, `infra`, `repo`, `release`, or
-`testing`. Avoid random abbreviations, URLs, work-item IDs, and one-off names.
+## Breaking changes
 
-## Breaking Changes
+A change is breaking when consumers or dependent systems must change because
+of an API, behaviour, compatibility, configuration, data, or operational
+contract. Internal refactors and file moves that keep supported behaviour are
+not breaking.
 
-A breaking change requires consumers or dependent systems to change because of
-an API, behavior, compatibility, config, data, or operational contract.
-
-- This repository's fallback convention requires `!` before the colon and a
-  `BREAKING CHANGE:` footer. The convention is intentionally stricter than
-  Conventional Commits, which permits either marker.
-- Do not mark internal refactors or file moves as breaking when supported
-  behavior is unchanged.
+The fallback requires both markers: `!` before the colon and a
+`BREAKING CHANGE:` footer. That's stricter than Conventional Commits, which
+accepts either one.
 
 ```text
 feat(api)!: require cursor pagination
@@ -60,24 +58,24 @@ feat(api)!: require cursor pagination
 BREAKING CHANGE: list endpoints now require cursor parameters.
 ```
 
+## Body
+
+The body says why the change was needed and what it affects; the diff already
+shows how.
+
 ## Examples
 
 ```text
 docs: clarify deployment runbook
 feat(ui): add saved filters
 fix(auth): reject expired tokens
-test(api): cover pagination errors
 ci: add pull request validation
 build(deps): update lockfile
 chore(release): prepare v0.3.2
-refactor(api): simplify request parsing
 ```
 
-Avoid vague or mixed headers such as `Update stuff`, `patch bump`, `fix #1`, or
-`build: change dependencies and docs and runtime config`.
-
-For version bumps, include the exact version. Keep generated changelog and
-version output separate from unrelated changes.
+Vague or mixed headers such as "Update stuff", "fix #1", or "build: change
+dependencies and docs and runtime config" say nothing a reader can search for.
 
 Sources: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/),
 [commitlint rules](https://commitlint.js.org/reference/rules.html), and reviewed

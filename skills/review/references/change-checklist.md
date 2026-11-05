@@ -4,9 +4,6 @@
 
 - Favor a pass when the change improves repository health and has no blocking
   correctness, security, data, migration, compatibility, or confidence issue.
-- Let automation handle formatting. Spend human or agent attention on behavior
-  and risk.
-- For huge reviews, ask for a split or give high-level risk direction first.
 - For human-facing commands and workflows, check discoverability, safe defaults,
   familiar language, actionable errors, and recovery paths.
 

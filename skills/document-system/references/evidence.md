@@ -1,6 +1,6 @@
 # Evidence Contract
 
-`docs/evidence.md` is the agent-maintained, normalized working ledger for
+The evidence page (default `docs/evidence.md`) is the agent-maintained, normalized working ledger for
 inventory, reverse engineering, iteration, and comparison. It is separate from
 the human-maintained `context.md` and the synthesized `system.md`. Keep
 exactly these H2 sections in this order: `coverage`, `sources`,

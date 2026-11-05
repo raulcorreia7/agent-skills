@@ -28,10 +28,8 @@ Do not run format, engine, theme, platform, or size matrices unless the target
 requires them. Parser success is not visual validation. File existence is not
 success when the renderer failed.
 
-Use the selected renderer guide for native commands or `render-helper.md` for
-the bundled helper. The helper atomically replaces an existing output only
-after a successful non-empty render. A failed batch retains outputs completed
-before the failure; retry only after inspecting those results.
+Use the selected renderer leaf for native commands, or `render-helper.md` for
+the bundled helper and its failure behaviour.
 
 Sources: [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) and
 [Graphviz command line](https://graphviz.org/doc/info/command.html).

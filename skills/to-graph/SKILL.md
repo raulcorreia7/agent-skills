@@ -1,6 +1,6 @@
 ---
 name: to-graph
-description: Manual invocation only. Turns a repeatable task, such as a plan, runbook, PR review, CI/CD watch, or cron job, into a checked YAML workflow graph (DAG) that people, small models, or schedulers can draw and run. Not for changing the task or doing its work; use to-plan or code.
+description: "Manual invocation only. Turns a repeatable task, such as a plan, runbook, PR review, CI/CD watch, or cron job, into a checked YAML workflow graph that people, small models, or schedulers can draw and run. Not for changing the task or doing its work; use `to-plan` or `code`."
 ---
 
 # To Graph
@@ -11,16 +11,14 @@ Turn a repeatable task into one workflow graph. Each node produces one
 checkable result, and each result decides the next node. The graph passes its
 checks, has a diagram, and states how to run it.
 
+The lightest path adapts the closest example, checks it, and shows it.
+Escalate to gates and recorded approvals when the task has a person's
+decision, a live or external action, or a schedule.
+
 ## Steps
 
-Copy this checklist into the reply and tick it off:
-
-```text
-- [ ] 1. Model the task
-- [ ] 2. Write the graph
-- [ ] 3. Check the graph
-- [ ] 4. Show the graph
-```
+Put this line in the reply and tick each box as its step completes:
+`[ ] model  [ ] write  [ ] check  [ ] show`.
 
 1. Model the task. List each step, the result it must show, every decision
    that needs a person, and every value that changes per run. Complete when
@@ -30,11 +28,10 @@ Copy this checklist into the reply and tick it off:
    or gate is unclear. Complete when every step from step 1 is a node, every
    per-run value is an input, and every person's decision is a gate.
 3. Check the graph. Run the `check` command from
-   [running.md](references/running.md); run the script, do not read it. Fix
+   [running.md](references/running.md); run the script, don't read it. Fix
    each reported error and check again. Complete when the check reports `ok`.
 4. Show the graph. Run `render` for the diagram and `run --dry-run` for the
-   success path.
-   Complete when both match the task from step 1.
+   success path. Complete when both match the task from step 1.
 
 ## Flow
 

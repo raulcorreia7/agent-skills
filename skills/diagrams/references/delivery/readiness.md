@@ -9,8 +9,7 @@ A binary on one engineer's machine is not team support. Record four layers:
 
 Classify each dependency as `native`, `team-managed`, `author-local`, or
 `unavailable`. Do not recommend source-only delivery when readers cannot render
-it. Do not add repository packages, CI jobs, extensions, public renderers, or
-installation side effects without approval.
+it.
 
 Use common team fonts or package approved fonts. Substitution can move nodes,
 clip labels, and invalidate review. Record every icon pack and license and keep

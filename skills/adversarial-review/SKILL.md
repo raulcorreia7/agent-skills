@@ -1,6 +1,6 @@
 ---
 name: adversarial-review
-description: Manual invocation only. Runs two isolated reviews of an artifact and adjudicates their evidence.
+description: "Manual invocation only. Runs two isolated reviews, a breaker and a verifier, of an artifact and adjudicates their evidence. Not for a single review; use `review`."
 ---
 
 # Adversarial Review
@@ -9,6 +9,10 @@ description: Manual invocation only. Runs two isolated reviews of an artifact an
 
 Coordinate two independent reviews and adjudicate their evidence. Agreement is
 not proof.
+
+The lightest path composes an existing specialist as the review basis and runs
+each role once. Fall back to the generic contracts only when no specialist
+fits, and retry a role only when its report is unusable.
 
 ## Steps
 
@@ -29,15 +33,16 @@ not proof.
 3. Start exactly two isolated parallel roles from that packet: a breaker for
    failures, omissions, unsafe assumptions, counterexamples, broken boundaries,
    and unhandled conditions; and a verifier to test the criteria and challenge
-   assumptions, certainty, ambiguity, and false positives. Use fresh contexts
-   when available; otherwise give each only the packet and its role contract,
-   and record the review as degraded isolation. Each role follows the role
+   assumptions, certainty, ambiguity, and false positives. Run each role in an
+   isolated context if the harness has them; otherwise run them one after the
+   other in this context, give each only the packet and its role contract, and
+   record the review as degraded isolation. Each role follows the role
    limits in Guardrails whatever the review basis. Complete when both roles
    have run from the same packet.
 4. Validate both reports. A report is unusable when its artifact or scope,
    verdict, evidence, or role is wrong, or it exposes peer output. Retry an
-   unusable role once in a fresh isolated
-   context with only the original packet; each role produces at most one valid
+   unusable role once in a new isolated context, or a fresh start in this
+   context, with only the original packet; each role produces at most one valid
    report. If a required report is still missing, return an incomplete review
    naming the missing roles and attempts, and stop without adjudicating.
    Complete when both reports are valid or the incomplete review is returned.
@@ -60,10 +65,10 @@ not proof.
 ```text
 input ← artifact, purpose, scope, criteria, evidence limits
 basis → neutral packet → breaker ∥ verifier (isolated, packet only)
-report usable? yes → continue | no → retry once in a fresh context
+report usable? yes → continue | no → retry once from the packet only
 still missing? yes → stop: incomplete review, missing roles, attempts
 claim ← confirmed | disputed | rejected; dedupe, no new findings
-verdict ← findings if any confirmed | pass if none confirmed and no disputed High+ | not reviewable if a report is missing
+verdict ← pass if none confirmed and no disputed High+ | otherwise findings
 stop: both reports and the synthesis meet the output contract
 ```
 
@@ -87,7 +92,7 @@ isolated roles.
 For a completed review, return:
 
 1. **Review basis:** Artifact, purpose, scope, criteria, evidence boundary, and
-   isolation: isolated, or degraded when fresh contexts were unavailable.
+   isolation: isolated, or degraded when isolated contexts were unavailable.
 2. **Breaker report:** Full structured report without hidden reasoning.
 3. **Verifier report:** Full structured report without hidden reasoning.
 4. **Adjudicated synthesis:** Verdict, confirmed, disputed, and rejected

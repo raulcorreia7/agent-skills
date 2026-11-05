@@ -1,6 +1,6 @@
 interface:
   display_name: "Code Scanner"
-  short_description: "Run code-scanner checks"
-  default_prompt: "Use $code-scanner to run quantitative and qualitative code checks and report thresholded findings with scanner tools."
+  short_description: "Run code scanners and report thresholded findings"
+  default_prompt: "Use $code-scanner to run scanners on this repository or branch and report thresholded findings."
 policy:
   allow_implicit_invocation: false

@@ -8,8 +8,9 @@ When release metadata or changelogs are generated:
 4. Review and merge it.
 5. Tag only the reviewed merge commit.
 
-If generated output is wrong, fix commit metadata, adjust the selected version,
-or rerun the generator. Do not hand-edit generated changelog content.
+Keep the repository's generated release workflow. If generated output is
+wrong, fix the commit metadata, adjust the selected version, or rerun the
+generator; don't hand-edit generated changelog content.
 
 Example release result:
 

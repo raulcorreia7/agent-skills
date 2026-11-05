@@ -22,7 +22,7 @@ quadrantChart
 
 Explain how positions were determined; do not present subjective placement as
 measurement. Keep labels because color is supplementary. For a fixed PNG, use
-the controlled profile in `core.md`; native host output remains valid without
-it.
+the fixed PNG profile in `../delivery/mermaid.md`; native host output remains
+valid without it.
 
 Source: [Mermaid quadrant chart](https://mermaid.js.org/syntax/quadrantChart.html).

@@ -1,23 +1,23 @@
-# Live And External Audit Boundaries
+# Live And External Systems
 
-Read-only intent does not itself authorize access to production, tenant,
-customer, repository-hosting, or other external systems.
+Read-only intent doesn't authorize access. Production, tenant, customer,
+repository-hosting, and other external systems each need the user's approval
+of the system and scope before the first query.
 
-Before an external system query:
+Before and during an approved query:
 
-1. Confirm that the user's request places the system and scope in bounds.
-2. Use the least-privilege connector or reviewed tool available.
-3. Prefer metadata and narrow queries over content or bulk export.
-4. Do not retrieve secrets, credentials, customer data, build logs, artifacts,
-   or environment values unless separately required and authorized.
-5. Separate live observations from repository declarations and inference.
-6. Report unavailable providers and missing coverage. Keep access within scope.
+1. Use the least-privileged connector or reviewed tool available.
+2. Prefer metadata and narrow queries over content or bulk export.
+3. Leave out secrets, credentials, customer data, build logs, artifacts, and
+   environment values unless the user separately approves them.
+4. Label each live observation apart from repository declarations and
+   inference.
 
-For cloud comparison, record the approved source and scope, the allowed
-identifiers, state, and timestamps observed, and the owned declaration each
-observation is compared with. Report unmatched declarations and unavailable
-evidence separately from supported drift claims.
+For a cloud comparison, record the approved source and scope, the identifiers,
+state, and timestamps observed, and the owned declaration each observation is
+compared with. Report unmatched declarations and unavailable providers apart
+from supported drift claims.
 
-Never create, update, delete, deploy, publish, run jobs, assign access, change
-settings, or trigger side effects during an audit. A compliance assessment or
-production security test requires a separately defined authority and method.
+An audit never creates, updates, deletes, deploys, publishes, runs jobs,
+assigns access, changes settings, or triggers side effects. A compliance
+assessment or production security test needs its own authority and method.

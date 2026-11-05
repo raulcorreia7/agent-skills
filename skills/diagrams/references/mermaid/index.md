@@ -1,7 +1,6 @@
 # Mermaid Family Router
 
-Load `core.md` for all Mermaid authoring. Then load only the family file that
-matches the reader question.
+Load only the family file that matches the reader question.
 
 | Trigger | File |
 |---|---|

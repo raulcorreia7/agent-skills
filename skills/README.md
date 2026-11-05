@@ -8,7 +8,7 @@ An `implicit` skill activates when a request matches its description. Ask for a
 | Skill | Invocation | Use |
 |---|---|---|
 | [`code`](code/SKILL.md) | `implicit` | Implement or explain application behavior |
-| [`refactor`](refactor/SKILL.md) | `manual` | Restructure code while preserving behavior |
+| [`refactor`](refactor/SKILL.md) | `implicit` | Restructure code while preserving behavior |
 | [`scripts`](scripts/SKILL.md) | `implicit` | Build scripts, CLI helpers, and developer automation |
 | [`create-tests`](create-tests/SKILL.md) | `implicit` | Create or improve a primary test deliverable |
 | [`quality-gates`](quality-gates/SKILL.md) | `implicit` | Set up or tune linters, formatters, type checkers, hooks, and CI gates |
@@ -22,27 +22,27 @@ An `implicit` skill activates when a request matches its description. Ask for a
 | [`ast-grep`](ast-grep/SKILL.md) | `implicit` | Find code structures or author ast-grep rules |
 | [`debug`](debug/SKILL.md) | `implicit` | Isolate an evidence-backed failure cause |
 | [`audit`](audit/SKILL.md) | `manual` | Inspect repository or system state within a read-only boundary |
-| [`optimize`](optimize/SKILL.md) | `manual` | Rank evidence-backed improvements to a measurable target |
+| [`optimize`](optimize/SKILL.md) | `implicit` | Rank evidence-backed improvements to a measurable target |
 | [`code-scanner`](code-scanner/SKILL.md) | `manual` | Run code scans |
-| [`triage`](triage/SKILL.md) | `manual` | Triage bugs, issues, tickets, and PRs into owned next actions |
+| [`triage`](triage/SKILL.md) | `implicit` | Triage bugs, issues, tickets, and PRs into owned next actions |
 
 ## Review
 
 | Skill | Invocation | Use |
 |---|---|---|
 | [`adversarial-review`](adversarial-review/SKILL.md) | `manual` | Run two isolated artifact reviews and adjudicate their evidence |
-| [`review`](review/SKILL.md) | `manual` | Review pull requests, diffs, and designs against their intent and evidence |
+| [`review`](review/SKILL.md) | `implicit` | Review pull requests, diffs, and designs against their intent and evidence |
 
 ## Decide and plan
 
 | Skill | Invocation | Use |
 |---|---|---|
-| [`discuss-architecture`](discuss-architecture/SKILL.md) | `manual` | Align system boundaries and architecture trade-offs |
-| [`to-prd`](to-prd/SKILL.md) | `manual` | Produce source-backed, decision-ready requirements |
-| [`to-plan`](to-plan/SKILL.md) | `manual` | Produce an implementation-ready plan |
-| [`to-issues`](to-issues/SKILL.md) | `manual` | Decompose an approved PRD or plan into issue drafts |
+| [`discuss-architecture`](discuss-architecture/SKILL.md) | `implicit` | Align system boundaries and architecture trade-offs |
+| [`to-prd`](to-prd/SKILL.md) | `implicit` | Produce source-backed, decision-ready requirements |
+| [`to-plan`](to-plan/SKILL.md) | `implicit` | Produce an implementation-ready plan |
+| [`to-issues`](to-issues/SKILL.md) | `implicit` | Decompose an approved PRD or plan into issue drafts |
 | [`to-graph`](to-graph/SKILL.md) | `manual` | Turn a repeatable task into a checked, renderable, runnable workflow graph |
-| [`plan-remediation`](plan-remediation/SKILL.md) | `manual` | Plan evidence-backed remediation across three horizons |
+| [`plan-remediation`](plan-remediation/SKILL.md) | `implicit` | Plan evidence-backed remediation across three horizons |
 
 ## Document and explain
 
@@ -62,4 +62,4 @@ An `implicit` skill activates when a request matches its description. Ask for a
 |---|---|---|
 | [`git`](git/SKILL.md) | `implicit` | Inspect Git, draft commits, branches, and releases, or run an approved Git workflow |
 | [`pull-request`](pull-request/SKILL.md) | `implicit` | Prepare, describe, open, and iterate on your own PR or MR |
-| [`worktrees`](worktrees/SKILL.md) | `manual` | Manage Git worktrees and provider review checkouts |
+| [`worktrees`](worktrees/SKILL.md) | `implicit` | Manage Git worktrees and provider review checkouts |

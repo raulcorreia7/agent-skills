@@ -1,7 +1,12 @@
 # Code Structure
 
-Treat nearby code as evidence, not as a reason to reproduce accidental
-structure. Improve the smallest complete block touched by the behavior change.
+A fallback for block layout, naming, and expression shape that no linter or
+repository rule decides. Treat nearby code as evidence, not as a reason to
+copy accidental structure, and improve only the smallest complete block the
+behavior change touches.
+
+Contents: Semantic Paragraphs · Indentation And Blocks · Names And
+Expressions (with Control-Flow Examples) · Comments
 
 ## Semantic Paragraphs
 
@@ -35,7 +40,7 @@ return f"{first_name} {last_name}"
   purpose changes.
 - Align value columns only as Stable Shapes in formatting allows.
 - Put a why-comment directly above the block it explains, at that block's
-  indentation (see Comments).
+  indentation.
 
 ```text
 function settle_invoice(request, ledger, clock):
@@ -186,10 +191,5 @@ return field in managed_fields
 
 ## Comments
 
-Add a concise comment when it helps the next reader understand why.
-Explain non-obvious rationale, invariants, constraints, risks, or trade-offs.
-Do not narrate visible mechanics or invent a reason.
-
-Place a rationale comment directly above the code it constrains. Keep comments
-current when behavior changes. Use the `comments` skill when the comment surface
-becomes substantial or primary.
+Keep the short rationale comments a change needs; when comments, docstrings,
+or API documentation become the deliverable, use `comments`.
