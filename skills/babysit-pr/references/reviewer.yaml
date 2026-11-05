@@ -11,7 +11,7 @@ inputs:
   PR: { description: Pull request number }
   END: { description: Local end time as HH:MM, default: "08:00" }
   STATE: { description: Pass log outside the work tree, default: .git/babysit-pr-review.md }
-  ANALYSIS: { description: "Lenses to apply, comma-separated (see Reviewer analysis in SKILL.md)", default: "intent,bugs,tests,checks,duplication,design,contracts,security,performance,docs,follow-through" }
+  ANALYSIS: { description: "Lenses to apply, comma-separated (see Reviewer analysis in SKILL.md)", default: "intent,bugs,tests,checks,duplication,complexity,churn,coverage,design,contracts,security,performance,docs,follow-through" }
   SKILLS: { description: "Skills or tools allowed, comma-separated; empty means whatever is installed from the mapping in passes.md", default: "" }
   FOOTER: { description: Last line of the summary, default: "🤖 Agent (babysit-pr, reviewer) · unknown effort: unknown" }
   READER: { description: Read-only agent CLI, default: "claude --allowedTools Read Bash(gh pr view:*) Bash(gh pr diff:*) Bash(gh pr checks:*) --model sonnet -p" }

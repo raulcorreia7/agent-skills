@@ -77,10 +77,17 @@ allows it. Otherwise use the tool, or read the diff.
 | `bugs` (structural patterns) | `ast-grep` | `ast-grep run` on changed files |
 | `tests`, `checks` | `worktrees`, for a separate review checkout | the repository's own commands in that checkout (format check, lint, type check, tests); `gh pr checks` |
 | `duplication` | `code-scanner`, only when the user names it | `jscpd` on changed files; otherwise search the repository for the changed functions |
+| `complexity` | `code-scanner`, only when the user names it | the repository's complexity rule; otherwise `lizard -w -C 20 -L 100` on changed files |
+| `churn` | `code-scanner`, only when the user names it | `git log --since=6.months.ago --name-only --format=`, counted per file; co-change from the same log. Needs full history: in a shallow clone, report it as unmeasured |
+| `coverage` | `create-tests`, to judge uncovered branches | the repository's coverage task in the review checkout; with none, report "no coverage configured" |
 | `security` | `code-scanner`, only when the user names it | its secret and SAST scanners with verification off; the lockfile diff |
 | `performance` | `review` in `pr` mode | read the diff around loops, queries, and I/O |
 | `docs` | `docs`, or `comments`, in review mode | the docs and changelog files touched |
 | `follow-through` | none | the pass log's earlier findings |
+
+A tool that is neither in the repository nor already installed (such as
+`lizard` or `jscpd` through `uvx` or `npx`) is a download: use it only when the
+user's `skills` list names it.
 
 Run checks in check mode only, such as `--check` or `--diff`. A formatter or
 linter that writes fixes changes the reviewer's checkout, not the PR.

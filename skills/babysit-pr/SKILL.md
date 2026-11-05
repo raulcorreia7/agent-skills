@@ -73,12 +73,18 @@ finding names its lens, file and line, evidence, and priority.
 | `tests` | Check that new or changed behavior has tests. Flag deleted, skipped, or weakened tests. |
 | `checks` | Run the repository's format check, linter, type checker, and tests on the new head. Report each failure with its command. |
 | `duplication` | Flag code that repeats logic already in the repository or elsewhere in the PR, and name the original. |
-| `design` | Flag needless complexity, code in the wrong layer, dead code, misleading names, and broken local conventions. |
+| `complexity` | Flag changed functions over the repository's complexity or length limits; without limits, over cyclomatic complexity 20 or 100 lines. |
+| `churn` | Flag changed files that are hotspots: among the most changed in six months and over the complexity limit. Name files that usually change with them but didn't. |
+| `coverage` | Report changed-line coverage from the repository's coverage task, and flag changed branches no test reaches. |
+| `design` | Flag needless indirection, code in the wrong layer, dead code, misleading names, and broken local conventions. |
 | `contracts` | Flag changes to public APIs, config, data shapes, migrations, or compatibility that the PR doesn't declare. |
 | `security` | Flag secrets, missing authorization, injection, unsafe input handling, and new or upgraded dependencies. |
 | `performance` | Flag added work on hot paths: queries in loops, unbounded memory or iteration, and blocking I/O. |
 | `docs` | Check that docs, comments, and the changelog match the change. |
 | `follow-through` | Mark each earlier finding as fixed, moved, or open. |
+
+Metric lenses (`complexity`, `churn`, `coverage`) point at code to read. Report
+a number only with the code it points to and why it matters there.
 
 When no skill or tool matches a lens, apply it by reading the diff. When
 the user names a skill that isn't installed, report it in the summary and
@@ -133,9 +139,9 @@ use no substitute.
 - Use `pull-request` in `iterate` mode for the author role's fixes, replies,
   resolutions, pushes, and description sync.
 - Use `review` in `pr` mode for the reviewer role's review of each new push.
-- Use `worktrees`, `ast-grep`, `code-scanner`, `docs`, and `comments` for the
-  reviewer lenses they serve, when installed and chosen (see
-  `references/passes.md`).
+- Use `worktrees`, `ast-grep`, `code-scanner`, `create-tests`, `docs`, and
+  `comments` for the reviewer lenses they serve, when installed and chosen
+  (see `references/passes.md`).
 - Use `to-graph` to check and render `references/author.yaml` and
   `references/reviewer.yaml` after changing them.
 
