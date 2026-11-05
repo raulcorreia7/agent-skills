@@ -25,7 +25,7 @@ nodes:
     next: { improved: ship, regressed: explain, failed: broken }
   explain:
     outcome: Explain each case that regressed
-    run: ${AGENT} "Compare baseline.json and candidate.json. For each test that passed in baseline and failed in candidate, give the input and why it failed." > regressions.md
+    run: ${AGENT} "Compare baseline.json and candidate.json. For each test that passed in baseline and failed in candidate, give the input and why it failed. Print only the result; do not create or edit files." > regressions.md
     next: { succeeded: keep }
   ship: { kind: terminal, status: success, outcome: Ship the candidate prompt }
   keep: { kind: terminal, status: failure, outcome: Keep the baseline; see regressions.md }

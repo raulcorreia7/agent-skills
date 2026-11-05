@@ -33,7 +33,7 @@ nodes:
     next: { succeeded: applied, failed: diagnose }
   diagnose:
     outcome: Explain the apply failure or drift
-    run: terraform -chdir=${DIR} plan -input=false -no-color 2>&1 | ${AGENT} "Explain why this differs from the approved plan in tfplan.json, and the smallest fix." > diagnosis.md
+    run: terraform -chdir=${DIR} plan -input=false -no-color 2>&1 | ${AGENT} "Explain why this differs from the approved plan in tfplan.json, and the smallest fix. Print only the result; do not create or edit files." > diagnosis.md
     next: { succeeded: stopped }
   applied: { kind: terminal, status: success, outcome: Infrastructure matches code }
   stopped: { kind: terminal, status: failure, outcome: "Not applied, or applied with drift; see diagnosis.md" }

@@ -24,6 +24,9 @@ owns field names and types; this file explains how to use them.
   and `${AGENT} "prompt"`. Changing the harness changes one value. End a
   list option such as `--allowedTools` with another option, or it swallows
   the prompt.
+- When an agent's output is redirected to a file, end the prompt with "Print
+  only the result; do not create or edit files." Otherwise the agent may try
+  to write the file itself and print commentary instead.
 
 ## Outcomes and links
 

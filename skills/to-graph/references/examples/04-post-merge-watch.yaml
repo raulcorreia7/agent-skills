@@ -42,7 +42,7 @@ nodes:
       gh run list --commit ${merged.output} --status failure --json databaseId --jq '.[].databaseId' \
         | xargs -n1 gh run view --log-failed > failed.log
       gh pr checks ${PR} > pr-checks.txt || true
-      ${AGENT} "failed.log is from runs after merge; pr-checks.txt shows the PR checks that passed. Name the failing step, the cause, and which PR check missed it and why." > diagnosis.md
+      ${AGENT} "failed.log is from runs after merge; pr-checks.txt shows the PR checks that passed. Name the failing step, the cause, and which PR check missed it and why. Print only the result; do not create or edit files." > diagnosis.md
     next: { succeeded: approve-revert }
   approve-revert:
     kind: gate

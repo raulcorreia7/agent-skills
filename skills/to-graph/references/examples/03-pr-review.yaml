@@ -13,16 +13,16 @@ nodes:
     next: { succeeded: review-bugs }
   review-bugs:
     outcome: List correctness bugs with file and line
-    run: ${AGENT} "Read pr.md and pr.diff. List correctness bugs as file:line - problem - fix. Write nothing else." > bugs.md
+    run: ${AGENT} "Read pr.md and pr.diff. List correctness bugs as file:line - problem - fix. Print only the result; do not create or edit files." > bugs.md
     next: { succeeded: review-security }
   review-security:
     outcome: List security issues with file and line
-    run: ${AGENT} "Read pr.diff. List security issues as file:line - risk - fix. Write nothing else." > security.md
+    run: ${AGENT} "Read pr.diff. List security issues as file:line - risk - fix. Print only the result; do not create or edit files." > security.md
     next: { succeeded: draft }
   draft:
     outcome: Merge both lists into one comment
     done_when: review.md exists and repeats no finding
-    run: ${AGENT} "Merge bugs.md and security.md into one PR review comment. Drop duplicates." > review.md
+    run: ${AGENT} "Merge bugs.md and security.md into one PR review comment. Drop duplicates. Print only the result; do not create or edit files." > review.md
     next: { succeeded: approve }
   approve:
     kind: gate

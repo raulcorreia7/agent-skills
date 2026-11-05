@@ -24,7 +24,7 @@ nodes:
   summarize:
     outcome: One summary groups failures by cause
     done_when: summary.md lists each cause with its runs and a likely owner
-    run: ${AGENT} "failures.json lists failed CI runs and failed.log has their logs. Group them by root cause; for each give the runs, the cause, and the likely fix. Markdown only." > summary.md
+    run: ${AGENT} "failures.json lists failed CI runs and failed.log has their logs. Group them by root cause; for each give the runs, the cause, and the likely fix. Markdown only. Print only the result; do not create or edit files." > summary.md
     next: { succeeded: file-issue }
   file-issue:
     outcome: The summary is on today's tracking issue
