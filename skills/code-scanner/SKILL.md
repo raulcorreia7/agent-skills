@@ -28,8 +28,8 @@ Escalate to `focused` or `deep` only when the user asks or names a family.
    `references/tool-catalog.md` and `references/workflows.md`. Complete when
    each in-scope family points at a catalog command.
 2. Run each command with the first runner that works, in the catalog's runner
-   order. Complete when each family other than coverage has output or a named
-   reason it is unmeasured.
+   order, under the catalog's resource limits. Complete when each family
+   other than coverage has output or a named reason it is unmeasured.
 3. Flag every result against the workflow gates, as adjusted by the repo's
    config or the user for this run. Complete when each result is flagged or
    clean.
@@ -45,7 +45,8 @@ Escalate to `focused` or `deep` only when the user asks or names a family.
 ```text
 input ← target path or branch, depth, families
 for family in families except coverage:
-    runner ← native | uvx/npx | toolbox | fetch-tools   (approval before any download)
+    runner ← native | uvx/npx | toolbox                 (approval before any download)
+    run ← bounded, on a clean-tree export, one tool at a time
     result ← run → flag against the gate
 coverage → announce → confirmed? yes → run | no → pending
 report ← rows | clean | unmeasured: <reason> | coverage pending
@@ -66,10 +67,16 @@ stop: every in-scope family has rows, clean, unmeasured, or pending
 
 ## Guardrails
 
+- Resource limits are on by default (`references/tool-catalog.md` › Resource
+  limits), because an unbounded scan can freeze the machine: wrap every native,
+  `uvx` or `npx` command in `bounded`, scan a `clean-tree` export unless the
+  catalog says otherwise, run one scanner and one project at a time, and keep
+  each tool's parallelism flags. Raise a ceiling for one run when a scan needs it. Lift the
+  limits (`CODE_SCANNER_FORCE=1`) only when the user explicitly forces it.
 - The scan is read-only. Coverage runs the test suite, so it waits for the
   user's confirmation of the announced command.
-- Approval-gated network access: `uvx` and `npx` downloads, `fetch-tools`,
-  toolbox image builds, dependency and CVE lookups, downloaded rule packs
+- Approval-gated network access: `uvx` and `npx` downloads, toolbox image
+  builds, dependency and CVE lookups, downloaded rule packs
   such as `semgrep --config auto`, and trufflehog verification, which sends
   candidate secrets to their providers. Without that approval, run trufflehog
   with `--no-verification`.

@@ -1,0 +1,33 @@
+#!/bin/sh
+# usage: bounded <command> [args...]
+# Runs a native scanner (or uvx/npx/moon) in a systemd user scope with a soft
+# ceiling. Above the soft memory ceiling the kernel throttles and swaps the
+# scope instead of killing it; the hard ceiling is a backstop for runaways.
+# CPU uses a low weight, not a quota: idle cores stay usable at full speed,
+# but the desktop wins under contention.
+#
+# Values take systemd's form: a size (8G) or a share of RAM (50%).
+#   CODE_SCANNER_MEM_SOFT  soft ceiling (MemoryHigh), default 25%
+#   CODE_SCANNER_MEM_HARD  hard ceiling (MemoryMax),  default 50%
+#   CODE_SCANNER_SWAP      swap the scan may use,     default 2G
+#   CODE_SCANNER_FORCE=1   no limits; only when the user explicitly asks
+set -eu
+
+[ "$#" -ge 1 ] || { echo "usage: bounded <command> [args...]" >&2; exit 1; }
+[ "${CODE_SCANNER_FORCE:-0}" = 1 ] && exec "$@"
+
+# systemd accepts only upper-case size suffixes.
+upper() { printf '%s' "$1" | tr '[:lower:]' '[:upper:]'; }
+
+if ! command -v systemd-run >/dev/null 2>&1 || ! systemd-run --user --scope -q true 2>/dev/null; then
+  echo "bounded: no systemd user scope here, so no memory ceiling can be set." >&2
+  echo "bounded: use the toolbox (code-scanner), or set CODE_SCANNER_FORCE=1 if the user forces it." >&2
+  exit 1
+fi
+
+exec systemd-run --user --scope -q \
+  -p MemoryHigh="$(upper "${CODE_SCANNER_MEM_SOFT:-25%}")" \
+  -p MemoryMax="$(upper "${CODE_SCANNER_MEM_HARD:-50%}")" \
+  -p MemorySwapMax="$(upper "${CODE_SCANNER_SWAP:-2G}")" \
+  -p CPUWeight=20 -p IOWeight=20 \
+  -- nice -n 10 "$@"

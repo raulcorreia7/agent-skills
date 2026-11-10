@@ -1,0 +1,64 @@
+#!/bin/sh
+# usage: code-scanner <path> <scanner> [args...]
+# Mounts <path> at /src:ro and runs the scanner against it.
+# If args already mention /src, they pass through untouched.
+# Scanner caches (vulnerability databases, rules) persist in a named volume;
+# remove it with `docker volume rm code-scanner-cache`.
+#
+# Resource limits (on by default):
+#   CPU: a low weight (--cpu-shares), not a quota. Idle cores stay usable at
+#   full speed; the desktop wins under contention.
+#   Memory: a hard ceiling plus swap headroom. At the ceiling the kernel
+#   reclaims and swaps the container first and kills it only if swap is also
+#   exhausted. The container dies, never the session.
+#   For a true soft ceiling (throttle, never kill) set
+#   CODE_SCANNER_CGROUP_PARENT to a systemd slice that has MemoryHigh set;
+#   see references/tool-catalog.md > Resource limits.
+#
+# Sizes take a number and a K, M or G suffix (either case).
+#   CODE_SCANNER_MEM_HARD  memory ceiling,         default 50% of RAM, 4G if unknown
+#   CODE_SCANNER_SWAP      swap the scan may use,  default 2G
+#   CODE_SCANNER_FORCE=1   no limits; only when the user explicitly asks
+set -eu
+
+[ "$#" -ge 2 ] || { echo "usage: code-scanner <path> <scanner> [args...]" >&2; exit 1; }
+target=$(realpath "$1")
+shift
+image=${CODE_SCANNER_IMAGE:-code-scanner:latest}
+cache=${CODE_SCANNER_CACHE:-code-scanner-cache}
+
+case "$*" in
+  */src*) ;;
+  *) set -- "$@" /src ;;
+esac
+
+if [ "${CODE_SCANNER_FORCE:-0}" = 1 ]; then
+  exec docker run --rm --init -v "$target:/src:ro" -v "$cache:/home/scanner/.cache" "$image" "$@"
+fi
+
+# to_kib <size>: 8G, 512m or 1048576k as KiB; exits on anything else.
+to_kib() {
+  n=${1%[KkMmGg]}
+  case "$n" in '' | *[!0-9]*) echo "code-scanner: bad size: $1" >&2; exit 1 ;; esac
+  case "$1" in
+    *[Gg]) echo $((n * 1048576)) ;;
+    *[Mm]) echo $((n * 1024)) ;;
+    *[Kk]) echo "$n" ;;
+    *) echo "code-scanner: size needs a K, M or G suffix: $1" >&2; exit 1 ;;
+  esac
+}
+
+if [ -n "${CODE_SCANNER_MEM_HARD:-}" ]; then
+  mem_kib=$(to_kib "$CODE_SCANNER_MEM_HARD")
+else
+  ram_kib=$(awk '/^MemTotal:/ {print $2}' /proc/meminfo 2>/dev/null || true)
+  mem_kib=$((${ram_kib:-8388608} / 2))
+fi
+swap_kib=$(to_kib "${CODE_SCANNER_SWAP:-2G}")
+
+exec docker run --rm --init \
+  ${CODE_SCANNER_CGROUP_PARENT:+"--cgroup-parent=$CODE_SCANNER_CGROUP_PARENT"} \
+  --memory "${mem_kib}k" \
+  --memory-swap "$((mem_kib + swap_kib))k" \
+  --cpu-shares 256 --pids-limit 2048 \
+  -v "$target:/src:ro" -v "$cache:/home/scanner/.cache" "$image" "$@"

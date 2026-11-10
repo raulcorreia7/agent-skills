@@ -1,0 +1,41 @@
+#!/bin/sh
+# usage: clean-tree <repo> [ref] [path...]
+# Exports every tracked file of <ref> (default HEAD), or only those under the
+# given paths, into a fresh directory under ~/.cache/code-scanner and prints
+# its path. Scanners then walk thousands of files instead of millions: no
+# node_modules, build output, caches or nested worktrees. Lockfiles are
+# tracked, so dependency scanners lose nothing. Unlike `git archive`, the
+# export keeps `export-ignore` files.
+#
+# Not in the export: uncommitted changes (commit first, or scan the checkout)
+# and submodule contents (report them as unscanned). History scans
+# (gitleaks git, trufflehog git) need the real repository.
+#
+# The export can hold tracked secrets. Remove it when done:
+# rm -rf "<printed path>". Exports older than a day are pruned on each run.
+set -eu
+
+[ "$#" -ge 1 ] || { echo "usage: clean-tree <repo> [ref] [path...]" >&2; exit 1; }
+repo=$1
+ref=${2:-HEAD}
+if [ "$#" -ge 2 ]; then shift 2; else shift 1; fi
+case "$ref" in -*) echo "clean-tree: ref must not start with '-': $ref" >&2; exit 1 ;; esac
+
+# The parent stays private to this user; the export itself must be readable
+# by the toolbox's scanner user (uid 10001) through the bind mount.
+base=${XDG_CACHE_HOME:-$HOME/.cache}/code-scanner
+mkdir -p "$base" && chmod 700 "$base"
+find "$base" -maxdepth 1 -name 'tree.*' -mtime +0 -exec rm -rf {} + 2>/dev/null || true
+
+out=$(mktemp -d "$base/tree.XXXXXX")
+index=$(mktemp "$base/index.XXXXXX")
+trap 'rm -rf "$out" "$index"' EXIT
+
+GIT_INDEX_FILE=$index git -C "$repo" read-tree "$ref"
+GIT_INDEX_FILE=$index git -C "$repo" ls-files -z -- "$@" |
+  GIT_INDEX_FILE=$index git -C "$repo" checkout-index -z --stdin --prefix="$out/"
+chmod -R a+rX "$out"
+
+rm -f "$index"
+trap - EXIT
+echo "$out"

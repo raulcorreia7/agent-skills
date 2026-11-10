@@ -27,20 +27,27 @@ Every finding is one row:
 
 | file:line | Metric | Value | Gate | Verify |
 |---|---|---|---|---|
-| `src/page.tsx:88` | Function length | 245 lines | > 100 | `uvx lizard -w -L 100 src/page.tsx` |
-| `pnpm-lock.yaml` | CVE-2026-1234 (lodash) | HIGH, fixed in 4.17.22 | HIGH+ with fix | `trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed .` |
+| `src/page.tsx:88` | Function length | 245 lines | > 100 | `bounded uvx lizard -w -L 100 src/page.tsx` |
+| `pnpm-lock.yaml` | CVE-2026-1234 (lodash) | HIGH, fixed in 4.17.22 | HIGH+ with fix | `bounded trivy fs --parallel 2 --skip-dirs '**/node_modules' --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed pnpm-lock.yaml` |
 
 A family with no rows gets one line: `clean` or `unmeasured: <reason>`.
+
+Report paths relative to the repository, not the export: strip the
+`clean-tree` prefix (or `/src/` from the toolbox). Write each Verify command
+against the repository path, so it still works after the export is removed.
 
 ## quick
 
 Triage the worst offenders, one command per family:
 
 ```sh
-uvx lizard -w -C 20 -L 100 -s cyclomatic_complexity . | head -10
-git log --since=6.months.ago --name-only --format= | sort | uniq -c | sort -rn | head -10
-trivy fs --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed .
-gitleaks dir . --no-banner
+# One project at a time, one command at a time, on a clean export.
+tree=$(<skill-root>/scripts/clean-tree . HEAD <project-dir>)
+bounded uvx lizard -w -C 20 -L 100 -s cyclomatic_complexity "$tree" | head -10
+git log --since=6.months.ago --name-only --format= -- <project-dir> | sort | uniq -c | sort -rn | head -10
+bounded trivy fs --parallel 2 --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed "$tree"
+bounded gitleaks dir "$tree" --max-target-megabytes 5 --no-banner
+rm -rf "$tree"
 ```
 
 ## focused
@@ -64,16 +71,18 @@ base_ref=${BASE:-$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD)}
 base=$(git merge-base "$base_ref" HEAD)
 mapfile -t files < <(git diff --name-only --diff-filter=AM "$base"...HEAD)
 
+# bounded = <skill-root>/scripts/bounded. The changed-file list is small, so no export.
 if (( ${#files[@]} )); then
-  uvx lizard -w -C 20 -L 100 "${files[@]}"
-  npx jscpd "${files[@]}" --min-tokens 50
-  semgrep scan --config p/default --metrics=off "${files[@]}"
+  bounded uvx lizard -w -C 20 -L 100 "${files[@]}"
+  bounded npx jscpd "${files[@]}" --min-tokens 50
+  bounded semgrep scan --jobs 2 --max-memory 1500 --config p/default --metrics=off "${files[@]}"
 else
   echo "no added or modified files"
 fi
-gitleaks git . --log-opts="$base..HEAD" --no-banner
-trufflehog git file://. --since-commit "$base" --no-verification --no-update
+bounded gitleaks git . --log-opts="$base..HEAD" --no-banner
+bounded trufflehog git file://. --since-commit "$base" --concurrency 2 --no-verification --no-update
 ```
 
-Dependency and IaC scanners read whole lockfiles and configs. Run them on the
-repo, then keep only findings in files the change touches.
+Dependency and IaC scanners read whole lockfiles and configs. Run them on a
+`clean-tree` export of the branch, one project at a time, then keep only
+findings in files the change touches.
