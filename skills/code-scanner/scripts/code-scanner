@@ -1,7 +1,8 @@
 #!/bin/sh
 # usage: code-scanner <path> <scanner> [args...]
 # Mounts <path> at /src:ro and runs the scanner against it.
-# If args already mention /src, they pass through untouched.
+# If an argument is /src or a path under it, the args pass through untouched;
+# otherwise /src is appended as the scan target.
 # Scanner caches (vulnerability databases, rules) persist in a named volume;
 # remove it with `docker volume rm code-scanner-cache`.
 #
@@ -27,10 +28,11 @@ shift
 image=${CODE_SCANNER_IMAGE:-code-scanner:latest}
 cache=${CODE_SCANNER_CACHE:-code-scanner-cache}
 
-case "$*" in
-  */src*) ;;
-  *) set -- "$@" /src ;;
-esac
+names_src=0
+for arg in "$@"; do
+  case "$arg" in /src | /src/*) names_src=1 ;; esac
+done
+[ "$names_src" = 1 ] || set -- "$@" /src
 
 if [ "${CODE_SCANNER_FORCE:-0}" = 1 ]; then
   exec docker run --rm --init -v "$target:/src:ro" -v "$cache:/home/scanner/.cache" "$image" "$@"

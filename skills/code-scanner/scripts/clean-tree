@@ -29,13 +29,15 @@ find "$base" -maxdepth 1 -name 'tree.*' -mtime +0 -exec rm -rf {} + 2>/dev/null 
 
 out=$(mktemp -d "$base/tree.XXXXXX")
 index=$(mktemp "$base/index.XXXXXX")
-trap 'rm -rf "$out" "$index"' EXIT
+list=$(mktemp "$base/list.XXXXXX")
+trap 'rm -rf "$out" "$index" "$list"' EXIT
 
 GIT_INDEX_FILE=$index git -C "$repo" read-tree "$ref"
-GIT_INDEX_FILE=$index git -C "$repo" ls-files -z -- "$@" |
-  GIT_INDEX_FILE=$index git -C "$repo" checkout-index -z --stdin --prefix="$out/"
+GIT_INDEX_FILE=$index git -C "$repo" ls-files -z -- "$@" >"$list"
+[ -s "$list" ] || { echo "clean-tree: no tracked files match: ${*:-<all>}" >&2; exit 1; }
+GIT_INDEX_FILE=$index git -C "$repo" checkout-index -z --stdin --prefix="$out/" <"$list"
 chmod -R a+rX "$out"
 
-rm -f "$index"
+rm -f "$index" "$list"
 trap - EXIT
 echo "$out"
